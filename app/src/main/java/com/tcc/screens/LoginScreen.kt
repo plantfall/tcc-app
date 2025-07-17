@@ -66,7 +66,7 @@ fun LoginScreen(navController: NavHostController) {
         ) {
 
             Box(modifier = Modifier.height(230.dp)){
-                Image(painter = painterResource(id = R.drawable.bg),
+                Image(painter = painterResource(id = R.drawable.img),
                     contentDescription = "",
                     contentScale = ContentScale.Crop)
             }
@@ -117,8 +117,6 @@ fun LoginScreen(navController: NavHostController) {
                 modifier = Modifier.fillMaxWidth())
         }
     }
-
-
 }
 
 
