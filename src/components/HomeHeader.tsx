@@ -22,7 +22,7 @@ export default function HomeHeader({nome}: Props) {
 
   return (
     <LinearGradient
-      colors={['#fff', '#DFEFF5', '#BFDFEB', '#80BFD8', '#1B8CB9', '#1B8CB9']}
+      colors={AppUtils.Gradient}
       style={{
         gap: 10,
         marginTop: 30,

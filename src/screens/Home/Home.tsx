@@ -4,6 +4,7 @@ import HomeHeader from '../../components/HomeHeader';
 import {useContext} from 'react';
 import {SessionContext} from '../../context/SessionContext';
 import {AppUtils} from '../../utils/AppUtils';
+import {useNavigation} from '@react-navigation/native';
 
 export default function Home() {
   const {user} = useContext(SessionContext);
@@ -12,7 +13,11 @@ export default function Home() {
       <StatusBar barStyle={'dark-content'} backgroundColor={'#fff'} />
       <HomeHeader nome={user?.nome!} />
       <View style={{rowGap: 20, marginTop: 50, marginHorizontal: 15}}>
-        <Item text="Agendar Consulta" iconName="calendar-check-o" />
+        <Item
+          text="Agendar Consulta"
+          iconName="calendar-check-o"
+          destination="ScreenAgendarConsulta"
+        />
         <Item text="Histórico de Consultas" iconName="history" />
         <Item text="Minha ficha médica" iconName="address-book-o" />
         <Item text="Localização da UBS" iconName="location-arrow" />
@@ -21,10 +26,15 @@ export default function Home() {
   );
 }
 
-type Props = {text: string; iconName: string};
-function Item({text, iconName}: Props) {
+type Props = {text: string; iconName: string; destination: string};
+function Item({text, iconName, destination}: Props) {
+  const nav = useNavigation();
   return (
-    <TouchableOpacity activeOpacity={0.6}>
+    <TouchableOpacity
+      activeOpacity={0.6}
+      onPress={() => {
+        nav.navigate(destination);
+      }}>
       <View
         style={{
           flexDirection: 'row',

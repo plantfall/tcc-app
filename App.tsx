@@ -19,14 +19,12 @@ export default function App() {
       duration={5000}
       style={{borderRadius: 20}}
       textStyle={{flexWrap: 'wrap', textAlign: 'center', width: '80%'}}>
-      <SafeAreaProvider style={{backgroundColor: '#fff'}}>
-        <NavigationContainer>
-          <SessionProvider>
-            <Routes />
-          </SessionProvider>
-          {/* <StackApp /> */}
-        </NavigationContainer>
-      </SafeAreaProvider>
+      <NavigationContainer>
+        <SessionProvider>
+          <Routes />
+        </SessionProvider>
+        {/* <StackApp /> */}
+      </NavigationContainer>
     </ToastProvider>
   );
 }

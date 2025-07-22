@@ -1,6 +1,7 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Home from '../screens/Home/Home';
-import ScreenConfirmacao from '../screens/ScreenConfirmacao/ScreenConfirmacao';
+import ScreenConfirmacao from '../screens/ScreenAgendarConsulta/ScreenAgendarConsulta';
+import ScreenAgendarConsulta from '../screens/ScreenAgendarConsulta/ScreenAgendarConsulta';
 
 const Stack = createNativeStackNavigator();
 
@@ -22,6 +23,10 @@ function HomeStackNavigator() {
         headerShown: false,
       }}>
       <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen
+        name="ScreenAgendarConsulta"
+        component={ScreenAgendarConsulta}
+      />
       <Stack.Screen name="ScreenConfirmacao" component={ScreenConfirmacao} />
     </Stack.Navigator>
   );
