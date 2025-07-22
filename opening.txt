@@ -1,0 +1,65 @@
+C:\Users\pcmix>set ANDROID_HOME=D:\ANDROID_SDK
+
+C:\Users\pcmix>set ANDROID_AVD_HOME=C:\Users\pcmix\.android\avd
+
+D:\ANDROID_SDK\emulator\emulator @Medium_Phone
+
+
+-- Erro de 
+
+
+PS D:\REACT_NATIVE\vendaIa> D:\ANDROID_SDK\emulator\emulator -list-avds   
+Medium_Phone
+PS D:\REACT_NATIVE\vendaIa> npx react-native run-android
+warn Package @ant-design/icons-react-native contains invalid configuration: "dependency.assets" is not allowed. Please verify it's properly linked using "npx react-native config" command and contact the package maintainers about this.
+info A dev server is already running for this project on port 8081.
+info Launching emulator...
+error Failed to launch emulator. Reason: The emulator (Medium_Phone) quit before it finished opening. You can try starting the emulator manually from the terminal with: D:\ANDROID_SDK/emulator/emulator @Medium_Phone.
+warn Please launch an emulator manually or connect a device. Otherwise app may fail to launch.
+info Installing the app...
+
+> Configure project :react-native-reanimated
+Android gradle plugin: 8.8.2
+Gradle: 8.13
+
+> Task :app:installDebug FAILED
+Skipping device 'emulator-5554' (emulator-5554): Device is UNAUTHORIZED,
+    see http://d.android.com/tools/help/adb.html#Enabling.
+
+[Incubating] Problems report is available at: file:///D:/REACT_NATIVE/vendaIa/android/build/reports/problems/problems-report.html
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/8.13/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+271 actionable tasks: 34 executed, 237 up-to-date
+
+info 💡 Tip: Make sure that you have set up your development environment correctly, by running npx react-native doctor. To read more about doctor command visit: https://github.com/react-native-community/cli/blob/main/packages/cli-doctor/README.md#doctor 
+
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:installDebug'.
+> com.android.builder.testing.api.DeviceException: No online devices found.
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 24s
+error Failed to install the app. Command failed with exit code 1: gradlew.bat app:installDebug -PreactNativeDevServerPort=8081 FAILURE: Build failed with an exception. * What went wrong: Execution failed for task ':app:installDebug'. > com.android.builder.testing.api.DeviceException: No online devices found. * Try: > Run with --stacktrace option to get the stack trace. > Run with --info or --debug option to get more log output. > Run with --scan to get full insights. > Get more help at https://help.gradle.org. BUILD FAILED in 24s.
+info Run CLI with --verbose flag for more details.
+PS D:\REACT_NATIVE\vendaIa> 
+
+
+- resolucao:
+
+adb kill-server
+adb start-server
+
+- então em outra aba(terminal)
+npx react-native run-android
