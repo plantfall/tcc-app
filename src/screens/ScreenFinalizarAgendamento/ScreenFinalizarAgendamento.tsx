@@ -22,7 +22,7 @@ const HORARIOS = [
 export default function ScreenFinalizarAgendamento() {
   const [horarioSelected, setHorarioSelected] = useState<null | string>(null);
 
-  const [consultaAgendada, setConsultaAgendada] = useState(true);
+  const [consultaAgendada, setConsultaAgendada] = useState(false);
 
   const handleHorarioClick = (horario: string) => {
     if (horarioSelected == horario) {
