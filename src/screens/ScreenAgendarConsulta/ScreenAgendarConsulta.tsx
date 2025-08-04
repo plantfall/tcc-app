@@ -7,9 +7,18 @@ import ScreenConfimacaoHook, {
 import {useNavigation} from '@react-navigation/native';
 import Feather from 'react-native-vector-icons/Feather';
 import {AppUtils} from '../../utils/AppUtils';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 export default function ScreenAgendarConsulta() {
-  const {loading, especialistas} = ScreenConfimacaoHook();
+  const {
+    loading,
+    especialistas,
+    dateSelected,
+    setDateSelected,
+    showDatePicker,
+    turnDatePickerOn,
+    turnDatePickerOff,
+  } = ScreenConfimacaoHook();
 
   const nav = useNavigation();
 
@@ -17,9 +26,32 @@ export default function ScreenAgendarConsulta() {
     <View style={{backgroundColor: '#fff', flex: 1}}>
       <Voltar text="Agendar Consulta" />
       <View>
+        {showDatePicker && (
+          <DateTimePicker
+            value={dateSelected}
+            mode="date"
+            display="default"
+            onChange={(event: any, selectedDate?: Date) => {
+              if (event.type === 'set' && selectedDate != undefined) {
+                setDateSelected(selectedDate);
+                turnDatePickerOff();
+                nav.navigate('ScreenFinalizarAgendamento');
+              } else if (event.type === 'dismissed') {
+                console.log('Usuário fechou o datepicker sem selecionar');
+                turnDatePickerOff();
+              }
+            }}
+          />
+        )}
+
         <FlatList
           data={especialistas}
-          renderItem={({item}) => <EspecialistaCard especialista={item} />}
+          renderItem={({item}) => (
+            <EspecialistaCard
+              especialista={item}
+              turnDatePickerOn={turnDatePickerOn}
+            />
+          )}
         />
       </View>
     </View>
@@ -28,11 +60,12 @@ export default function ScreenAgendarConsulta() {
 
 type Props = {
   especialista: Especialista;
+  turnDatePickerOn: () => void;
 };
-function EspecialistaCard({especialista}: Props) {
+function EspecialistaCard({especialista, turnDatePickerOn}: Props) {
   return (
     <View style={{padding: 15}}>
-      <Top especialista={especialista} />
+      <Top especialista={especialista} turnDatePickerOn={turnDatePickerOn} />
       <View style={{flexDirection: 'row', gap: 8, marginTop: 22}}>
         <Feather name={'calendar'} size={15} />
         <Text
@@ -45,6 +78,7 @@ function EspecialistaCard({especialista}: Props) {
       </View>
 
       <TouchableOpacity
+        onPress={turnDatePickerOn}
         style={{
           flexDirection: 'row',
           gap: 10,

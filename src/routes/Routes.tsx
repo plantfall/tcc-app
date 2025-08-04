@@ -16,16 +16,8 @@ export default function Routes() {
           paddingTop: 50,
           backgroundColor: '#fff',
         }}>
-        <Image
-          source={require('../assets/images/sgw.webp')}
-          style={{
-            height: 100,
-            width: 100,
-          }}
-        />
+        <Text style={{fontSize: 20, fontWeight: '700'}}>App TCC</Text>
 
-        <Text style={{fontSize: 20, fontWeight: '700'}}>App Venda IA</Text>
-        <Text style={{fontSize: 15}}>Indentar Inc.</Text>
         <ActivityIndicator size={50} color={'blue'} style={{marginTop: 30}} />
       </View>
     );

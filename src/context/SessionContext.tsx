@@ -1,7 +1,6 @@
 import {createContext, ReactNode, useEffect, useState} from 'react';
-import {AuthService} from '../service/AuthService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {LoginResponse, StatusErro, User} from '../@types/Auth.types';
+import {LoginResponse, User} from '../@types/Auth.types';
 
 type SessionContextType = {
   user: User | undefined;
@@ -23,11 +22,12 @@ export const SessionContext = createContext<SessionContextType>(
 export default function SessionProvider({children}: props) {
   const [token, setToken] = useState('');
   const [user, setUser] = useState<User | undefined>();
-  const [signed, setSignIn] = useState(true);
+  const [signed, setSignIn] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     loadData();
+    //setLoading(false);
   }, []);
 
   async function salvarUsuario(loginResponse: LoginResponse) {

@@ -10,8 +10,19 @@ export type Especialista = {
   especializacao: Especializacao;
 };
 
-export default function ScreenConfimacaoHook() {
+export default function useAgendarConsulta() {
   const [especialistas, setEspecialistas] = useState<Especialista[]>([]);
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [dateSelected, setDateSelected] = useState(new Date());
+  const [loading, setLoading] = useState(false);
+
+  const turnDatePickerOn = () => {
+    setShowDatePicker(true);
+  };
+
+  const turnDatePickerOff = () => {
+    setShowDatePicker(false);
+  };
 
   useEffect(() => {
     async function buscarEspecialistas() {
@@ -32,10 +43,13 @@ export default function ScreenConfimacaoHook() {
     buscarEspecialistas();
   }, []);
 
-  const [loading, setLoading] = useState(false);
-
   return {
     loading,
     especialistas,
+    dateSelected,
+    setDateSelected,
+    showDatePicker,
+    turnDatePickerOn,
+    turnDatePickerOff,
   };
 }

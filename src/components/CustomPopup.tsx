@@ -3,7 +3,7 @@ import {Modal, View, Text, StyleSheet, Pressable} from 'react-native';
 
 type Props = {
   visible: boolean;
-  onClose: () => void;
+  onClose?: () => void;
   title?: string;
   message?: string;
   emoji?: string;
