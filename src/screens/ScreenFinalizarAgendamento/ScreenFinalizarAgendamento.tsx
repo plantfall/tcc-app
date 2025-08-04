@@ -38,7 +38,7 @@ export default function ScreenFinalizarAgendamento() {
     //agendar
     setTimeout(() => {
       setConsultaAgendada(true);
-    }, 5000);
+    }, 3000);
   };
 
   const handleFechar = () => {
