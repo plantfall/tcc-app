@@ -3,6 +3,7 @@ import Voltar from '../../components/Voltar';
 import {useState} from 'react';
 import CustomButton from '../../components/CustomButton';
 import CustomPopup from '../../components/CustomPopup';
+import {useNavigation} from '@react-navigation/native';
 
 const HORARIOS = [
   '08:00',
@@ -32,6 +33,8 @@ export default function ScreenFinalizarAgendamento() {
     setHorarioSelected(horario);
   };
 
+  const nav = useNavigation();
+
   const handleAgendar = async () => {
     setConsultaAgendada(false);
 
@@ -43,6 +46,8 @@ export default function ScreenFinalizarAgendamento() {
 
   const handleFechar = () => {
     //levar usuario para os agendamentos dele
+    setConsultaAgendada(false);
+    nav.navigate('ScreenHistoricoConsultas');
   };
 
   return (

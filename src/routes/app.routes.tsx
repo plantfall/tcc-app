@@ -3,6 +3,7 @@ import Home from '../screens/Home/Home';
 import ScreenConfirmacao from '../screens/ScreenAgendarConsulta/ScreenAgendarConsulta';
 import ScreenAgendarConsulta from '../screens/ScreenAgendarConsulta/ScreenAgendarConsulta';
 import ScreenFinalizarAgendamento from '../screens/ScreenFinalizarAgendamento/ScreenFinalizarAgendamento';
+import ScreenHistoricoConsultas from '../screens/ScreenHistoricoConsultas/ScreenHistoricoConsultas';
 
 const Stack = createNativeStackNavigator();
 
@@ -31,6 +32,10 @@ function HomeStackNavigator() {
       <Stack.Screen
         name="ScreenFinalizarAgendamento"
         component={ScreenFinalizarAgendamento}
+      />
+      <Stack.Screen
+        name="ScreenHistoricoConsultas"
+        component={ScreenHistoricoConsultas}
       />
     </Stack.Navigator>
   );
