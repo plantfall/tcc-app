@@ -1,3 +1,6 @@
+npm install @react-navigation/stack
+
+
 C:\Users\pcmix>set ANDROID_HOME=D:\ANDROID_SDK
 
 C:\Users\pcmix>set ANDROID_AVD_HOME=C:\Users\pcmix\.android\avd

@@ -1,9 +1,17 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Home from '../screens/Home/Home';
-import ScreenConfirmacao from '../screens/ScreenAgendarConsulta/ScreenAgendarConsulta';
 import ScreenAgendarConsulta from '../screens/ScreenAgendarConsulta/ScreenAgendarConsulta';
 import ScreenFinalizarAgendamento from '../screens/ScreenFinalizarAgendamento/ScreenFinalizarAgendamento';
 import ScreenHistoricoConsultas from '../screens/ScreenHistoricoConsultas/ScreenHistoricoConsultas';
+import ScreenDefinirDiaHorario from '../screens/ScreenDefinirDiaHorario/ScreenDefinirDiaHorario';
+
+export type RootStackParamList = {
+  Home: undefined;
+  ScreenAgendarConsulta: undefined;
+  ScreenDefinirDiaHorario: undefined;
+  ScreenFinalizarAgendamento: undefined;
+  ScreenHistoricoConsultas: undefined;
+};
 
 const Stack = createNativeStackNavigator();
 
@@ -28,6 +36,10 @@ function HomeStackNavigator() {
       <Stack.Screen
         name="ScreenAgendarConsulta"
         component={ScreenAgendarConsulta}
+      />
+      <Stack.Screen
+        name="ScreenDefinirDiaHorario"
+        component={ScreenDefinirDiaHorario}
       />
       <Stack.Screen
         name="ScreenFinalizarAgendamento"

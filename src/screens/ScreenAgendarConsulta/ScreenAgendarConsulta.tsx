@@ -10,40 +10,12 @@ import {AppUtils} from '../../utils/AppUtils';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 export default function ScreenAgendarConsulta() {
-  const {
-    loading,
-    especialistas,
-    dateSelected,
-    setDateSelected,
-    showDatePicker,
-    turnDatePickerOn,
-    turnDatePickerOff,
-  } = ScreenConfimacaoHook();
-
-  const nav = useNavigation();
+  const {especialistas, turnDatePickerOn} = ScreenConfimacaoHook();
 
   return (
     <View style={{backgroundColor: '#fff', flex: 1}}>
       <Voltar text="Agendar Consulta" />
       <View>
-        {showDatePicker && (
-          <DateTimePicker
-            value={dateSelected}
-            mode="date"
-            display="default"
-            onChange={(event: any, selectedDate?: Date) => {
-              if (event.type === 'set' && selectedDate != undefined) {
-                setDateSelected(selectedDate);
-                turnDatePickerOff();
-                nav.navigate('ScreenFinalizarAgendamento');
-              } else if (event.type === 'dismissed') {
-                console.log('Usuário fechou o datepicker sem selecionar');
-                turnDatePickerOff();
-              }
-            }}
-          />
-        )}
-
         <FlatList
           data={especialistas}
           renderItem={({item}) => (
@@ -63,6 +35,8 @@ type Props = {
   turnDatePickerOn: () => void;
 };
 function EspecialistaCard({especialista, turnDatePickerOn}: Props) {
+  const nav = useNavigation();
+
   return (
     <View style={{padding: 15}}>
       <Top especialista={especialista} turnDatePickerOn={turnDatePickerOn} />
@@ -78,7 +52,9 @@ function EspecialistaCard({especialista, turnDatePickerOn}: Props) {
       </View>
 
       <TouchableOpacity
-        onPress={turnDatePickerOn}
+        onPress={() => {
+          nav.navigate('ScreenDefinirDiaHorario', {dado: especialista});
+        }}
         style={{
           flexDirection: 'row',
           gap: 10,
@@ -124,7 +100,7 @@ function Top({especialista}: Props) {
   );
 }
 
-function getNomeApropriado(especializacao: Especializacao) {
+export function getNomeApropriado(especializacao: Especializacao) {
   switch (especializacao) {
     case 'CLINICO_GERAL':
       return 'Clínico Geral';

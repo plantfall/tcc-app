@@ -3,7 +3,9 @@ import Voltar from '../../components/Voltar';
 import {useState} from 'react';
 import CustomButton from '../../components/CustomButton';
 import CustomPopup from '../../components/CustomPopup';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
+import type {StackNavigationProp} from '@react-navigation/stack';
+import {RootStackParamList} from '../../routes/app.routes';
 
 const HORARIOS = [
   '08:00',
@@ -25,6 +27,10 @@ export default function ScreenFinalizarAgendamento() {
 
   const [consultaAgendada, setConsultaAgendada] = useState(false);
 
+  const {params} = useRoute();
+  const diaSelecionado = params?.diaSelecionado;
+  console.log(diaSelecionado);
+
   const handleHorarioClick = (horario: string) => {
     if (horarioSelected == horario) {
       setHorarioSelected(null);
@@ -33,9 +39,10 @@ export default function ScreenFinalizarAgendamento() {
     setHorarioSelected(horario);
   };
 
-  const nav = useNavigation();
+  const nav = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   const handleAgendar = async () => {
+    setConsultaAgendada(false);
     setConsultaAgendada(false);
 
     //agendar
