@@ -18,7 +18,11 @@ export default function Home() {
           iconName="calendar-check-o"
           destination="ScreenAgendarConsulta"
         />
-        <Item text="Histórico de Consultas" iconName="history" />
+        <Item
+          text="Histórico de Consultas"
+          iconName="history"
+          destination="ScreenHistoricoConsultas"
+        />
         <Item text="Minha ficha médica" iconName="address-book-o" />
         <Item text="Localização da UBS" iconName="location-arrow" />
       </View>
