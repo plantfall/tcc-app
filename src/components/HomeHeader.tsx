@@ -4,6 +4,7 @@ import {Text, TouchableOpacity, View} from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import LinearGradient from 'react-native-linear-gradient';
 import {AppUtils} from '../utils/AppUtils';
+import {useNavigation} from '@react-navigation/native';
 
 type Props = {
   nome: string;
@@ -68,6 +69,8 @@ function Top({nome}: Props) {
     }
     return texto;
   };
+
+  const nav = useNavigation();
   return (
     <View
       style={{
@@ -82,7 +85,10 @@ function Top({nome}: Props) {
           Ola, {limitarNome(nome)}!
         </Text>
       </View>
-      <TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => {
+          nav.navigate('ScreenNotificacoes');
+        }}>
         <Feather name="bell" color={'blue'} size={20} />
       </TouchableOpacity>
     </View>

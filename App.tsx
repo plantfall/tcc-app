@@ -13,18 +13,11 @@ export default function App() {
   }, []);
 
   return (
-    <ToastProvider
-      placement="bottom"
-      offsetBottom={120}
-      duration={5000}
-      style={{borderRadius: 20}}
-      textStyle={{flexWrap: 'wrap', textAlign: 'center', width: '80%'}}>
-      <NavigationContainer>
-        <SessionProvider>
-          <Routes />
-        </SessionProvider>
-        {/* <StackApp /> */}
-      </NavigationContainer>
-    </ToastProvider>
+    <NavigationContainer>
+      <SessionProvider>
+        <Routes />
+      </SessionProvider>
+      {/* <StackApp /> */}
+    </NavigationContainer>
   );
 }

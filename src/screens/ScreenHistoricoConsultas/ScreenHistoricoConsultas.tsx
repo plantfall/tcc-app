@@ -1,6 +1,6 @@
 import {View, Text, TouchableOpacity, FlatList} from 'react-native';
 import Voltar from '../../components/Voltar';
-import {useEffect, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import {Especialista} from '../ScreenAgendarConsulta/useAgendarConsulta';
 import {AppUtils} from '../../utils/AppUtils';
 import {getNomeApropriado} from '../ScreenAgendarConsulta/ScreenAgendarConsulta';
@@ -9,6 +9,7 @@ type Status = 'AGENDADA' | 'CANCELADA' | 'CONCLUIDA';
 type Consulta = {
   especialista: Especialista;
   dataMarcada: string;
+  horarioMarcado: string;
   status: Status;
 };
 
@@ -26,7 +27,8 @@ export default function ScreenHistoricoConsultas() {
             nome: 'Dra.Gabriela Garcia',
             especializacao: 'CLINICO_GERAL',
           },
-          dataMarcada: '05/10/2025 às 08:00',
+          dataMarcada: '05/10/2025',
+          horarioMarcado: '08:30',
           status: 'AGENDADA',
         },
 
@@ -35,7 +37,8 @@ export default function ScreenHistoricoConsultas() {
             nome: 'Dr Mauro Strevis Allious',
             especializacao: 'MEDICO',
           },
-          dataMarcada: '09/11/2025 às 08:30',
+          dataMarcada: '09/11/2025',
+          horarioMarcado: '10:30',
           status: 'CANCELADA',
         },
       ];
@@ -62,15 +65,36 @@ type Props = {
 };
 
 function Card({consulta}: Props) {
-  const {dataMarcada, especialista, status} = consulta;
+  const {dataMarcada, especialista, status, horarioMarcado} = consulta;
 
   const size = 10;
+
+  const [status_, setStatus_] = useState('');
+  const [corCirculo, setCorCirculo] = useState('');
+
+  useMemo(() => {
+    switch (status) {
+      case 'AGENDADA':
+        setStatus_('Agendada');
+        setCorCirculo('green');
+        break;
+      case 'CANCELADA':
+        setStatus_('Cancelada');
+        setCorCirculo('red');
+        break;
+      case 'CONCLUIDA':
+        setStatus_('Concluída');
+        setCorCirculo('#003950');
+        break;
+    }
+  }, [status]);
+
   return (
     <View
       style={{
         borderRadius: 10,
         borderWidth: 1,
-        borderColor: 'gray',
+        borderColor: '#BAE6C9',
         padding: 10,
         backgroundColor: '#fff',
         marginBottom: 10,
@@ -82,9 +106,24 @@ function Card({consulta}: Props) {
         }}>
         {/* LEFT */}
         <View>
-          <Text>{dataMarcada}</Text>
-          <Text>{especialista.nome}</Text>
-          <Text>{getNomeApropriado(especialista.especializacao)}</Text>
+          <Text style={{fontSize: AppUtils.FontSizeMedium}}>
+            Data: {dataMarcada}
+          </Text>
+          <Text style={{fontSize: AppUtils.FontSizeMedium}}>
+            Horário: {horarioMarcado}
+          </Text>
+          <Text
+            style={{
+              color: '#002230',
+              fontSize: AppUtils.FontSizeGrande,
+              marginTop: 20,
+              fontWeight: '700',
+            }}>
+            {especialista.nome}
+          </Text>
+          <Text style={{fontSize: AppUtils.FontSizeMedium}}>
+            {getNomeApropriado(especialista.especializacao)}
+          </Text>
         </View>
 
         {/* DIRETA */}
@@ -100,12 +139,12 @@ function Card({consulta}: Props) {
               height: size,
               width: size,
               borderRadius: size / 2,
-              backgroundColor: status == 'AGENDADA' ? 'green' : 'red',
+              backgroundColor: corCirculo,
             }}
           />
 
           <TouchableOpacity>
-            <Text style={{fontSize: AppUtils.FontSize}}>{status}</Text>
+            <Text style={{fontSize: AppUtils.FontSize - 2}}>{status_}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -116,23 +155,8 @@ function Card({consulta}: Props) {
             flexDirection: 'row',
             justifyContent: 'flex-end',
             gap: 30,
-            marginTop: 40,
+            marginTop: 25,
           }}>
-          <TouchableOpacity
-            style={{
-              backgroundColor: 'green',
-              paddingHorizontal: 15,
-              paddingVertical: 8,
-              borderRadius: 10,
-              width: 100,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <Text style={{color: '#fff', fontSize: AppUtils.FontSize}}>
-              Editar
-            </Text>
-          </TouchableOpacity>
-
           <TouchableOpacity
             style={{
               borderColor: 'red',
@@ -146,6 +170,21 @@ function Card({consulta}: Props) {
             }}>
             <Text style={{color: 'red', fontSize: AppUtils.FontSize}}>
               Cancelar
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={{
+              backgroundColor: '#2390BB',
+              paddingHorizontal: 15,
+              paddingVertical: 8,
+              borderRadius: 10,
+              width: 100,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Text style={{color: '#fff', fontSize: AppUtils.FontSize}}>
+              Editar
             </Text>
           </TouchableOpacity>
         </View>

@@ -4,6 +4,7 @@ import ScreenAgendarConsulta from '../screens/ScreenAgendarConsulta/ScreenAgenda
 import ScreenFinalizarAgendamento from '../screens/ScreenFinalizarAgendamento/ScreenFinalizarAgendamento';
 import ScreenHistoricoConsultas from '../screens/ScreenHistoricoConsultas/ScreenHistoricoConsultas';
 import ScreenDefinirDiaHorario from '../screens/ScreenDefinirDiaHorario/ScreenDefinirDiaHorario';
+import ScreenNotificacoes from '../screens/ScreenNotificacoes/ScreenNotificacoes';
 
 export type RootStackParamList = {
   Home: undefined;
@@ -49,6 +50,7 @@ function HomeStackNavigator() {
         name="ScreenHistoricoConsultas"
         component={ScreenHistoricoConsultas}
       />
+      <Stack.Screen name="ScreenNotificacoes" component={ScreenNotificacoes} />
     </Stack.Navigator>
   );
 }
