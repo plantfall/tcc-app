@@ -5,6 +5,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import LinearGradient from 'react-native-linear-gradient';
 import {AppUtils} from '../utils/AppUtils';
 import {useNavigation} from '@react-navigation/native';
+import {CircularName} from './CircularName';
 
 type Props = {
   nome: string;
@@ -80,7 +81,7 @@ function Top({nome}: Props) {
         marginTop: 30,
       }}>
       <View style={{flexDirection: 'row', alignItems: 'center', gap: 10}}>
-        <CircularImage nome={nome} />
+        <CircularName nome={nome} />
         <Text style={{fontSize: 20, fontWeight: '700', color: '#002230'}}>
           Ola, {limitarNome(nome)}!
         </Text>
@@ -91,25 +92,6 @@ function Top({nome}: Props) {
         }}>
         <Feather name="bell" color={'blue'} size={20} />
       </TouchableOpacity>
-    </View>
-  );
-}
-
-function CircularImage({nome}: Props) {
-  const size = 40;
-  return (
-    <View
-      style={{
-        backgroundColor: 'white',
-        height: size,
-        width: size,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: size / 2,
-        borderWidth: 2,
-        borderColor: '#1B8CB9',
-      }}>
-      <Text style={{fontSize: 20, color: '#002230'}}>{nome.charAt(0)}</Text>
     </View>
   );
 }
