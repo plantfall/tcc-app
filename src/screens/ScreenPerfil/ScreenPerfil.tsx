@@ -15,12 +15,15 @@ import AntDesignIcon from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
 import {AppUtils} from '../../utils/AppUtils.ts';
 import {CircularName} from '../../components/CircularName.tsx';
+import {useNavigation} from '@react-navigation/native';
 
 export default function ScreenPerfil() {
   const name = 'Camille e Eliezer';
 
   const [cartaoSus, setCartaoSus] = useState('');
   const [editandoCartaoSus, setEditandoCartaoSus] = useState(false);
+
+  const nav = useNavigation();
 
   return (
     <View style={{gap: 20, marginTop: 30}}>
@@ -33,7 +36,7 @@ export default function ScreenPerfil() {
           alignItems: 'center',
           paddingLeft: 20,
         }}>
-        <TouchableOpacity style={{padding: 5}}>
+        <TouchableOpacity style={{padding: 5}} onPress={() => nav.goBack()}>
           <Feather name="arrow-left" size={27} color={'#000'} />
         </TouchableOpacity>
 
