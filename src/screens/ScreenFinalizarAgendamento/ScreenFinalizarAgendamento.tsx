@@ -54,7 +54,11 @@ export default function ScreenFinalizarAgendamento() {
   const handleFechar = () => {
     //levar usuario para os agendamentos dele
     setConsultaAgendada(false);
-    nav.navigate('ScreenHistoricoConsultas');
+    nav.navigate('ScreenConsultaAgendada', {
+      diaSelecionado,
+      horarioSelected,
+      especialistaId: '124_ID',
+    });
   };
 
   return (

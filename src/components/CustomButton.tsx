@@ -1,5 +1,6 @@
 import {ActivityIndicator} from '@ant-design/react-native';
 import {TouchableOpacity, Text} from 'react-native';
+import {AppUtils} from '../utils/AppUtils';
 
 type Props = {
   onClick: () => void;
@@ -23,7 +24,7 @@ export default function CustomButton(props: Props) {
       onPress={onClick}
       style={{
         backgroundColor,
-        paddingVertical: 10,
+        paddingVertical: 15,
         borderRadius: borderRadius ?? 5,
         justifyContent: 'center',
         alignItems: 'center',
@@ -39,7 +40,9 @@ export default function CustomButton(props: Props) {
           {props.iconSource && props.iconName && (
             <props.iconSource name={props.iconName} size={18} color="#fff" />
           )}
-          <Text style={{color: 'white', fontSize: 14}}>{text}</Text>
+          <Text style={{color: 'white', fontSize: AppUtils.FontSize}}>
+            {text}
+          </Text>
         </>
       )}
     </TouchableOpacity>
