@@ -70,15 +70,17 @@ export default function ScreenConsultaAgendada() {
           </TouchableOpacity>
         </View>
 
-        <View style={{alignItems: 'center', rowGap: 15}}>
-          <Text
-            style={{
-              fontSize: AppUtils.FontSizeGrande,
-              fontWeight: '700',
-            }}>
-            Sua consulta foi agendada com sucesso!
-          </Text>
+        <Text
+          style={{
+            fontSize: AppUtils.FontSizeGrande + 4,
+            fontWeight: '700',
+            textAlign: 'left',
+            marginLeft: 20,
+          }}>
+          {'Sua consulta foi agendada\ncom sucesso!'}
+        </Text>
 
+        <View style={{alignItems: 'center'}}>
           <Image
             source={require('../../assets/images/banner_consulta_agendada.png')}
             style={{width: 150, height: 150}}
