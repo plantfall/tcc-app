@@ -47,18 +47,14 @@ export default function ScreenFinalizarAgendamento() {
 
     //agendar
     setTimeout(() => {
-      setConsultaAgendada(true);
+      //levar usuario para os agendamentos dele
+      setConsultaAgendada(false);
+      nav.navigate('ScreenConsultaAgendada', {
+        diaSelecionado,
+        horarioSelected,
+        especialistaId: '124_ID',
+      });
     }, 3000);
-  };
-
-  const handleFechar = () => {
-    //levar usuario para os agendamentos dele
-    setConsultaAgendada(false);
-    nav.navigate('ScreenConsultaAgendada', {
-      diaSelecionado,
-      horarioSelected,
-      especialistaId: '124_ID',
-    });
   };
 
   return (
@@ -66,13 +62,6 @@ export default function ScreenFinalizarAgendamento() {
       <Voltar text="Agendar Consulta" />
 
       <View style={{padding: 15}}>
-        <CustomPopup
-          visible={consultaAgendada}
-          title="Consulta Agendada"
-          message="Sua consulta foi agendada com sucesso"
-          emoji="😉"
-          onClose={handleFechar}
-        />
         <View
           style={{
             flexDirection: 'row',

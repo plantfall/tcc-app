@@ -1,16 +1,8 @@
-import {
-  View,
-  Text,
-  FlatList,
-  Image,
-  TouchableOpacity,
-  StatusBar,
-} from 'react-native';
+import {View, Text, Image, TouchableOpacity, StatusBar} from 'react-native';
 import {useEffect, useState} from 'react';
 import {AppUtils} from '../../utils/AppUtils';
-import Feather from 'react-native-vector-icons/Feather';
 import AntDesignIcon from 'react-native-vector-icons/AntDesign';
-import {useNavigation, useRoute} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import {Especialista} from '../ScreenAgendarConsulta/useAgendarConsulta';
 import CardConsulta from '../../components/CardConsulta';
 import CustomButton from '../../components/CustomButton';
@@ -64,7 +56,7 @@ export default function ScreenConsultaAgendada() {
           <TouchableOpacity
             style={{padding: 15}}
             onPress={() => {
-              nav.goBack();
+              nav.navigate('Home');
             }}>
             <AntDesignIcon name="close" color={'black'} size={20} />
           </TouchableOpacity>
@@ -118,7 +110,8 @@ export default function ScreenConsultaAgendada() {
               alignItems: 'center',
               marginTop: 20,
               marginBottom: 40,
-            }}>
+            }}
+            onPress={() => nav.navigate('Home')}>
             <Text style={{fontSize: AppUtils.FontSize}}>
               Voltar para tela inicial
             </Text>

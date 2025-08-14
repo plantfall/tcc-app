@@ -81,15 +81,15 @@ function Top({nome}: Props) {
         marginTop: 30,
       }}>
       <View style={{flexDirection: 'row', alignItems: 'center', gap: 10}}>
-        <CircularName nome={nome} />
+        <TouchableOpacity onPress={() => nav.navigate('ScreenPerfil')}>
+          <CircularName nome={nome} />
+        </TouchableOpacity>
+
         <Text style={{fontSize: 20, fontWeight: '700', color: '#002230'}}>
           Ola, {limitarNome(nome)}!
         </Text>
       </View>
-      <TouchableOpacity
-        onPress={() => {
-          nav.navigate('ScreenNotificacoes');
-        }}>
+      <TouchableOpacity onPress={() => nav.navigate('ScreenNotificacoes')}>
         <Feather name="bell" color={'blue'} size={20} />
       </TouchableOpacity>
     </View>
