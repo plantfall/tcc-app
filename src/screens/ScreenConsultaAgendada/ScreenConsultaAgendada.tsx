@@ -6,6 +6,7 @@ import {useNavigation} from '@react-navigation/native';
 import {Especialista} from '../ScreenAgendarConsulta/useAgendarConsulta';
 import CardConsulta from '../../components/CardConsulta';
 import CustomButton from '../../components/CustomButton';
+import OutlineButton from '../../components/OutlineButton';
 
 type Notificacao = {
   titulo: string;
@@ -99,23 +100,10 @@ export default function ScreenConsultaAgendada() {
           }}>
           <CustomButton text="Ver Agendamentos" onClick={() => {}} />
 
-          <TouchableOpacity
-            style={{
-              borderWidth: 1,
-              borderColor: '#1B8CB9',
-              borderRadius: 10,
-              paddingVertical: 15,
-              width: '100%',
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginTop: 20,
-              marginBottom: 40,
-            }}
-            onPress={() => nav.navigate('Home')}>
-            <Text style={{fontSize: AppUtils.FontSize}}>
-              Voltar para tela inicial
-            </Text>
-          </TouchableOpacity>
+          <OutlineButton
+            text="Voltar para tela inicial"
+            onClick={() => nav.navigate('Home')}
+          />
         </View>
       </View>
     </View>

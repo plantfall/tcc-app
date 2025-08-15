@@ -61,7 +61,8 @@ export default function SessionProvider({children}: props) {
     }
 
     setLoading(false);
-    setSignIn(userResponse != null);
+    //setSignIn(userResponse != null);
+    setSignIn(false);
   }
 
   async function sair() {
