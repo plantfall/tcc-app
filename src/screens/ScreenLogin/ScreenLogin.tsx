@@ -47,10 +47,9 @@ export default function ScreenLogin() {
 
       <ScrollView
         contentContainerStyle={{
-          paddingHorizontal: 20,
           alignItems: 'center',
           flex: 1,
-          marginTop: 40,
+          marginTop: 20,
           // flexGrow: 1,
           paddingTop: 0,
         }}
@@ -70,19 +69,16 @@ export default function ScreenLogin() {
                   }),
                 },
               ],
-              borderBottomLeftRadius: 20,
-              borderBottomRightRadius: 20,
-              borderRadius: 20,
             }}
           />
         </View>
 
-        <View style={{width: '100%', marginTop: 20}}>
+        <View style={{width: '100%', marginTop: 60, paddingHorizontal: 30}}>
           <TextInput
             value={loginInput}
             onChangeText={setLoginInput}
             placeholderTextColor="#808080"
-            placeholder="Informe seu cartão do SUS"
+            placeholder="Insira o email"
             numberOfLines={1}
             autoCapitalize="none"
             style={styles.input}
@@ -105,7 +101,7 @@ export default function ScreenLogin() {
               <Feather
                 name={showPassword ? 'eye' : 'eye-off'}
                 size={20}
-                color="#808080"
+                color="#1B8CB9"
               />
             </TouchableOpacity>
           </View>
@@ -123,6 +119,7 @@ export default function ScreenLogin() {
             </Text>
           )}
 
+          <View style={{marginTop: 60}} />
           <CustomButton
             text="Entrar"
             isLoading={isLoading}
@@ -138,6 +135,7 @@ export default function ScreenLogin() {
               fontWeight: '400',
               marginTop: 40,
               fontFamily: AppUtils.FontFamily,
+              color: '#1B8CB9',
             }}>
             Esqueci minha senha
           </Text>
@@ -149,7 +147,7 @@ export default function ScreenLogin() {
 
 const styles = StyleSheet.create({
   input: {
-    borderColor: 'gray',
+    borderColor: '#1B8CB9',
     borderWidth: 1,
     borderRadius: 15,
     width: '100%',

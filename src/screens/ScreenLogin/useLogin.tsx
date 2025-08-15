@@ -3,8 +3,8 @@ import {AuthService} from '../../service/AuthService';
 import {SessionContext} from '../../context/SessionContext';
 
 export function useLogin() {
-  const [loginInput, setLoginInput] = useState('12345');
-  const [password, setPassword] = useState('12345');
+  const [loginInput, setLoginInput] = useState('');
+  const [password, setPassword] = useState('');
   const [isLoading, setLoading] = useState(false);
   const [erro, setErro] = useState('');
   const [showPassword, setShowPassword] = useState(false);

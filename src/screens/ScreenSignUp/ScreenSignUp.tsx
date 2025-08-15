@@ -139,7 +139,7 @@ export default function ScreenSignUp() {
               <Feather
                 name={showPassword ? 'eye' : 'eye-off'}
                 size={20}
-                color="#808080"
+                color="#1B8CB9"
               />
             </TouchableOpacity>
           </View>
@@ -172,7 +172,7 @@ export default function ScreenSignUp() {
 
 const styles = StyleSheet.create({
   input: {
-    borderColor: 'gray',
+    borderColor: '#1B8CB9',
     borderWidth: 1,
     borderRadius: 15,
     width: '100%',

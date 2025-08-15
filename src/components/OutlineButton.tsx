@@ -21,7 +21,9 @@ export default function OutlineButton({onClick, text}: props) {
         marginBottom: 40,
       }}
       onPress={onClick}>
-      <Text style={{fontSize: AppUtils.FontSize}}>{text}</Text>
+      <Text style={{fontSize: AppUtils.FontSize, color: '#1B8CB9'}}>
+        {text}
+      </Text>
     </TouchableOpacity>
   );
 }
