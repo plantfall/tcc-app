@@ -1,17 +1,9 @@
-import {
-  View,
-  Text,
-  StatusBar,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-} from 'react-native';
+import {View, Text, StatusBar} from 'react-native';
 import CustomButton from '../../components/CustomButton.tsx';
 import {useLogin} from './useLogin.tsx';
 import React, {useEffect, useRef} from 'react';
 import {Animated} from 'react-native';
 import {AppUtils} from '../../utils/AppUtils.ts';
-import Feather from 'react-native-vector-icons/Feather';
 import OutlineButton from '../../components/OutlineButton.tsx';
 import {useNavigation} from '@react-navigation/native';
 
@@ -99,7 +91,7 @@ export default function ScreenBoarding() {
 
         <OutlineButton
           text="Criar conta"
-          onClick={() => nav.navigate('Home')}
+          onClick={() => nav.navigate('ScreenSignUp')}
         />
       </View>
     </View>
