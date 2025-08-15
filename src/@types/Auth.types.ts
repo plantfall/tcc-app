@@ -9,4 +9,5 @@ export type LoginResponse = {
 
 export type User = {
   nome: string;
+  cartaoSus: string;
 };

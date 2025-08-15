@@ -23,7 +23,6 @@ export default function Home() {
           iconName="history"
           destination="ScreenHistoricoConsultas"
         />
-        <Item text="Minha ficha médica" iconName="address-book-o" />
         <Item text="Localização da UBS" iconName="location-arrow" />
       </View>
     </View>

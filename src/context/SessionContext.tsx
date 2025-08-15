@@ -27,7 +27,8 @@ export default function SessionProvider({children}: props) {
 
   useEffect(() => {
     loadData();
-    //setLoading(false);
+    //sair();
+    setLoading(false);
   }, []);
 
   async function salvarUsuario(loginResponse: LoginResponse) {

@@ -37,7 +37,6 @@ function HomeStackNavigator() {
         headerShown: false,
         orientation: 'portrait',
       }}>
-      <Stack.Screen name="ScreenBoarding" component={ScreenBoarding} />
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="ScreenPerfil" component={ScreenPerfil} />
       <Stack.Screen

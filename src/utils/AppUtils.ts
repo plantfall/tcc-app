@@ -1,4 +1,6 @@
 export class AppUtils {
+  static TestMode = true;
+
   static PlaceholderTextColor = '#808080';
   static FontSize = 14;
   static FontSizeMedium = 16;

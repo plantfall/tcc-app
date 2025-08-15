@@ -83,7 +83,7 @@ export default function ScreenBoarding() {
 
       <View style={{width: '100%', marginTop: 50}}>
         <CustomButton
-          text="Entrar"
+          text="Já possuo conta"
           isLoading={isLoading}
           bgColor="#4A90E2"
           onClick={() => nav.navigate('ScreenLogin')}

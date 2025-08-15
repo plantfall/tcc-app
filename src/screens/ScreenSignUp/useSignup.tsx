@@ -1,6 +1,7 @@
 import {useContext, useState} from 'react';
 import {AuthService} from '../../service/AuthService';
 import {SessionContext} from '../../context/SessionContext';
+import {AppUtils} from '../../utils/AppUtils';
 
 export function useSignUp() {
   const [nomeInput, setNomeInput] = useState('');
@@ -18,10 +19,18 @@ export function useSignUp() {
 
   const handleSignUp = async () => {
     setLoading(true);
-    if (emailInput.trim().length == 0) {
-      setLoading(false);
-      return;
+
+    if (!AppUtils.TestMode) {
+      if (emailInput.trim().length == 0) {
+        setLoading(false);
+        return;
+      }
     }
+
+    setEmailInput('teste@teste.com');
+    setCartaoSusInput('12345678910');
+    setNomeInput('Teste da Silva');
+    setPassword('123456789');
 
     await authService
       .login(emailInput, password)

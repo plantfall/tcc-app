@@ -6,7 +6,8 @@ export class AuthService extends DefaultApiProvider {
     return {
       responseLogin: {
         user: {
-          nome: 'Amanda',
+          nome: 'Teste da Silva',
+          cartaoSus: '12345678910',
         },
         token: '',
       },
