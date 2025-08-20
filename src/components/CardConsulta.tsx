@@ -4,6 +4,7 @@ import {getNomeApropriado} from '../screens/ScreenAgendarConsulta/ScreenAgendarC
 import {AppUtils} from '../utils/AppUtils';
 import {Consulta} from '../service/ConsultaService';
 import {formatarDataPorExtenso} from '../utils/DateUtils';
+import {useNavigation} from '@react-navigation/native';
 
 type Props = {
   consulta: Consulta;
@@ -22,6 +23,8 @@ export default function CardConsulta({
 
   const [status_, setStatus_] = useState('');
   const [corCirculo, setCorCirculo] = useState('');
+
+  const nav = useNavigation();
 
   useMemo(() => {
     switch (status) {
@@ -138,6 +141,12 @@ export default function CardConsulta({
           </Pressable>
 
           <TouchableOpacity
+            onPress={() =>
+              nav.navigate('ScreenDefinirDiaHorario', {
+                consulta: consulta,
+                editMode: true,
+              })
+            }
             style={{
               backgroundColor: '#2390BB',
               paddingHorizontal: 15,

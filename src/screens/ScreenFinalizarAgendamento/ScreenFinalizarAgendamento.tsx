@@ -31,6 +31,9 @@ export default function ScreenFinalizarAgendamento() {
 
   const {params} = useRoute();
 
+  const consulta: Consulta = params?.consulta;
+  const editMode: boolean = params?.editMode;
+
   const handleHorarioClick = (horario: string) => {
     if (horarioSelected == horario) {
       setHorarioSelected(null);
@@ -54,9 +57,19 @@ export default function ScreenFinalizarAgendamento() {
 
     console.log(consultaRequest);
 
-    await consultaService.agendarConsulta(user?.uid, consultaRequest);
+    if (editMode) {
+      consultaRequest.id = consulta.id;
 
-    nav.navigate('ScreenConsultaAgendada', consultaRequest);
+      console.log('vai editar');
+      console.log(consultaRequest);
+
+      //await consultaService.editarConsulta(user?.uid, consultaRequest);
+    } else await consultaService.agendarConsulta(user?.uid, consultaRequest);
+
+    nav.navigate('ScreenConsultaAgendada', {
+      consulta: consultaRequest,
+      editMode: editMode,
+    });
   };
 
   return (
@@ -88,7 +101,10 @@ export default function ScreenFinalizarAgendamento() {
           ))}
         </View>
 
-        <CustomButton text="Agendar" onClick={handleAgendar} />
+        <CustomButton
+          text={editMode ? 'Alterar agendamento' : 'Agendar'}
+          onClick={handleAgendar}
+        />
       </View>
     </View>
   );

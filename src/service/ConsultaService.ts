@@ -1,12 +1,10 @@
 import {Especialista} from '../screens/ScreenAgendarConsulta/useAgendarConsulta';
-import firestore, {
-  FirebaseFirestoreTypes,
-} from '@react-native-firebase/firestore';
+import firestore from '@react-native-firebase/firestore';
 import {formatarFirestoreDateParaDataIso} from '../utils/DateUtils';
 import {AppUtils} from '../utils/AppUtils';
-import {consultaMock, consultasMock} from '../mocks/Consultas.mock';
+import {consultasMock} from '../mocks/Consultas.mock';
 
-export type Status = 'AGENDADA' | 'CANCELADA' | 'CONCLUIDA';
+export type Status = 'AGENDADA' | 'CANCELADA' | 'CONCLUIDA' | 'REAJENDADA';
 export type Consulta = {
   id?: string;
   especialista: Especialista;
@@ -103,6 +101,33 @@ export class ConsultaService {
       await consultaRef.update({status: 'CANCELADA'});
 
       console.log(`Consulta ${consultaId} cancelada com sucesso`);
+      return true;
+    } catch (error: any) {
+      console.error('Erro ao cancelar consulta:', error.message);
+      return false;
+    }
+  }
+
+  public async editarConsulta(
+    uidUser: string,
+    consulta: Consulta,
+  ): Promise<boolean> {
+    try {
+      const consultaRef = firestore()
+        .collection('users')
+        .doc(uidUser)
+        .collection('consultas')
+        .doc(consulta.id);
+
+      console.log('consulta id: ' + consulta.id);
+
+      await consultaRef.update({
+        status: 'AGENDADA',
+        dataMarcada: consulta.dataMarcada,
+        horarioMarcado: consulta.horarioMarcado,
+      });
+
+      console.log(`Consulta atualizada com sucesso`);
       return true;
     } catch (error: any) {
       console.error('Erro ao cancelar consulta:', error.message);

@@ -17,7 +17,11 @@ export default function ScreenConsultaAgendada() {
   const [notificacoes, setNotificacoes] = useState<Notificacao[]>([]);
 
   const {params} = useRoute();
-  const consultaAgendada = AppUtils.TestMode ? consultaMock : params;
+
+  const editMode = params.editMode;
+  const consulta = params.consulta;
+
+  const consultaAgendada = AppUtils.TestMode ? consultaMock : consulta;
 
   const nav = useNavigation();
 
@@ -47,7 +51,9 @@ export default function ScreenConsultaAgendada() {
             textAlign: 'left',
             marginLeft: 20,
           }}>
-          {'Sua consulta foi agendada\ncom sucesso!'}
+          {editMode
+            ? 'Sua consulta foi alterada\ncom sucesso!'
+            : 'Sua consulta foi agendada\ncom sucesso!'}
         </Text>
 
         <View style={{alignItems: 'center'}}>

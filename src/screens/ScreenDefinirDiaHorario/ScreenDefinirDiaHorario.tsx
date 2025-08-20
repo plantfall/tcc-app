@@ -6,14 +6,21 @@ import {Calendar} from 'react-native-calendars';
 import {getNomeApropriado} from '../ScreenAgendarConsulta/ScreenAgendarConsulta';
 import {Especialista} from '../ScreenAgendarConsulta/useAgendarConsulta';
 import {useState} from 'react';
+import {Consulta} from '../../service/ConsultaService';
 
 export default function ScreenDefinirDiaHorario() {
   const {params} = useRoute();
-  const especialista: Especialista = params?.dado;
+
+  const consulta: Consulta = params?.consulta;
+  const editMode: boolean = params?.editMode || false;
+
+  const especialista: Especialista = editMode
+    ? consulta.especialista
+    : params?.dado;
+
   const diasDisponiveis = especialista.diasDisponiveis;
 
-  const [dateSelected, setDateSelected] = useState(new Date());
-
+  const dateSelected = editMode ? new Date(consulta.dataMarcada) : new Date();
   const nav = useNavigation();
 
   // Converter lista para formato do Calendar
@@ -84,6 +91,8 @@ export default function ScreenDefinirDiaHorario() {
             nav.navigate('ScreenFinalizarAgendamento', {
               especialista: especialista,
               diaSelecionado: new Date(day.dateString),
+              editMode: editMode,
+              consulta: consulta,
             });
           }
         }}
