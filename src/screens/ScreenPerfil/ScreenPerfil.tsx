@@ -16,12 +16,15 @@ import Feather from 'react-native-vector-icons/Feather';
 import {AppUtils} from '../../utils/AppUtils.ts';
 import {CircularName} from '../../components/CircularName.tsx';
 import {useNavigation} from '@react-navigation/native';
+import {SessionContext} from '../../context/SessionContext.tsx';
 
 export default function ScreenPerfil() {
   const name = 'Camille e Eliezer';
 
   const [cartaoSus, setCartaoSus] = useState('');
   const [editandoCartaoSus, setEditandoCartaoSus] = useState(false);
+
+  const {sair} = useContext(SessionContext);
 
   const nav = useNavigation();
 
@@ -133,7 +136,9 @@ export default function ScreenPerfil() {
           text="Sair da conta"
           iconSource={Feather}
           iconName="log-out"
-          onClick={() => {}}
+          onClick={async () => {
+            await sair();
+          }}
         />
       </View>
     </View>

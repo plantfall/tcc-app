@@ -44,24 +44,18 @@ export default function SessionProvider({children}: props) {
   }
 
   async function loadData() {
-    const userResponse = await AsyncStorage.getItem('@usuario');
-    const tokenResponse = await AsyncStorage.getItem('@token');
+    const userData = await AsyncStorage.getItem('@user');
 
-    if (userResponse != null) {
-      const userResponse_: User = JSON.parse(userResponse);
+    if (userData != null) {
+      const userResponse_: User = JSON.parse(userData);
 
       console.log('user......');
       console.log(userResponse_);
       setUser(userResponse_);
     }
 
-    if (tokenResponse != null) {
-      setToken(tokenResponse);
-    }
-
     setLoading(false);
-    //setSignIn(userResponse != null);
-    setSignIn(false);
+    setSignIn(userData != null);
   }
 
   async function sair() {

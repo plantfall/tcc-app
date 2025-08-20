@@ -2,7 +2,6 @@ import {AuthRequest, LoginResponse} from '../@types/Auth.types';
 import {DefaultApiProvider} from './DefaultApiProvider';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export class AuthService extends DefaultApiProvider {
   public async signUp(authRequest: AuthRequest): Promise<LoginResponse> {
@@ -41,15 +40,33 @@ export class AuthService extends DefaultApiProvider {
   }
 
   public async login(email: string, password: string): Promise<LoginResponse> {
-    return {
-      responseLogin: {
+    try {
+      const userCredential = await auth().signInWithEmailAndPassword(
+        email,
+        password,
+      );
+      const {uid} = userCredential.user;
+
+      const userDoc = await firestore().collection('users').doc(uid).get();
+
+      if (!userDoc.exists) {
+        throw new Error('Dados do usuário não encontrados no Firestore.');
+      }
+
+      const userData = userDoc.data();
+
+      const loginResponse: LoginResponse = {
         user: {
-          nome: 'Teste da Silva',
-          cartaoSus: '12345678910',
+          uid,
+          nome: userData?.name || '',
+          email: userData?.email || '',
+          cartaoSus: userData?.cartao_sus || '',
         },
-        token: '',
-      },
-    };
-    //throw {status: 500, message: 'Erro inesperado no login'};
+      };
+
+      return loginResponse;
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
   }
 }

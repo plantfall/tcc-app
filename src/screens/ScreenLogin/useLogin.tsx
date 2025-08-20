@@ -1,11 +1,10 @@
 import {useContext, useState} from 'react';
 import {AuthService} from '../../service/AuthService';
 import {SessionContext} from '../../context/SessionContext';
-import {AppUtils} from '../../utils/AppUtils';
 
 export function useLogin() {
-  const [loginInput, setLoginInput] = useState('');
-  const [password, setPassword] = useState('');
+  const [loginInput, setLoginInput] = useState('teste1@gmail.com');
+  const [password, setPassword] = useState('12345678');
   const [isLoading, setLoading] = useState(false);
   const [erro, setErro] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -15,16 +14,6 @@ export function useLogin() {
 
   const handleLogin = async () => {
     setLoading(true);
-
-    if (!AppUtils.TestMode) {
-      if (loginInput.trim().length == 0) {
-        setLoading(false);
-        return;
-      }
-    }
-
-    setLoginInput('teste@teste.com');
-    setPassword('123456789');
 
     await authService
       .login(loginInput, password)

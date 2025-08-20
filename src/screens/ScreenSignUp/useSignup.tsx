@@ -1,7 +1,6 @@
 import {useContext, useState} from 'react';
 import {AuthService} from '../../service/AuthService';
 import {SessionContext} from '../../context/SessionContext';
-import {AppUtils} from '../../utils/AppUtils';
 
 export function useSignUp() {
   const [nomeInput, setNomeInput] = useState('Teste');
