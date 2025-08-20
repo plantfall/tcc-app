@@ -7,7 +7,6 @@ import ScreenConfimacaoHook, {
 import {useNavigation} from '@react-navigation/native';
 import Feather from 'react-native-vector-icons/Feather';
 import {AppUtils} from '../../utils/AppUtils';
-import DateTimePicker from '@react-native-community/datetimepicker';
 
 export default function ScreenAgendarConsulta() {
   const {especialistas, turnDatePickerOn} = ScreenConfimacaoHook();
@@ -47,7 +46,7 @@ function EspecialistaCard({especialista, turnDatePickerOn}: Props) {
             color: '#4F4F4F',
             fontSize: AppUtils.FontSize,
           }}>
-          Próxima data: Amanhã 18 de Setembro
+          Próxima data: {especialista.diasDisponiveis[0]}
         </Text>
       </View>
 

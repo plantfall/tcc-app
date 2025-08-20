@@ -19,7 +19,6 @@ export const SessionContext = createContext<SessionContextType>(
 );
 
 export default function SessionProvider({children}: props) {
-  const [token, setToken] = useState('');
   const [user, setUser] = useState<User | undefined>();
   const [signed, setSignIn] = useState(false);
   const [loading, setLoading] = useState(true);

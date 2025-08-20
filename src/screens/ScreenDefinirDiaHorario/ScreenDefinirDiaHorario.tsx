@@ -11,8 +11,11 @@ export default function ScreenDefinirDiaHorario() {
   const {params} = useRoute();
   const especialista: Especialista = params?.dado;
 
-  const {loading, diasDisponiveis, dateSelected, setDateSelected} =
-    useScreenDefinirDiaHorario();
+  console.log(especialista);
+
+  const diasDisponiveis = especialista.diasDisponiveis;
+
+  const {dateSelected, setDateSelected} = useScreenDefinirDiaHorario();
 
   const nav = useNavigation();
 
