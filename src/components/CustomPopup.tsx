@@ -1,6 +1,11 @@
 import React from 'react';
 import {Modal, View, Text, StyleSheet, Pressable} from 'react-native';
 
+type buttonProp = {
+  text: string;
+  bgColor: string;
+  onClick: () => void;
+};
 type Props = {
   visible: boolean;
   onClose?: () => void;
@@ -8,6 +13,7 @@ type Props = {
   message?: string;
   emoji?: string;
   btnText?: string;
+  btns: buttonProp[];
 };
 
 export default function CustomPopup({
@@ -16,7 +22,7 @@ export default function CustomPopup({
   title = 'Erro',
   message = 'Algo deu errado.',
   emoji = '😢',
-  btnText = 'Fechar',
+  btns,
 }: Props) {
   return (
     <Modal
@@ -29,9 +35,22 @@ export default function CustomPopup({
           <Text style={styles.modalEmoji}>{emoji}</Text>
           <Text style={styles.modalTitle}>{title}</Text>
           <Text style={styles.modalMessage}>{message}</Text>
-          <Pressable style={styles.modalButton} onPress={onClose}>
-            <Text style={{color: 'white', fontWeight: 'bold'}}>{btnText}</Text>
-          </Pressable>
+
+          <View style={styles.btnsContainer}>
+            {btns.map((current, index) => (
+              <Pressable
+                key={index}
+                style={{
+                  ...styles.modalButton,
+                  backgroundColor: current.bgColor,
+                }}
+                onPress={current.onClick}>
+                <Text style={{color: 'white', fontWeight: 'bold'}}>
+                  {current.text}
+                </Text>
+              </Pressable>
+            ))}
+          </View>
         </View>
       </View>
     </Modal>
@@ -76,5 +95,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 10,
+  },
+  btnsContainer: {
+    flexDirection: 'row',
+    columnGap: 20,
   },
 });

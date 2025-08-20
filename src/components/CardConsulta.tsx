@@ -1,5 +1,5 @@
 import {useState, useMemo} from 'react';
-import {View, Text, TouchableOpacity, Image} from 'react-native';
+import {View, Text, TouchableOpacity, Image, Pressable} from 'react-native';
 import {getNomeApropriado} from '../screens/ScreenAgendarConsulta/ScreenAgendarConsulta';
 import {AppUtils} from '../utils/AppUtils';
 import {Consulta} from '../service/ConsultaService';
@@ -8,11 +8,13 @@ import {formatarDataPorExtenso} from '../utils/DateUtils';
 type Props = {
   consulta: Consulta;
   emScreenConsultaAgendada?: boolean;
+  callbackCancelar?: (consulta: Consulta) => void;
 };
 
 export default function CardConsulta({
   consulta,
   emScreenConsultaAgendada,
+  callbackCancelar,
 }: Props) {
   const {dataMarcada, especialista, status, horarioMarcado} = consulta;
 
@@ -116,7 +118,10 @@ export default function CardConsulta({
             gap: 30,
             marginTop: 25,
           }}>
-          <TouchableOpacity
+          <Pressable
+            onPress={() => {
+              if (callbackCancelar != undefined) callbackCancelar(consulta);
+            }}
             style={{
               borderColor: 'red',
               borderRadius: 10,
@@ -130,7 +135,7 @@ export default function CardConsulta({
             <Text style={{color: 'red', fontSize: AppUtils.FontSize}}>
               Cancelar
             </Text>
-          </TouchableOpacity>
+          </Pressable>
 
           <TouchableOpacity
             style={{

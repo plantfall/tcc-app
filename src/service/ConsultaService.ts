@@ -8,6 +8,7 @@ import {consultaMock, consultasMock} from '../mocks/Consultas.mock';
 
 export type Status = 'AGENDADA' | 'CANCELADA' | 'CONCLUIDA';
 export type Consulta = {
+  id?: string;
   especialista: Especialista;
   dataMarcada: string;
   horarioMarcado: string;
@@ -15,6 +16,7 @@ export type Consulta = {
 };
 
 export type ConsultaResponse = {
+  id: string;
   especialista: Especialista;
   dataMarcada: FirestoreTimestamp;
   horarioMarcado: string;
@@ -51,6 +53,7 @@ export class ConsultaService {
       if (AppUtils.TestMode) {
         const consultas: Consulta[] = consultasMock.map(data => {
           return {
+            id: data.id,
             dataMarcada: formatarFirestoreDateParaDataIso(data.dataMarcada),
             especialista: data.especialista,
             horarioMarcado: data.horarioMarcado,
@@ -70,6 +73,7 @@ export class ConsultaService {
         const data = doc.data() as ConsultaResponse;
 
         return {
+          id: doc.id,
           dataMarcada: formatarFirestoreDateParaDataIso(data.dataMarcada),
           especialista: data.especialista,
           horarioMarcado: data.horarioMarcado,
@@ -82,6 +86,27 @@ export class ConsultaService {
       return consultas;
     } catch (error: any) {
       throw new Error(error.message);
+    }
+  }
+
+  public async cancelarConsulta(
+    uidUser: string,
+    consultaId: string,
+  ): Promise<boolean> {
+    try {
+      const consultaRef = firestore()
+        .collection('users')
+        .doc(uidUser)
+        .collection('consultas')
+        .doc(consultaId);
+
+      await consultaRef.update({status: 'CANCELADA'});
+
+      console.log(`Consulta ${consultaId} cancelada com sucesso`);
+      return true;
+    } catch (error: any) {
+      console.error('Erro ao cancelar consulta:', error.message);
+      return false;
     }
   }
 }
