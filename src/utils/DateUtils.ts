@@ -1,3 +1,5 @@
+import firestore from '@react-native-firebase/firestore';
+
 export function ConverterDataParaFormatoBrasileiro(
   milissegundos: number,
 ): string {
@@ -39,4 +41,18 @@ export function formatarDataPorExtenso(dataIso: string): string {
   const ano = data.getFullYear();
 
   return `${dia} de ${mes} de ${ano}`;
+}
+
+export function formatarFirestoreDateParaDataIso(timestamp: {
+  seconds: number;
+  nanoseconds: number;
+}): string {
+  // converte para Date
+  const date = new firestore.Timestamp(
+    timestamp.seconds,
+    timestamp.nanoseconds,
+  ).toDate();
+
+  // retorna no formato ISO (2025-08-28T00:00:00.000Z)
+  return date.toISOString();
 }

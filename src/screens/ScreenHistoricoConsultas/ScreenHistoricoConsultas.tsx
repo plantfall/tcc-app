@@ -1,40 +1,21 @@
 import {View, FlatList} from 'react-native';
 import Voltar from '../../components/Voltar';
-import {useEffect, useState} from 'react';
-import {Especialista} from '../ScreenAgendarConsulta/useAgendarConsulta';
+import {useContext, useEffect, useState} from 'react';
 import CardConsulta from '../../components/CardConsulta';
-import {Consulta} from '../../service/ConsultaService';
+import {Consulta, ConsultaService} from '../../service/ConsultaService';
+import {SessionContext} from '../../context/SessionContext';
 
 export default function ScreenHistoricoConsultas() {
   const [consultas, setConsultas] = useState<Consulta[]>([]);
+  const consultaService = new ConsultaService();
+
+  const {user} = useContext(SessionContext);
 
   useEffect(() => {
     loadConsultas();
 
     async function loadConsultas() {
-      //...
-      const lista: Consulta[] = [
-        {
-          especialista: {
-            nome: 'Dra.Gabriela Garcia',
-            especializacao: 'CLINICO_GERAL',
-          },
-          dataMarcada: '05/10/2025',
-          horarioMarcado: '08:30',
-          status: 'AGENDADA',
-        },
-
-        {
-          especialista: {
-            nome: 'Dr Mauro Strevis Allious',
-            especializacao: 'MEDICO',
-          },
-          dataMarcada: '09/11/2025',
-          horarioMarcado: '10:30',
-          status: 'CANCELADA',
-        },
-      ];
-      setConsultas(lista);
+      setConsultas(await consultaService.fetchConsultas(user?.uid));
     }
   }, []);
 

@@ -38,12 +38,16 @@ function HomeStackNavigator() {
         orientation: 'portrait',
       }}>
       <Stack.Screen
+        name="ScreenHistoricoConsultas"
+        component={ScreenHistoricoConsultas}
+      />
+
+      <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen name="ScreenPerfil" component={ScreenPerfil} />
+      <Stack.Screen
         name="ScreenConsultaAgendada"
         component={ScreenConsultaAgendada}
       />
-      <Stack.Screen name="Home" component={Home} />
-      <Stack.Screen name="ScreenPerfil" component={ScreenPerfil} />
-
       <Stack.Screen
         name="ScreenAgendarConsulta"
         component={ScreenAgendarConsulta}
@@ -56,10 +60,7 @@ function HomeStackNavigator() {
         name="ScreenFinalizarAgendamento"
         component={ScreenFinalizarAgendamento}
       />
-      <Stack.Screen
-        name="ScreenHistoricoConsultas"
-        component={ScreenHistoricoConsultas}
-      />
+
       <Stack.Screen name="ScreenNotificacoes" component={ScreenNotificacoes} />
     </Stack.Navigator>
   );
