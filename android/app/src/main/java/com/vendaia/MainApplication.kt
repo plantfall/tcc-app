@@ -1,4 +1,4 @@
-package com.vendaia
+package com.app.tcc
 
 import android.app.Application
 import com.facebook.react.PackageList
@@ -11,6 +11,7 @@ import com.facebook.react.defaults.DefaultReactHost.getDefaultReactHost
 import com.facebook.react.defaults.DefaultReactNativeHost
 import com.facebook.react.soloader.OpenSourceMergedSoMapping
 import com.facebook.soloader.SoLoader
+import io.invertase.firebase.firestore.ReactNativeFirebaseFirestorePackage;
 
 class MainApplication : Application(), ReactApplication {
 

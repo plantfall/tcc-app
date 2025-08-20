@@ -111,15 +111,17 @@ export default function ScreenSignUp() {
             numberOfLines={1}
             autoCapitalize="none"
             style={styles.input}
+            keyboardType="number-pad"
           />
           <TextInput
             value={emailInput}
             onChangeText={setEmailInput}
             placeholderTextColor="#808080"
-            placeholder="Informe seu cartão do SUS"
+            placeholder="Informe seu email"
             numberOfLines={1}
             autoCapitalize="none"
             style={styles.input}
+            keyboardType="email-address"
           />
 
           <View style={styles.passwordContainer}>

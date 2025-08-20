@@ -4,12 +4,12 @@ import {SessionContext} from '../../context/SessionContext';
 import {AppUtils} from '../../utils/AppUtils';
 
 export function useSignUp() {
-  const [nomeInput, setNomeInput] = useState('');
-  const [cartaoSusInput, setCartaoSusInput] = useState('');
+  const [nomeInput, setNomeInput] = useState('Teste');
+  const [cartaoSusInput, setCartaoSusInput] = useState('12345678910');
 
-  const [emailInput, setEmailInput] = useState('');
+  const [emailInput, setEmailInput] = useState('teste1@gmail.com');
 
-  const [password, setPassword] = useState('');
+  const [password, setPassword] = useState('12345678');
   const [isLoading, setLoading] = useState(false);
   const [erro, setErro] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -20,20 +20,13 @@ export function useSignUp() {
   const handleSignUp = async () => {
     setLoading(true);
 
-    if (!AppUtils.TestMode) {
-      if (emailInput.trim().length == 0) {
-        setLoading(false);
-        return;
-      }
-    }
-
-    setEmailInput('teste@teste.com');
-    setCartaoSusInput('12345678910');
-    setNomeInput('Teste da Silva');
-    setPassword('123456789');
-
     await authService
-      .login(emailInput, password)
+      .signUp({
+        name: nomeInput,
+        cartao_sus: cartaoSusInput,
+        email: emailInput,
+        password: password,
+      })
       .then(async r => {
         await salvarUsuario(r);
       })

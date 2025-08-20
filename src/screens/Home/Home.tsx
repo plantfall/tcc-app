@@ -23,7 +23,11 @@ export default function Home() {
           iconName="history"
           destination="ScreenHistoricoConsultas"
         />
-        <Item text="Localização da UBS" iconName="location-arrow" />
+        <Item
+          text="Localização da UBS"
+          iconName="location-arrow"
+          destination="ScreenHistoricoConsultas"
+        />
       </View>
     </View>
   );

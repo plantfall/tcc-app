@@ -1,4 +1,4 @@
-package com.vendaia
+package com.app.tcc
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate

@@ -6,7 +6,6 @@ type SessionContextType = {
   user: User | undefined;
   signed: boolean;
   loading: boolean;
-  token: string;
   salvarUsuario(loginResponse: LoginResponse): Promise<void>;
   sair(): Promise<void>;
 };
@@ -32,17 +31,16 @@ export default function SessionProvider({children}: props) {
   }, []);
 
   async function salvarUsuario(loginResponse: LoginResponse) {
-    const userResponse = loginResponse.responseLogin.user;
-    const tokenResponse = loginResponse.responseLogin.token;
-    try {
-      await AsyncStorage.setItem('@usuario', JSON.stringify(userResponse));
-      await AsyncStorage.setItem('@token', tokenResponse);
-    } catch (e) {
-      console.log('erro ao salvar usuario');
-    }
+    await saveDataLocal(loginResponse);
+    const userResponse = loginResponse.user;
+
     setUser(userResponse);
-    setToken(tokenResponse);
     setSignIn(true);
+  }
+
+  async function saveDataLocal(authResponse: LoginResponse) {
+    await AsyncStorage.setItem('@user', JSON.stringify(authResponse.user));
+    console.log('salvou');
   }
 
   async function loadData() {
@@ -78,7 +76,6 @@ export default function SessionProvider({children}: props) {
         signed,
         loading,
         sair,
-        token,
         user,
         salvarUsuario,
       }}>
