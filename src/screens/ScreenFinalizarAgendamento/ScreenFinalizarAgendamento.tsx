@@ -1,11 +1,12 @@
-import {View, Text, StatusBar, TouchableOpacity} from 'react-native';
+import {View, Text, TouchableOpacity} from 'react-native';
 import Voltar from '../../components/Voltar';
-import {useState} from 'react';
+import {useContext, useState} from 'react';
 import CustomButton from '../../components/CustomButton';
-import CustomPopup from '../../components/CustomPopup';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import type {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParamList} from '../../routes/app.routes';
+import {Consulta, ConsultaService} from '../../service/ConsultaService';
+import {SessionContext} from '../../context/SessionContext';
 
 const HORARIOS = [
   '08:00',
@@ -25,11 +26,10 @@ const HORARIOS = [
 export default function ScreenFinalizarAgendamento() {
   const [horarioSelected, setHorarioSelected] = useState<null | string>(null);
 
-  const [consultaAgendada, setConsultaAgendada] = useState(false);
+  const consultaService = new ConsultaService();
+  const {user} = useContext(SessionContext);
 
   const {params} = useRoute();
-  const diaSelecionado = params?.diaSelecionado;
-  console.log(diaSelecionado);
 
   const handleHorarioClick = (horario: string) => {
     if (horarioSelected == horario) {
@@ -42,19 +42,21 @@ export default function ScreenFinalizarAgendamento() {
   const nav = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   const handleAgendar = async () => {
-    setConsultaAgendada(false);
-    setConsultaAgendada(false);
+    const diaSelecionado = params?.diaSelecionado;
+    const especialista = params?.especialista;
 
-    //agendar
-    setTimeout(() => {
-      //levar usuario para os agendamentos dele
-      setConsultaAgendada(false);
-      nav.navigate('ScreenConsultaAgendada', {
-        diaSelecionado,
-        horarioSelected,
-        especialistaId: '124_ID',
-      });
-    }, 3000);
+    const consultaRequest: Consulta = {
+      dataMarcada: diaSelecionado,
+      especialista: especialista,
+      horarioMarcado: horarioSelected,
+      status: 'AGENDADA',
+    };
+
+    console.log(consultaRequest);
+
+    await consultaService.agendarConsulta(user?.uid, consultaRequest);
+
+    nav.navigate('ScreenConsultaAgendada', consultaRequest);
   };
 
   return (

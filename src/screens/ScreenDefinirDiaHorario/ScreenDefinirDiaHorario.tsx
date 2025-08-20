@@ -5,17 +5,14 @@ import {AppUtils} from '../../utils/AppUtils';
 import {Calendar} from 'react-native-calendars';
 import {getNomeApropriado} from '../ScreenAgendarConsulta/ScreenAgendarConsulta';
 import {Especialista} from '../ScreenAgendarConsulta/useAgendarConsulta';
-import useScreenDefinirDiaHorario from './useScreenDefinirDiaHorario';
+import {useState} from 'react';
 
 export default function ScreenDefinirDiaHorario() {
   const {params} = useRoute();
   const especialista: Especialista = params?.dado;
-
-  console.log(especialista);
-
   const diasDisponiveis = especialista.diasDisponiveis;
 
-  const {dateSelected, setDateSelected} = useScreenDefinirDiaHorario();
+  const [dateSelected, setDateSelected] = useState(new Date());
 
   const nav = useNavigation();
 
@@ -85,6 +82,7 @@ export default function ScreenDefinirDiaHorario() {
             //setDateSelected(new Date(day.dateString));
 
             nav.navigate('ScreenFinalizarAgendamento', {
+              especialista: especialista,
               diaSelecionado: new Date(day.dateString),
             });
           }

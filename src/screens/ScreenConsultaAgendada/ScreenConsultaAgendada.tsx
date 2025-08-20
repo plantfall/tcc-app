@@ -1,12 +1,12 @@
 import {View, Text, Image, TouchableOpacity, StatusBar} from 'react-native';
-import {useEffect, useState} from 'react';
+import {useState} from 'react';
 import {AppUtils} from '../../utils/AppUtils';
 import AntDesignIcon from 'react-native-vector-icons/AntDesign';
-import {useNavigation} from '@react-navigation/native';
-import {Especialista} from '../ScreenAgendarConsulta/useAgendarConsulta';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import CardConsulta from '../../components/CardConsulta';
 import CustomButton from '../../components/CustomButton';
 import OutlineButton from '../../components/OutlineButton';
+import {consultaMock} from '../../mocks/Consultas.mock';
 
 type Notificacao = {
   titulo: string;
@@ -16,33 +16,10 @@ type Notificacao = {
 export default function ScreenConsultaAgendada() {
   const [notificacoes, setNotificacoes] = useState<Notificacao[]>([]);
 
-  //const {params} = useRoute();
-
-  const params = {
-    diaSelecionado: '25/03/2025',
-    horarioSelected: '14:30',
-    especialistaId: '124_ID',
-  };
-
-  const {diaSelecionado, horarioSelected, especialistaId} = params;
-
-  const [especialista, setEspecialista] = useState<Especialista | null>(null);
+  const {params} = useRoute();
+  const consultaAgendada = AppUtils.TestMode ? consultaMock : params;
 
   const nav = useNavigation();
-
-  useEffect(() => {
-    buscaEspecialistaPorId();
-
-    async function buscaEspecialistaPorId() {
-      //...
-
-      //setNotificacoes(lista);
-      setEspecialista({
-        especializacao: 'CLINICO_GERAL',
-        nome: 'DJ Pereira',
-      });
-    }
-  }, []);
 
   return (
     <View style={{backgroundColor: '#fff', flex: 1}}>
@@ -82,17 +59,11 @@ export default function ScreenConsultaAgendada() {
       </View>
 
       <View style={{flex: 1, padding: 20}}>
-        {especialista != null && (
-          <CardConsulta
-            emScreenConsultaAgendada={true}
-            consulta={{
-              status: 'AGENDADA',
-              dataMarcada: diaSelecionado,
-              especialista: especialista,
-              horarioMarcado: horarioSelected,
-            }}
-          />
-        )}
+        <CardConsulta
+          emScreenConsultaAgendada={true}
+          consulta={consultaAgendada}
+        />
+
         <View
           style={{
             flex: 1,

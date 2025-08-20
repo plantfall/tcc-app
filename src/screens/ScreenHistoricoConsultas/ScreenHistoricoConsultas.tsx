@@ -3,14 +3,7 @@ import Voltar from '../../components/Voltar';
 import {useEffect, useState} from 'react';
 import {Especialista} from '../ScreenAgendarConsulta/useAgendarConsulta';
 import CardConsulta from '../../components/CardConsulta';
-
-export type Status = 'AGENDADA' | 'CANCELADA' | 'CONCLUIDA';
-export type Consulta = {
-  especialista: Especialista;
-  dataMarcada: string;
-  horarioMarcado: string;
-  status: Status;
-};
+import {Consulta} from '../../service/ConsultaService';
 
 export default function ScreenHistoricoConsultas() {
   const [consultas, setConsultas] = useState<Consulta[]>([]);

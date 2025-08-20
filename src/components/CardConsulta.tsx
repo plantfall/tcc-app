@@ -1,8 +1,9 @@
 import {useState, useMemo} from 'react';
 import {View, Text, TouchableOpacity, Image} from 'react-native';
 import {getNomeApropriado} from '../screens/ScreenAgendarConsulta/ScreenAgendarConsulta';
-import {Consulta} from '../screens/ScreenHistoricoConsultas/ScreenHistoricoConsultas';
 import {AppUtils} from '../utils/AppUtils';
+import {Consulta} from '../service/ConsultaService';
+import {formatarDataPorExtenso} from '../utils/DateUtils';
 
 type Props = {
   consulta: Consulta;
@@ -61,7 +62,7 @@ export default function CardConsulta({
           />
           <View>
             <Text style={{fontSize: AppUtils.FontSizeMedium}}>
-              Data: {dataMarcada}
+              Data: {formatarDataPorExtenso(dataMarcada)}
             </Text>
             <Text style={{fontSize: AppUtils.FontSizeMedium}}>
               Horário: {horarioMarcado}
