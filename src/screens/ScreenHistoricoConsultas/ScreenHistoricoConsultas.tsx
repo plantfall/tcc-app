@@ -1,10 +1,11 @@
-import {View, FlatList} from 'react-native';
+import {View, FlatList, Text} from 'react-native';
 import Voltar from '../../components/Voltar';
 import {useContext, useEffect, useState} from 'react';
 import CardConsulta from '../../components/CardConsulta';
 import {Consulta, ConsultaService} from '../../service/ConsultaService';
 import {SessionContext} from '../../context/SessionContext';
 import CustomPopup from '../../components/CustomPopup';
+import {AppUtils} from '../../utils/AppUtils';
 
 export default function ScreenHistoricoConsultas() {
   const [consultas, setConsultas] = useState<Consulta[]>([]);
@@ -40,7 +41,9 @@ export default function ScreenHistoricoConsultas() {
           {
             text: 'Confirmar',
             bgColor: '#007BFF',
+
             onClick: async () => {
+              console.log(consultaSelected);
               const cancelou = await consultaService.cancelarConsulta(
                 user?.uid,
                 consultaSelected.id,
@@ -74,6 +77,19 @@ export default function ScreenHistoricoConsultas() {
               }}
             />
           )}
+          ListEmptyComponent={() => {
+            return (
+              <View>
+                <Text
+                  style={{
+                    textAlign: 'center',
+                    fontSize: AppUtils.FontSizeMedium,
+                  }}>
+                  Nenhuma consulta encontrada!
+                </Text>
+              </View>
+            );
+          }}
         />
       </View>
     </View>

@@ -63,7 +63,7 @@ export default function ScreenFinalizarAgendamento() {
       console.log('vai editar');
       console.log(consultaRequest);
 
-      //await consultaService.editarConsulta(user?.uid, consultaRequest);
+      await consultaService.editarConsulta(user?.uid, consultaRequest);
     } else await consultaService.agendarConsulta(user?.uid, consultaRequest);
 
     nav.navigate('ScreenConsultaAgendada', {

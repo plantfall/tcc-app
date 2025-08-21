@@ -1,9 +1,8 @@
 import {AuthRequest, LoginResponse} from '../@types/Auth.types';
-import {DefaultApiProvider} from './DefaultApiProvider';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 
-export class AuthService extends DefaultApiProvider {
+export class AuthService {
   public async signUp(authRequest: AuthRequest): Promise<LoginResponse> {
     try {
       // 1️⃣ Cria o usuário no Firebase Auth
