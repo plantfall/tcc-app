@@ -5,8 +5,11 @@ import {AppUtils} from '../../utils/AppUtils';
 import {Calendar} from 'react-native-calendars';
 import {getNomeApropriado} from '../ScreenAgendarConsulta/ScreenAgendarConsulta';
 import {Especialista} from '../ScreenAgendarConsulta/useAgendarConsulta';
-import {useState} from 'react';
 import {Consulta} from '../../service/ConsultaService';
+import {
+  ConverterMilisegundosParaDataFormatoBrasileiroPorExtendo,
+  ConverterStringParaDataFormatoBrasileiroPorExtendo,
+} from '../../utils/DateUtils';
 
 export default function ScreenDefinirDiaHorario() {
   const {params} = useRoute();
@@ -14,13 +17,17 @@ export default function ScreenDefinirDiaHorario() {
   const consulta: Consulta = params?.consulta;
   const editMode: boolean = params?.editMode || false;
 
+  console.log(editMode);
+
   const especialista: Especialista = editMode
     ? consulta.especialista
-    : params?.dado;
+    : params?.especialista;
 
   const diasDisponiveis = especialista.diasDisponiveis;
 
-  const dateSelected = editMode ? new Date(consulta.dataMarcada) : new Date();
+  const dateSelected = editMode
+    ? new Date(consulta.dataMarcadaMilisegundos)
+    : new Date();
   const nav = useNavigation();
 
   // Converter lista para formato do Calendar
@@ -88,11 +95,24 @@ export default function ScreenDefinirDiaHorario() {
           if (diasDisponiveisFormatados.includes(day.dateString)) {
             //setDateSelected(new Date(day.dateString));
 
-            nav.navigate('ScreenFinalizarAgendamento', {
+            const consultaObj: Consulta = {
+              dataFormatada: ConverterStringParaDataFormatoBrasileiroPorExtendo(
+                day.dateString,
+              ),
+              dataMarcadaMilisegundos: editMode
+                ? consulta.dataMarcadaMilisegundos
+                : day.timestamp,
               especialista: especialista,
-              diaSelecionado: new Date(day.dateString),
+              horarioMarcado:
+                consulta != undefined ? consulta.horarioMarcado : '',
+              status: consulta != undefined ? consulta.status : 'AGENDADA',
+              id: consulta != undefined ? consulta.id : '',
+            };
+
+            console.info(day.dateString);
+            nav.navigate('ScreenFinalizarAgendamento', {
               editMode: editMode,
-              consulta: consulta,
+              consulta: consultaObj,
             });
           }
         }}

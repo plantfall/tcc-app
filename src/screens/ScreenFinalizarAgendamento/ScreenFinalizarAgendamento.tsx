@@ -1,6 +1,6 @@
 import {View, Text, TouchableOpacity} from 'react-native';
 import Voltar from '../../components/Voltar';
-import {useContext, useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
 import CustomButton from '../../components/CustomButton';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import type {StackNavigationProp} from '@react-navigation/stack';
@@ -24,7 +24,7 @@ const HORARIOS = [
 ];
 
 export default function ScreenFinalizarAgendamento() {
-  const [horarioSelected, setHorarioSelected] = useState<null | string>(null);
+  const [horarioSelected, setHorarioSelected] = useState<string>('');
 
   const consultaService = new ConsultaService();
   const {user} = useContext(SessionContext);
@@ -33,6 +33,14 @@ export default function ScreenFinalizarAgendamento() {
 
   const consulta: Consulta = params?.consulta;
   const editMode: boolean = params?.editMode;
+
+  console.log('editmode: ' + editMode);
+
+  useEffect(() => {
+    if (editMode) {
+      setHorarioSelected(consulta.horarioMarcado);
+    }
+  }, []);
 
   const handleHorarioClick = (horario: string) => {
     if (horarioSelected == horario) {
@@ -45,29 +53,19 @@ export default function ScreenFinalizarAgendamento() {
   const nav = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   const handleAgendar = async () => {
-    const diaSelecionado = params?.diaSelecionado;
-    const especialista = params?.especialista;
+    consulta.horarioMarcado = horarioSelected;
+    console.log('handle agendamento');
 
-    const consultaRequest: Consulta = {
-      dataMarcada: diaSelecionado,
-      especialista: especialista,
-      horarioMarcado: horarioSelected,
-      status: 'AGENDADA',
-    };
+    console.log('editmode: ' + editMode);
 
-    console.log(consultaRequest);
+    console.log(consulta);
 
     if (editMode) {
-      consultaRequest.id = consulta.id;
-
-      console.log('vai editar');
-      console.log(consultaRequest);
-
-      await consultaService.editarConsulta(user?.uid, consultaRequest);
-    } else await consultaService.agendarConsulta(user?.uid, consultaRequest);
+      await consultaService.editarConsulta(user?.uid, consulta);
+    } else await consultaService.agendarConsulta(user?.uid, consulta);
 
     nav.navigate('ScreenConsultaAgendada', {
-      consulta: consultaRequest,
+      consulta: consulta,
       editMode: editMode,
     });
   };

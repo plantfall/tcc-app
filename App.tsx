@@ -2,10 +2,9 @@ import React, {useEffect} from 'react';
 
 import {NavigationContainer} from '@react-navigation/native';
 import Routes from './src/routes/Routes';
-import {SafeAreaProvider} from 'react-native-safe-area-context';
 import changeNavigationBarColor from 'react-native-navigation-bar-color';
-import {ToastProvider} from 'react-native-toast-notifications';
 import SessionProvider from './src/context/SessionContext.tsx';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 export default function App() {
   useEffect(() => {
@@ -15,9 +14,10 @@ export default function App() {
   return (
     <NavigationContainer>
       <SessionProvider>
-        <Routes />
+        <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
+          <Routes />
+        </SafeAreaView>
       </SessionProvider>
-      {/* <StackApp /> */}
     </NavigationContainer>
   );
 }

@@ -21,7 +21,7 @@ export default function ScreenConsultaAgendada() {
   const editMode = params.editMode;
   const consulta = params.consulta;
 
-  const consultaAgendada = AppUtils.TestMode ? consultaMock : consulta;
+  const consultaAgendada = consulta;
 
   const nav = useNavigation();
 
@@ -75,7 +75,10 @@ export default function ScreenConsultaAgendada() {
             flex: 1,
             justifyContent: 'flex-end',
           }}>
-          <CustomButton text="Ver Agendamentos" onClick={() => {}} />
+          <CustomButton
+            text="Ver Agendamentos"
+            onClick={() => nav.navigate('ScreenHistoricoConsultas')}
+          />
 
           <OutlineButton
             text="Voltar para tela inicial"

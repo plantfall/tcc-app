@@ -1,15 +1,41 @@
 import firestore from '@react-native-firebase/firestore';
 
-export function ConverterDataParaFormatoBrasileiro(
+export function ConverterStringParaDataFormatoBrasileiroPorExtendo(
+  dateString: string, // "2025-08-22"
+): string {
+  const [year, month, day] = dateString.split('-').map(Number);
+
+  // Criar a data no fuso local sem depender do horário UTC
+  const dateSelected = new Date(year, month - 1, day);
+
+  const formatadoBR = new Intl.DateTimeFormat('pt-BR', {
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric',
+  }).format(dateSelected);
+
+  console.log('data br');
+  console.log(formatadoBR);
+
+  return formatadoBR; // "22 de agosto de 2025"
+}
+
+export function ConverterMilisegundosParaDataFormatoBrasileiroPorExtendo(
   milissegundos: number,
 ): string {
-  const data = new Date(milissegundos);
+  const dateSelected = new Date(milissegundos);
 
-  const dia = data.getDate().toString().padStart(2, '0');
-  const mes = (data.getMonth() + 1).toString().padStart(2, '0');
-  const ano = data.getFullYear();
+  const formatadoBR = new Intl.DateTimeFormat('pt-BR', {
+    timeZone: 'America/Sao_Paulo',
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric',
+  }).format(dateSelected);
 
-  return `${dia}/${mes}/${ano}`;
+  console.log('data br');
+  console.log(formatadoBR);
+
+  return formatadoBR;
 }
 
 /**
@@ -18,23 +44,23 @@ export function ConverterDataParaFormatoBrasileiro(
  * @returns data convertida como: 25 de março de 2025
  */
 
+const meses = [
+  'janeiro',
+  'fevereiro',
+  'março',
+  'abril',
+  'maio',
+  'junho',
+  'julho',
+  'agosto',
+  'setembro',
+  'outubro',
+  'novembro',
+  'dezembro',
+];
+
 export function formatarDataPorExtenso(dataIso: string): string {
   const data = new Date(dataIso);
-
-  const meses = [
-    'janeiro',
-    'fevereiro',
-    'março',
-    'abril',
-    'maio',
-    'junho',
-    'julho',
-    'agosto',
-    'setembro',
-    'outubro',
-    'novembro',
-    'dezembro',
-  ];
 
   const dia = data.getDate();
   const mes = meses[data.getMonth()];

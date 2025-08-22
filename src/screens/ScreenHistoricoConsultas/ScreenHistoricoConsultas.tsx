@@ -15,10 +15,6 @@ export default function ScreenHistoricoConsultas() {
     null,
   );
 
-  //kdekdneedniednieed
-
-  //wdnwiudbwddbewiod
-
   const {user} = useContext(SessionContext);
 
   useEffect(() => {

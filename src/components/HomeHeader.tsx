@@ -27,7 +27,6 @@ export default function HomeHeader({nome}: Props) {
       colors={AppUtils.Gradient}
       style={{
         gap: 10,
-        marginTop: 30,
         paddingHorizontal: 15,
       }}>
       <Top nome={nome} />
@@ -78,7 +77,7 @@ function Top({nome}: Props) {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        marginTop: 30,
+        // marginTop: 30,
       }}>
       <View style={{flexDirection: 'row', alignItems: 'center', gap: 10}}>
         <TouchableOpacity onPress={() => nav.navigate('ScreenPerfil')}>

@@ -52,7 +52,7 @@ function EspecialistaCard({especialista, turnDatePickerOn}: Props) {
 
       <TouchableOpacity
         onPress={() => {
-          nav.navigate('ScreenDefinirDiaHorario', {dado: especialista});
+          nav.navigate('ScreenDefinirDiaHorario', {especialista: especialista});
         }}
         style={{
           flexDirection: 'row',

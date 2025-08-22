@@ -2,48 +2,18 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Debug Android",
+      "name": "Debug Android (Dispositivo Físico)",
       "type": "reactnative",
       "request": "launch",
       "platform": "android",
-      "sourceMaps": true,
-      "outDir": "${workspaceRoot}/.vscode/.react"
+      "target": "device",
+      "cwd": "${workspaceFolder}"
     },
     {
-      "name": "Debug iOS",
-      "type": "reactnative",
-      "request": "launch",
-      "platform": "ios",
-      "sourceMaps": true,
-      "outDir": "${workspaceRoot}/.vscode/.react"
-    },
-    {
-      "name": "Attach to Hermes application",
+      "name": "Attach to Hermes",
       "type": "reactnative",
       "request": "attach",
-      "sourceMaps": true,
-      "outDir": "${workspaceRoot}/.vscode/.react"
-    },
-    {
-      "name": "Attach to packager",
-      "type": "reactnative",
-      "request": "attach",
-      "sourceMaps": true,
-      "outDir": "${workspaceRoot}/.vscode/.react"
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Debug Poku (.ts only)",
-      "runtimeExecutable": "npx",
-      "runtimeArgs": [
-        "poku",
-        "--runner=tsx",
-        "--require=./poku.setup.js",
-        "__tests__"
-      ],
-      "console": "integratedTerminal",
-      "skipFiles": ["<node_internals>/**"]
+      "cwd": "${workspaceFolder}"
     }
   ]
 }

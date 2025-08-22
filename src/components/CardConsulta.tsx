@@ -17,7 +17,7 @@ export default function CardConsulta({
   emScreenConsultaAgendada,
   callbackCancelar,
 }: Props) {
-  const {dataMarcada, especialista, status, horarioMarcado} = consulta;
+  const {dataFormatada, especialista, status, horarioMarcado} = consulta;
 
   const size = 10;
 
@@ -67,7 +67,7 @@ export default function CardConsulta({
           />
           <View>
             <Text style={{fontSize: AppUtils.FontSizeMedium}}>
-              Data: {formatarDataPorExtenso(dataMarcada)}
+              Data: {dataFormatada}
             </Text>
             <Text style={{fontSize: AppUtils.FontSizeMedium}}>
               Horário: {horarioMarcado}

@@ -9,15 +9,8 @@ export type Status = 'AGENDADA' | 'CANCELADA' | 'CONCLUIDA' | 'REAJENDADA';
 export type Consulta = {
   id?: string;
   especialista: Especialista;
-  dataMarcada: string;
-  horarioMarcado: string;
-  status: Status;
-};
-
-export type ConsultaResponse = {
-  id: string;
-  especialista: Especialista;
-  dataMarcada: FirestoreTimestamp;
+  dataMarcadaMilisegundos: number;
+  dataFormatada: string;
   horarioMarcado: string;
   status: Status;
 };
@@ -67,15 +60,9 @@ export class ConsultaService {
         .get();
 
       let consultas: Consulta[] = snapshot.docs.map(doc => {
-        const data = doc.data() as ConsultaResponse;
+        const data = doc.data() as Consulta;
 
-        return {
-          id: doc.id,
-          dataMarcada: formatarFirestoreDateParaDataIso(data.dataMarcada),
-          especialista: data.especialista,
-          horarioMarcado: data.horarioMarcado,
-          status: data.status,
-        };
+        return data;
       });
 
       console.log(consultas);
@@ -136,8 +123,8 @@ export class ConsultaService {
       console.log('consulta id: ' + consulta.id);
 
       await consultaRef.update({
-        status: 'AGENDADA',
-        dataMarcada: consulta.dataMarcada,
+        dataFormatada: consulta.dataFormatada,
+        dataMarcada: consulta.dataMarcadaMilisegundos,
         horarioMarcado: consulta.horarioMarcado,
       });
 
