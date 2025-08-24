@@ -1,12 +1,15 @@
-import {View, FlatList, Text, TouchableOpacity} from 'react-native';
+import {View, FlatList, Text, TouchableOpacity, Image} from 'react-native';
 import Voltar from '../../components/Voltar';
 import ScreenConfimacaoHook, {
   Especialista,
   Especializacao,
+  imagens,
 } from './useAgendarConsulta';
 import {useNavigation} from '@react-navigation/native';
 import Feather from 'react-native-vector-icons/Feather';
 import {AppUtils} from '../../utils/AppUtils';
+import {useEffect, useState} from 'react';
+import {CircleImage} from '../../components/CircleImage';
 
 export default function ScreenAgendarConsulta() {
   const {especialistas, turnDatePickerOn} = ScreenConfimacaoHook();
@@ -36,6 +39,23 @@ type Props = {
 function EspecialistaCard({especialista, turnDatePickerOn}: Props) {
   const nav = useNavigation();
 
+  const [primeiroDiaDisponivel, setPrimeiroDiaDisponivel] = useState('');
+
+  useEffect(() => {
+    let mes = especialista.diasDisponiveis[0].split('-')[1];
+    let ano = especialista.diasDisponiveis[0].split('-')[2];
+
+    const dias = especialista.diasDisponiveis.map(v => {
+      const split = v.split('-');
+      const dia = split[0];
+      return Number(dia);
+    });
+
+    const ordemCrescente = dias.sort((a, b) => a - b);
+    const primeiroDia = ordemCrescente[0];
+    setPrimeiroDiaDisponivel(`${primeiroDia}-${mes}-${ano}`);
+  }, []);
+
   return (
     <View style={{padding: 15}}>
       <Top especialista={especialista} turnDatePickerOn={turnDatePickerOn} />
@@ -46,13 +66,13 @@ function EspecialistaCard({especialista, turnDatePickerOn}: Props) {
             color: '#4F4F4F',
             fontSize: AppUtils.FontSize,
           }}>
-          Próxima data: {especialista.diasDisponiveis[0]}
+          Próxima data: {primeiroDiaDisponivel}
         </Text>
       </View>
 
       <TouchableOpacity
         onPress={() => {
-          nav.navigate('ScreenDefinirDiaHorario', {especialista: especialista});
+          nav.navigate('ScreenEscolherDia', {especialista: especialista});
         }}
         style={{
           flexDirection: 'row',
@@ -76,17 +96,12 @@ function EspecialistaCard({especialista, turnDatePickerOn}: Props) {
 }
 
 function Top({especialista}: Props) {
-  const size = 90;
   return (
     <View style={{flexDirection: 'row', gap: 15, alignItems: 'center'}}>
       {/* IMAGEM CIRCULAR */}
-      <View
-        style={{
-          height: size,
-          width: size,
-          backgroundColor: 'red',
-          borderRadius: size / 2,
-        }}></View>
+
+      <CircleImage especialista={especialista} size={90} />
+
       <View>
         <Text style={{fontSize: AppUtils.FontSizeMedium, fontWeight: '600'}}>
           {especialista.nome}

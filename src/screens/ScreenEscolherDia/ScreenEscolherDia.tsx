@@ -6,12 +6,57 @@ import {Calendar} from 'react-native-calendars';
 import {getNomeApropriado} from '../ScreenAgendarConsulta/ScreenAgendarConsulta';
 import {Especialista} from '../ScreenAgendarConsulta/useAgendarConsulta';
 import {Consulta} from '../../service/ConsultaService';
-import {
-  ConverterMilisegundosParaDataFormatoBrasileiroPorExtendo,
-  ConverterStringParaDataFormatoBrasileiroPorExtendo,
-} from '../../utils/DateUtils';
+import {ConverterStringParaDataFormatoBrasileiroPorExtendo} from '../../utils/DateUtils';
+import {CircleImage} from '../../components/CircleImage';
 
-export default function ScreenDefinirDiaHorario() {
+import {LocaleConfig} from 'react-native-calendars';
+
+// Configurar locale para português (opcional, mas recomendado)
+LocaleConfig.locales['pt'] = {
+  monthNames: [
+    'Janeiro',
+    'Fevereiro',
+    'Março',
+    'Abril',
+    'Maio',
+    'Junho',
+    'Julho',
+    'Agosto',
+    'Setembro',
+    'Outubro',
+    'Novembro',
+    'Dezembro',
+  ],
+  monthNamesShort: [
+    'Jan',
+    'Fev',
+    'Mar',
+    'Abr',
+    'Mai',
+    'Jun',
+    'Jul',
+    'Ago',
+    'Set',
+    'Out',
+    'Nov',
+    'Dez',
+  ],
+  dayNames: [
+    'Domingo',
+    'Segunda-feira',
+    'Terça-feira',
+    'Quarta-feira',
+    'Quinta-feira',
+    'Sexta-feira',
+    'Sábado',
+  ],
+  dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
+  today: 'Hoje',
+};
+
+LocaleConfig.defaultLocale = 'pt';
+
+export default function ScreenEscolherDia() {
   const {params} = useRoute();
 
   const consulta: Consulta = params?.consulta;
@@ -91,6 +136,7 @@ export default function ScreenDefinirDiaHorario() {
 
       <Calendar
         markedDates={markedDates}
+        monthFormat="MMMM yyyy"
         onDayPress={day => {
           if (diasDisponiveisFormatados.includes(day.dateString)) {
             //setDateSelected(new Date(day.dateString));
@@ -125,7 +171,6 @@ type Props = {
   especialista: Especialista;
 };
 function Top({especialista}: Props) {
-  const size = 50;
   return (
     <View
       style={{
@@ -136,13 +181,7 @@ function Top({especialista}: Props) {
         margin: 10,
       }}>
       <View style={{flexDirection: 'row', gap: 15, alignItems: 'center'}}>
-        <View
-          style={{
-            height: size,
-            width: size,
-            backgroundColor: 'red',
-            borderRadius: size / 2,
-          }}></View>
+        <CircleImage especialista={especialista} size={50} />
         <View>
           <Text style={{fontSize: AppUtils.FontSizeMedium, fontWeight: '600'}}>
             {especialista.nome}

@@ -1,5 +1,5 @@
 import {View, Text, Image, TouchableOpacity, StatusBar} from 'react-native';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {AppUtils} from '../../utils/AppUtils';
 import AntDesignIcon from 'react-native-vector-icons/AntDesign';
 import {useNavigation, useRoute} from '@react-navigation/native';
@@ -7,6 +7,7 @@ import CardConsulta from '../../components/CardConsulta';
 import CustomButton from '../../components/CustomButton';
 import OutlineButton from '../../components/OutlineButton';
 import {consultaMock} from '../../mocks/Consultas.mock';
+import {BackHandler} from 'react-native';
 
 type Notificacao = {
   titulo: string;
@@ -20,10 +21,29 @@ export default function ScreenConsultaAgendada() {
 
   const editMode = params.editMode;
   const consulta = params.consulta;
+  //const editMode = false;
+  //const consulta = consultaMock;
 
   const consultaAgendada = consulta;
 
   const nav = useNavigation();
+
+  useEffect(() => {
+    const onBackPress = () => {
+      console.log('cliquei em voltar');
+      nav.navigate('Home');
+      return true;
+    };
+
+    // Adiciona o listener
+    const subscription = BackHandler.addEventListener(
+      'hardwareBackPress',
+      onBackPress,
+    );
+
+    // Remove o listener quando o componente for desmontado
+    return () => subscription.remove();
+  }, [nav]);
 
   return (
     <View style={{backgroundColor: '#fff', flex: 1}}>

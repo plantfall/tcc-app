@@ -86,6 +86,7 @@ export default function ScreenHistoricoConsultas() {
               </View>
             );
           }}
+          contentContainerStyle={{paddingBottom: 150}} // 👈 resolve
         />
       </View>
     </View>

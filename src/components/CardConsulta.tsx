@@ -3,7 +3,6 @@ import {View, Text, TouchableOpacity, Image, Pressable} from 'react-native';
 import {getNomeApropriado} from '../screens/ScreenAgendarConsulta/ScreenAgendarConsulta';
 import {AppUtils} from '../utils/AppUtils';
 import {Consulta} from '../service/ConsultaService';
-import {formatarDataPorExtenso} from '../utils/DateUtils';
 import {useNavigation} from '@react-navigation/native';
 
 type Props = {
@@ -142,7 +141,7 @@ export default function CardConsulta({
 
           <TouchableOpacity
             onPress={() =>
-              nav.navigate('ScreenDefinirDiaHorario', {
+              nav.navigate('ScreenEscolherDia', {
                 consulta: consulta,
                 editMode: true,
               })

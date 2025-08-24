@@ -3,7 +3,7 @@ import Home from '../screens/Home/Home';
 import ScreenAgendarConsulta from '../screens/ScreenAgendarConsulta/ScreenAgendarConsulta';
 import ScreenFinalizarAgendamento from '../screens/ScreenFinalizarAgendamento/ScreenFinalizarAgendamento';
 import ScreenHistoricoConsultas from '../screens/ScreenHistoricoConsultas/ScreenHistoricoConsultas';
-import ScreenDefinirDiaHorario from '../screens/ScreenDefinirDiaHorario/ScreenDefinirDiaHorario';
+import ScreenEscolherDia from '../screens/ScreenEscolherDia/ScreenEscolherDia';
 import ScreenNotificacoes from '../screens/ScreenNotificacoes/ScreenNotificacoes';
 import ScreenConsultaAgendada from '../screens/ScreenConsultaAgendada/ScreenConsultaAgendada';
 import ScreenPerfil from '../screens/ScreenPerfil/ScreenPerfil';
@@ -12,7 +12,7 @@ import ScreenBoarding from '../screens/ScreenBoarding/ScreenBoarding';
 export type RootStackParamList = {
   Home: undefined;
   ScreenAgendarConsulta: undefined;
-  ScreenDefinirDiaHorario: undefined;
+  ScreenEscolherDia: undefined;
   ScreenFinalizarAgendamento: undefined;
   ScreenHistoricoConsultas: undefined;
 };
@@ -38,6 +38,10 @@ function HomeStackNavigator() {
         orientation: 'portrait',
       }}>
       <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen
+        name="ScreenConsultaAgendada"
+        component={ScreenConsultaAgendada}
+      />
 
       <Stack.Screen
         name="ScreenHistoricoConsultas"
@@ -45,18 +49,12 @@ function HomeStackNavigator() {
       />
 
       <Stack.Screen name="ScreenPerfil" component={ScreenPerfil} />
-      <Stack.Screen
-        name="ScreenConsultaAgendada"
-        component={ScreenConsultaAgendada}
-      />
+
       <Stack.Screen
         name="ScreenAgendarConsulta"
         component={ScreenAgendarConsulta}
       />
-      <Stack.Screen
-        name="ScreenDefinirDiaHorario"
-        component={ScreenDefinirDiaHorario}
-      />
+      <Stack.Screen name="ScreenEscolherDia" component={ScreenEscolherDia} />
       <Stack.Screen
         name="ScreenFinalizarAgendamento"
         component={ScreenFinalizarAgendamento}

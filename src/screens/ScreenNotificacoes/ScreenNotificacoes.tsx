@@ -4,6 +4,7 @@ import {AppUtils} from '../../utils/AppUtils';
 import Feather from 'react-native-vector-icons/Feather';
 import AntDesignIcon from 'react-native-vector-icons/AntDesign';
 import {useNavigation} from '@react-navigation/native';
+import {ConsultaService} from '../../service/ConsultaService';
 
 type Notificacao = {
   titulo: string;
@@ -12,13 +13,31 @@ type Notificacao = {
 
 export default function ScreenNotificacoes() {
   const [notificacoes, setNotificacoes] = useState<Notificacao[]>([]);
-
+  const [dtProximaConsulta, setDtProximaConsulta] = useState('');
+  const consultaService = new ConsultaService();
   const nav = useNavigation();
 
   useEffect(() => {
     loadNotificacoes();
 
     async function loadNotificacoes() {
+      async function fetch() {
+        const proximaConsulta = await consultaService.buscaProximaConsulta();
+        console.log('proximaConsulta');
+        console.log(proximaConsulta);
+        setDtProximaConsulta(proximaConsulta?.dataFormatada);
+
+        const lista: Notificacao[] = [
+          {
+            titulo: 'Agendamento',
+            mensagem: `Sua consulta com ${proximaConsulta?.especialista.nome} foi agendada com sucesso para ${proximaConsulta?.dataFormatada} as ${proximaConsulta?.horarioMarcado}!`,
+          },
+        ];
+        setNotificacoes(lista);
+      }
+
+      fetch();
+
       //...
       const lista: Notificacao[] = [
         {
@@ -28,7 +47,7 @@ export default function ScreenNotificacoes() {
         },
       ];
       //setNotificacoes(lista);
-      setNotificacoes([]);
+      //setNotificacoes([]);
     }
   }, []);
 
@@ -89,7 +108,7 @@ export default function ScreenNotificacoes() {
           )}
         />
 
-        {notificacoes.length > 0 && (
+        {/* {notificacoes.length > 0 && (
           <View
             style={{
               height: 100,
@@ -104,7 +123,7 @@ export default function ScreenNotificacoes() {
               </Text>
             </TouchableOpacity>
           </View>
-        )}
+        )} */}
       </View>
     </View>
   );
@@ -124,6 +143,7 @@ function Card({notificacao}: Props) {
         padding: 15,
         backgroundColor: '#C0C0C036',
         marginBottom: 10,
+        marginHorizontal: 10,
       }}>
       <Text
         style={{

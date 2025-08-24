@@ -9,6 +9,13 @@ export type Especialista = {
   nome: string;
   especializacao: Especializacao;
   diasDisponiveis: string[];
+  img: keyof typeof imagens;
+};
+
+export const imagens = {
+  gabriela_garcia: require('../../assets/images/gabriela_garcia.png'),
+  isabel_matos: require('../../assets/images/isabel_matos.png'),
+  henrique_farias: require('../../assets/images/henrique_farias.png'),
 };
 
 export default function useAgendarConsulta() {
@@ -17,11 +24,19 @@ export default function useAgendarConsulta() {
       nome: 'Dra.Gabriela Garcia',
       especializacao: 'CLINICO_GERAL',
       diasDisponiveis: geraDiasDisponiveis(),
+      img: 'gabriela_garcia',
+    },
+    {
+      nome: 'Dr. Henrique Farias',
+      especializacao: 'CLINICO_GERAL_PEDIATRA',
+      diasDisponiveis: geraDiasDisponiveis(4),
+      img: 'henrique_farias',
     },
     {
       nome: 'Dra.Isabel Matos',
       especializacao: 'CLINICO_GERAL_PEDIATRA',
       diasDisponiveis: geraDiasDisponiveis(4),
+      img: 'isabel_matos',
     },
   ];
 

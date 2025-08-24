@@ -1,17 +1,13 @@
 import {
   View,
   Text,
-  Image,
   StatusBar,
   TouchableOpacity,
   TextInput,
   StyleSheet,
 } from 'react-native';
 import CustomButton from '../../components/CustomButton.tsx';
-import {useContext, useState} from 'react';
-import Voltar from '../../components/Voltar.tsx';
-import {useLocalDataHook} from '../../hooks/useLocalDataHook.tsx';
-import AntDesignIcon from 'react-native-vector-icons/AntDesign';
+import {useContext, useEffect, useState} from 'react';
 import Feather from 'react-native-vector-icons/Feather';
 import {AppUtils} from '../../utils/AppUtils.ts';
 import {CircularName} from '../../components/CircularName.tsx';
@@ -21,10 +17,10 @@ import {SessionContext} from '../../context/SessionContext.tsx';
 export default function ScreenPerfil() {
   const name = 'Camille e Eliezer';
 
-  const [cartaoSus, setCartaoSus] = useState('');
-  const [editandoCartaoSus, setEditandoCartaoSus] = useState(false);
+  const [cartaoSusVisibility, setcartaoSusVisibility] = useState(false);
 
-  const {sair} = useContext(SessionContext);
+  const {sair, user} = useContext(SessionContext);
+  const [cartaoSus, setCartaoSus] = useState(user?.cartaoSus);
 
   const nav = useNavigation();
 
@@ -72,7 +68,13 @@ export default function ScreenPerfil() {
             Cartão do SUS
           </Text>
           <View style={styles.passwordContainer}>
-            <TextInput
+            <View style={styles.container}>
+              <Text>
+                {cartaoSusVisibility ? cartaoSus : 'xxxx.xxxxx.xxx/xx'}
+              </Text>
+            </View>
+
+            {/* <TextInput
               value={cartaoSus}
               onChangeText={setCartaoSus}
               placeholder="xxxx.xxxxx.xxx/xx"
@@ -80,12 +82,12 @@ export default function ScreenPerfil() {
               numberOfLines={1}
               autoCapitalize="none"
               style={styles.input}
-            />
+            /> */}
             <TouchableOpacity
-              onPress={() => setEditandoCartaoSus(prev => !prev)}
+              onPress={() => setcartaoSusVisibility(prev => !prev)}
               style={styles.eyeButton}>
               <Feather
-                name={editandoCartaoSus ? 'eye' : 'eye-off'}
+                name={cartaoSusVisibility ? 'eye-off' : 'eye'}
                 size={20}
                 color="#808080"
               />
@@ -103,16 +105,9 @@ export default function ScreenPerfil() {
             Email
           </Text>
           <View style={styles.passwordContainer}>
-            <TextInput
-              value={cartaoSus}
-              onChangeText={setCartaoSus}
-              placeholder="xxxx.xxxxx.xxx/xx"
-              placeholderTextColor="#808080"
-              numberOfLines={1}
-              autoCapitalize="none"
-              style={styles.input}
-              keyboardType="email-address"
-            />
+            <View style={styles.container}>
+              <Text>{user?.email}</Text>
+            </View>
           </View>
         </View>
 
@@ -146,7 +141,7 @@ export default function ScreenPerfil() {
 }
 
 const styles = StyleSheet.create({
-  input: {
+  container: {
     borderColor: 'gray',
     borderWidth: 1,
     borderRadius: 15,
@@ -157,6 +152,7 @@ const styles = StyleSheet.create({
     color: 'black',
     fontFamily: AppUtils.FontFamily,
     fontSize: AppUtils.FontSize,
+    justifyContent: 'center',
   },
   passwordContainer: {
     position: 'relative',

@@ -6,6 +6,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import {AppUtils} from '../utils/AppUtils';
 import {useNavigation} from '@react-navigation/native';
 import {CircularName} from './CircularName';
+import {ConsultaService} from '../service/ConsultaService';
 
 type Props = {
   nome: string;
@@ -13,13 +14,16 @@ type Props = {
 
 export default function HomeHeader({nome}: Props) {
   const [dtProximaConsulta, setDtProximaConsulta] = useState('');
+  const consultaService = new ConsultaService();
   useEffect(() => {
-    const buscarProximaConsulta = async () => {
-      //
-      setDtProximaConsulta('22/08/2025');
-    };
+    async function fetch() {
+      const proximaConsulta = await consultaService.buscaProximaConsulta();
+      console.log('proximaConsulta');
+      console.log(proximaConsulta);
+      setDtProximaConsulta(proximaConsulta?.dataFormatada);
+    }
 
-    buscarProximaConsulta();
+    fetch();
   }, []);
 
   return (
@@ -40,7 +44,7 @@ export default function HomeHeader({nome}: Props) {
           alignItems: 'center',
           justifyContent: 'center',
           gap: 10,
-          width: 140,
+          width: 170,
           marginBottom: 20,
           borderRadius: 10,
           borderColor: '#8C8C8C',

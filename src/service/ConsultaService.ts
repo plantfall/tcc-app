@@ -4,6 +4,7 @@ import {formatarFirestoreDateParaDataIso} from '../utils/DateUtils';
 import {AppUtils} from '../utils/AppUtils';
 import {consultasMock} from '../mocks/Consultas.mock';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import NotificationService from './NotificationService';
 
 export type Status = 'AGENDADA' | 'CANCELADA' | 'CONCLUIDA' | 'REAJENDADA';
 export type Consulta = {
@@ -211,6 +212,111 @@ export class ConsultaService {
 
     // salva de volta no AsyncStorage
     await this.saveConsultasLocally(consultas);
+  }
+
+  public async buscaProximaConsulta(): Promise<Consulta | null> {
+    try {
+      const consultas = await this.fetchConsultasLocally();
+
+      if (!consultas || consultas.length === 0) {
+        return null;
+      }
+
+      const agora = Date.now();
+
+      const futuras = consultas.filter(c => {
+        if (c.status === 'CANCELADA') return false;
+
+        const dataConsulta = this.parseDataHora(
+          c.dataFormatada,
+          c.horarioMarcado,
+        );
+
+        return dataConsulta.getTime() >= agora;
+      });
+
+      if (futuras.length === 0) return null;
+
+      futuras.sort((a, b) => {
+        const dataA = this.parseDataHora(a.dataFormatada, a.horarioMarcado);
+        const dataB = this.parseDataHora(b.dataFormatada, b.horarioMarcado);
+        return dataA.getTime() - dataB.getTime();
+      });
+
+      return futuras[0];
+    } catch (error) {
+      console.error('Erro ao buscar próxima consulta:', error);
+      return null;
+    }
+  }
+
+  public async notificarProximaConsulta() {
+    const consulta = await this.buscaProximaConsulta();
+    if (!consulta) return;
+
+    const dataConsulta = this.parseDataHora(
+      consulta.dataFormatada,
+      consulta.horarioMarcado,
+    );
+
+    // Notificar imediatamente ao abrir o app
+    NotificationService.showNotification(
+      'Consulta agendada',
+      `Você tem consulta com ${consulta.especialista.nome} em ${consulta.dataFormatada} às ${consulta.horarioMarcado}`,
+    );
+  }
+
+  // Utilitário privado para montar Date a partir do formato "25 de agosto de 2025"
+  private parseDataHora(dataFormatada: string, horario: string): Date {
+    // Exemplo: "25 de agosto de 2025"
+    const [dia, _, resto] = dataFormatada.split(' ', 3);
+    const [mesNome, ano] = dataFormatada
+      .replace(`${dia} de `, '')
+      .split(' de ');
+
+    const meses: Record<string, number> = {
+      janeiro: 0,
+      fevereiro: 1,
+      março: 2,
+      abril: 3,
+      maio: 4,
+      junho: 5,
+      julho: 6,
+      agosto: 7,
+      setembro: 8,
+      outubro: 9,
+      novembro: 10,
+      dezembro: 11,
+    };
+
+    const mes = meses[mesNome.toLowerCase()];
+    const diaNum = parseInt(dia, 10);
+    const anoNum = parseInt(ano, 10);
+
+    const [hora, minuto] = horario.split(':').map(Number);
+
+    const d = new Date(anoNum, mes, diaNum, hora, minuto, 0, 0);
+    return d;
+  }
+
+  public notificarProximaConsultaMock() {
+    // Mock da consulta
+    const consulta = {
+      especialista: {nome: 'Dr. Mock'},
+      dataFormatada: '', // preenchido abaixo
+      horarioMarcado: '10:00',
+    };
+
+    // Data de amanhã
+    const dataAmanha = new Date();
+    dataAmanha.setDate(dataAmanha.getDate() + 1);
+    consulta.dataFormatada = dataAmanha.toLocaleDateString('pt-BR');
+
+    // Notificação imediata ao abrir o app
+    NotificationService.showNotification(
+      'Consulta agendada',
+      `Você tem consulta com ${consulta.especialista.nome} em ${consulta.dataFormatada} às ${consulta.horarioMarcado}`,
+    );
   }
 }
 

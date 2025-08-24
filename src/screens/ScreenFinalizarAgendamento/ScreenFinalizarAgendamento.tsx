@@ -53,12 +53,9 @@ export default function ScreenFinalizarAgendamento() {
   const nav = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   const handleAgendar = async () => {
+    if (horarioSelected == '') return;
+
     consulta.horarioMarcado = horarioSelected;
-    console.log('handle agendamento');
-
-    console.log('editmode: ' + editMode);
-
-    console.log(consulta);
 
     if (editMode) {
       await consultaService.editarConsulta(user?.uid, consulta);
