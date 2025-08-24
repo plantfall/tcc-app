@@ -3,11 +3,10 @@ import {
   Text,
   StatusBar,
   TouchableOpacity,
-  TextInput,
   StyleSheet,
 } from 'react-native';
 import CustomButton from '../../components/CustomButton.tsx';
-import {useContext, useEffect, useState} from 'react';
+import {useContext, useState} from 'react';
 import Feather from 'react-native-vector-icons/Feather';
 import {AppUtils} from '../../utils/AppUtils.ts';
 import {CircularName} from '../../components/CircularName.tsx';
