@@ -15,8 +15,6 @@ import {useNavigation} from '@react-navigation/native';
 import {SessionContext} from '../../context/SessionContext.tsx';
 
 export default function ScreenPerfil() {
-  const name = 'Camille e Eliezer';
-
   const [cartaoSusVisibility, setcartaoSusVisibility] = useState(false);
 
   const {sair, user} = useContext(SessionContext);
@@ -46,14 +44,14 @@ export default function ScreenPerfil() {
       <View style={{borderWidth: 1, borderBottomColor: 'black'}} />
 
       <View style={{alignItems: 'center', marginTop: 20}}>
-        <CircularName nome="Camille e Eliezer" size={90} fontSize={40} />
+        <CircularName nome={user?.nome} size={90} fontSize={40} />
         <Text
           style={{
             fontSize: AppUtils.FontSizeGrande,
             fontWeight: '700',
             marginTop: 20,
           }}>
-          {name}
+          {user?.nome}
         </Text>
       </View>
 
