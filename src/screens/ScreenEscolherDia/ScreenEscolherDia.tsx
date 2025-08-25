@@ -125,44 +125,48 @@ export default function ScreenEscolherDia() {
   return (
     <View style={{backgroundColor: '#fff', flex: 1}}>
       <Voltar text="Calendário de Consulta" />
-      <Top especialista={especialista} />
-      <Text style={{margin: 10, fontSize: AppUtils.FontSize}}>
-        Selecione no calendário o dia em que deseja realizar sua consulta:
-      </Text>
+      <View style={{paddingHorizontal: 10}}>
+        <Top especialista={especialista} />
+        <Text style={{margin: 10, fontSize: AppUtils.FontSize}}>
+          Selecione no calendário o dia em que deseja realizar sua consulta:
+        </Text>
+        <Text
+          style={{margin: 10, color: '#8E8E8E', fontSize: AppUtils.FontSize}}>
+          *Os dias destacados estão disponíveis para agendamento
+        </Text>
 
-      <Text style={{margin: 10, color: '#8E8E8E', fontSize: AppUtils.FontSize}}>
-        *Os dias destacados estão disponíveis para agendamento
-      </Text>
+        <Calendar
+          markedDates={markedDates}
+          style={{width: '100%'}}
+          monthFormat="MMMM yyyy"
+          onDayPress={day => {
+            if (diasDisponiveisFormatados.includes(day.dateString)) {
+              //setDateSelected(new Date(day.dateString));
 
-      <Calendar
-        markedDates={markedDates}
-        monthFormat="MMMM yyyy"
-        onDayPress={day => {
-          if (diasDisponiveisFormatados.includes(day.dateString)) {
-            //setDateSelected(new Date(day.dateString));
+              const consultaObj: Consulta = {
+                dataFormatada:
+                  ConverterStringParaDataFormatoBrasileiroPorExtendo(
+                    day.dateString,
+                  ),
+                dataMarcadaMilisegundos: editMode
+                  ? consulta.dataMarcadaMilisegundos
+                  : day.timestamp,
+                especialista: especialista,
+                horarioMarcado:
+                  consulta != undefined ? consulta.horarioMarcado : '',
+                status: consulta != undefined ? consulta.status : 'AGENDADA',
+                id: consulta != undefined ? consulta.id : '',
+              };
 
-            const consultaObj: Consulta = {
-              dataFormatada: ConverterStringParaDataFormatoBrasileiroPorExtendo(
-                day.dateString,
-              ),
-              dataMarcadaMilisegundos: editMode
-                ? consulta.dataMarcadaMilisegundos
-                : day.timestamp,
-              especialista: especialista,
-              horarioMarcado:
-                consulta != undefined ? consulta.horarioMarcado : '',
-              status: consulta != undefined ? consulta.status : 'AGENDADA',
-              id: consulta != undefined ? consulta.id : '',
-            };
-
-            console.info(day.dateString);
-            nav.navigate('ScreenFinalizarAgendamento', {
-              editMode: editMode,
-              consulta: consultaObj,
-            });
-          }
-        }}
-      />
+              console.info(day.dateString);
+              nav.navigate('ScreenFinalizarAgendamento', {
+                editMode: editMode,
+                consulta: consultaObj,
+              });
+            }
+          }}
+        />
+      </View>
     </View>
   );
 }
@@ -178,7 +182,8 @@ function Top({especialista}: Props) {
         borderColor: 'gray',
         borderWidth: 1,
         padding: 10,
-        margin: 10,
+        marginVertical: 10,
+        width: '100%',
       }}>
       <View style={{flexDirection: 'row', gap: 15, alignItems: 'center'}}>
         <CircleImage especialista={especialista} size={50} />

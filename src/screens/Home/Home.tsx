@@ -48,7 +48,7 @@ function Item({text, iconName, destination}: Props) {
           alignItems: 'center',
           gap: 15,
           padding: 25,
-          borderColor: 'black',
+          borderColor: '#8C8C8C',
           borderWidth: 1,
           borderRadius: 10,
           backgroundColor: 'white',

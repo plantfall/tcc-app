@@ -7,7 +7,7 @@ import ScreenConfimacaoHook, {
 } from './useAgendarConsulta';
 import {useNavigation} from '@react-navigation/native';
 import Feather from 'react-native-vector-icons/Feather';
-import {AppUtils} from '../../utils/AppUtils';
+import {AppUtils, GreenColor} from '../../utils/AppUtils';
 import {useEffect, useState} from 'react';
 import {CircleImage} from '../../components/CircleImage';
 
@@ -18,15 +18,17 @@ export default function ScreenAgendarConsulta() {
     <View style={{backgroundColor: '#fff', flex: 1}}>
       <Voltar text="Agendar Consulta" />
       <View>
-        <FlatList
-          data={especialistas}
-          renderItem={({item}) => (
-            <EspecialistaCard
-              especialista={item}
-              turnDatePickerOn={turnDatePickerOn}
-            />
-          )}
-        />
+        {especialistas.map((v, index) => {
+          return (
+            <View key={index}>
+              <EspecialistaCard
+                especialista={v}
+                turnDatePickerOn={turnDatePickerOn}
+              />
+              <View style={{height: 2, backgroundColor: '#F5F5F5'}} />
+            </View>
+          );
+        })}
       </View>
     </View>
   );
@@ -59,7 +61,13 @@ function EspecialistaCard({especialista, turnDatePickerOn}: Props) {
   return (
     <View style={{padding: 15}}>
       <Top especialista={especialista} turnDatePickerOn={turnDatePickerOn} />
-      <View style={{flexDirection: 'row', gap: 8, marginTop: 22}}>
+      <View
+        style={{
+          flexDirection: 'row',
+          gap: 8,
+          marginTop: 22,
+          alignItems: 'center',
+        }}>
         <Feather name={'calendar'} size={15} />
         <Text
           style={{
@@ -77,16 +85,15 @@ function EspecialistaCard({especialista, turnDatePickerOn}: Props) {
         style={{
           flexDirection: 'row',
           gap: 10,
-          backgroundColor: '#BAE6C9',
-          paddingHorizontal: 15,
-          paddingVertical: 10,
+          backgroundColor: GreenColor,
+          paddingVertical: 7,
           maxWidth: 170,
           justifyContent: 'center',
           alignItems: 'center',
           borderRadius: 10,
           marginTop: 10,
         }}>
-        <Text style={{color: '#4F4F4F', fontSize: AppUtils.FontSize}}>
+        <Text style={{color: 'black', fontSize: AppUtils.FontSize}}>
           Agendar horário
         </Text>
         <Feather name={'chevron-right'} size={15} />

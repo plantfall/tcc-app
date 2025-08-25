@@ -1,3 +1,5 @@
+export const GreenColor = '#80ef9aff';
+
 export class AppUtils {
   static TestMode = true;
 

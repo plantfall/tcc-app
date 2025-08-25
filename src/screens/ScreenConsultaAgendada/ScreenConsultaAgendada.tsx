@@ -94,6 +94,8 @@ export default function ScreenConsultaAgendada() {
           style={{
             flex: 1,
             justifyContent: 'flex-end',
+            rowGap: 20,
+            paddingBottom: 20,
           }}>
           <CustomButton
             text="Ver Agendamentos"

@@ -13,7 +13,7 @@ type Props = {
 };
 
 export default function HomeHeader({nome}: Props) {
-  const [dtProximaConsulta, setDtProximaConsulta] = useState('');
+  const [dtProximaConsulta, setDtProximaConsulta] = useState<null | string>('');
   const consultaService = new ConsultaService();
   useEffect(() => {
     async function fetch() {
@@ -44,19 +44,21 @@ export default function HomeHeader({nome}: Props) {
           alignItems: 'center',
           justifyContent: 'center',
           gap: 10,
-          width: 170,
+          minWidth: 170,
           marginBottom: 20,
           borderRadius: 10,
           borderColor: '#8C8C8C',
           borderWidth: 1,
         }}>
-        <FontAwesome name="calendar" color={'#1B8CB9'} />
+        <FontAwesome name="calendar" color={'##002230'} />
         <Text
           style={{
             color: '#002230',
             fontSize: AppUtils.FontSize,
           }}>
-          {dtProximaConsulta}
+          {dtProximaConsulta == null
+            ? 'Nenhum agendamento encontrado'
+            : dtProximaConsulta}
         </Text>
       </View>
     </LinearGradient>
@@ -81,7 +83,7 @@ function Top({nome}: Props) {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        // marginTop: 30,
+        paddingTop: 20,
       }}>
       <View style={{flexDirection: 'row', alignItems: 'center', gap: 10}}>
         <TouchableOpacity onPress={() => nav.navigate('ScreenPerfil')}>

@@ -17,8 +17,6 @@ export default function OutlineButton({onClick, text}: props) {
         width: '100%',
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 20,
-        marginBottom: 40,
       }}
       onPress={onClick}>
       <Text style={{fontSize: AppUtils.FontSize, color: '#1B8CB9'}}>

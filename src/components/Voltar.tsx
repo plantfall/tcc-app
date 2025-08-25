@@ -1,7 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
-import {Text, TouchableOpacity, View} from 'react-native';
+import {Text, TouchableOpacity} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import AntDesignIcon from 'react-native-vector-icons/AntDesign';
 import {AppUtils} from '../utils/AppUtils';
 import Feather from 'react-native-vector-icons/Feather';
 
@@ -16,7 +15,6 @@ export default function Voltar({text}: Props) {
     <LinearGradient
       colors={AppUtils.Gradient}
       style={{
-        marginTop: 20,
         height: 90,
         justifyContent: 'center',
       }}>

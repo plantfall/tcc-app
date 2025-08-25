@@ -40,7 +40,7 @@ export default function ScreenPerfil() {
           Minha Área
         </Text>
       </View>
-      <View style={{borderWidth: 1, borderBottomColor: 'black'}} />
+      <View style={{borderWidth: 0.6, borderBottomColor: '#CBCBCB'}} />
 
       <View style={{alignItems: 'center', marginTop: 20}}>
         <CircularName nome={user?.nome} size={90} fontSize={40} />
@@ -49,6 +49,7 @@ export default function ScreenPerfil() {
             fontSize: AppUtils.FontSizeGrande,
             fontWeight: '700',
             marginTop: 20,
+            color: '#002230',
           }}>
           {user?.nome}
         </Text>

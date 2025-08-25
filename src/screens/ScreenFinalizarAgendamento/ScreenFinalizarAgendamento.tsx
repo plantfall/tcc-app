@@ -78,6 +78,7 @@ export default function ScreenFinalizarAgendamento() {
             flexWrap: 'wrap',
             justifyContent: 'space-between',
             padding: 10,
+            marginBottom: 200,
           }}>
           {HORARIOS.map((v, index) => (
             <TouchableOpacity
