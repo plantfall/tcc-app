@@ -12,7 +12,7 @@ import {
 import CustomButton from '../../components/CustomButton.tsx';
 import React, {useEffect, useRef} from 'react';
 import {Animated} from 'react-native';
-import {AppUtils} from '../../utils/AppUtils.ts';
+import {AppUtils, BlueColor} from '../../utils/AppUtils.ts';
 import Feather from 'react-native-vector-icons/Feather';
 import {useSignUp} from './useSignup.tsx';
 
@@ -35,6 +35,8 @@ export default function ScreenSignUp() {
 
   const logoAnim = useRef(new Animated.Value(0)).current;
 
+  const size = 70;
+
   useEffect(() => {
     Animated.timing(logoAnim, {
       toValue: 1,
@@ -45,7 +47,7 @@ export default function ScreenSignUp() {
 
   return (
     <KeyboardAvoidingView
-      style={{flex: 1, backgroundColor: 'white'}}
+      style={{flex: 1, backgroundColor: '#fff'}}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <StatusBar backgroundColor={'#000'} barStyle={'light-content'} />
 
@@ -61,8 +63,8 @@ export default function ScreenSignUp() {
           <Animated.Image
             source={require('../../assets/images/register_banner.png')}
             style={{
-              height: 100,
-              width: 100,
+              height: size,
+              width: size,
               opacity: logoAnim,
               transform: [
                 {
@@ -81,7 +83,7 @@ export default function ScreenSignUp() {
 
         <Text
           style={{
-            color: 'black',
+            color: '#002230',
             fontSize: AppUtils.FontSizeGrande,
             fontWeight: '700',
             marginTop: 50,
@@ -93,7 +95,8 @@ export default function ScreenSignUp() {
           }
         </Text>
 
-        <View style={{width: '100%', marginTop: 90}}>
+        <View style={{width: '100%', marginTop: 10}}>
+          <Text style={{marginBottom: 7}}>Nome</Text>
           <TextInput
             value={nomeInput}
             onChangeText={setNomeInput}
@@ -101,8 +104,10 @@ export default function ScreenSignUp() {
             placeholder="Seu nome completo"
             numberOfLines={1}
             autoCapitalize="sentences"
-            style={styles.input}
+            style={stylesAuth.input}
           />
+
+          <Text style={{marginBottom: 7}}>Cartão do Sus</Text>
           <TextInput
             value={cartaoSusInput}
             onChangeText={setCartaoSusInput}
@@ -110,9 +115,11 @@ export default function ScreenSignUp() {
             placeholder="Informe seu cartão do SUS"
             numberOfLines={1}
             autoCapitalize="none"
-            style={styles.input}
+            style={stylesAuth.input}
             keyboardType="number-pad"
           />
+
+          <Text style={{marginBottom: 7}}>Email</Text>
           <TextInput
             value={emailInput}
             onChangeText={setEmailInput}
@@ -120,11 +127,12 @@ export default function ScreenSignUp() {
             placeholder="Informe seu email"
             numberOfLines={1}
             autoCapitalize="none"
-            style={styles.input}
+            style={stylesAuth.input}
             keyboardType="email-address"
           />
 
-          <View style={styles.passwordContainer}>
+          <Text style={{marginBottom: 7}}>Senha</Text>
+          <View style={stylesAuth.passwordContainer}>
             <TextInput
               value={password}
               onChangeText={setPassword}
@@ -133,11 +141,11 @@ export default function ScreenSignUp() {
               secureTextEntry={!showPassword}
               numberOfLines={1}
               autoCapitalize="none"
-              style={styles.input}
+              style={stylesAuth.input}
             />
             <TouchableOpacity
               onPress={() => setShowPassword(prev => !prev)}
-              style={styles.eyeButton}>
+              style={stylesAuth.eyeButton}>
               <Feather
                 name={showPassword ? 'eye' : 'eye-off'}
                 size={20}
@@ -163,7 +171,7 @@ export default function ScreenSignUp() {
           <CustomButton
             text="Criar conta"
             isLoading={isLoading}
-            bgColor="#4A90E2"
+            bgColor={BlueColor}
             onClick={handleSignUp}
           />
         </View>
@@ -172,29 +180,29 @@ export default function ScreenSignUp() {
   );
 }
 
-const styles = StyleSheet.create({
+export const stylesAuth = StyleSheet.create({
   input: {
     borderColor: '#1B8CB9',
     borderWidth: 1,
-    borderRadius: 15,
+    borderRadius: 10,
     width: '100%',
     padding: 12,
+    height: 50,
     marginBottom: 15,
     color: 'black',
     fontFamily: AppUtils.FontFamily,
     fontSize: AppUtils.FontSize - 2,
+    position: 'relative',
   },
   passwordContainer: {
-    position: 'relative',
     width: '100%',
     marginBottom: 15,
   },
   eyeButton: {
     position: 'absolute',
     right: 0,
-    top: 0,
     width: 40,
-    height: 45,
+    height: 50,
     justifyContent: 'center',
     alignItems: 'center',
   },

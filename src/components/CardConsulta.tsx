@@ -4,6 +4,7 @@ import {getNomeApropriado} from '../screens/ScreenAgendarConsulta/ScreenAgendarC
 import {AppUtils} from '../utils/AppUtils';
 import {Consulta} from '../service/ConsultaService';
 import {useNavigation} from '@react-navigation/native';
+import FontAwesome from '@react-native-vector-icons/fontawesome';
 
 type Props = {
   consulta: Consulta;
@@ -22,6 +23,7 @@ export default function CardConsulta({
 
   const [status_, setStatus_] = useState('');
   const [corCirculo, setCorCirculo] = useState('');
+  const [iconName, seticonName] = useState('');
 
   const nav = useNavigation();
 
@@ -30,14 +32,17 @@ export default function CardConsulta({
       case 'AGENDADA':
         setStatus_('Agendada');
         setCorCirculo('green');
+        seticonName('calendar');
         break;
       case 'CANCELADA':
         setStatus_('Cancelada');
         setCorCirculo('red');
+        seticonName('remove');
         break;
       case 'CONCLUIDA':
         setStatus_('Concluída');
         setCorCirculo('#003950');
+        seticonName('check-square-o');
         break;
     }
   }, [status]);
@@ -60,10 +65,7 @@ export default function CardConsulta({
         {/* LEFT */}
 
         <View style={{flexDirection: 'row', columnGap: 20}}>
-          <Image
-            source={require('../assets/images/icone_em_card.png')}
-            style={{height: 40, width: 40}}
-          />
+          <FontAwesome name={iconName} color={corCirculo} size={20} />
           <View>
             <Text style={{fontSize: AppUtils.FontSizeMedium}}>
               Data: {dataFormatada}

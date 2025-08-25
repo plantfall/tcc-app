@@ -3,7 +3,7 @@ import {useEffect, useState} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import LinearGradient from 'react-native-linear-gradient';
-import {AppUtils} from '../utils/AppUtils';
+import {AppUtils, BlueColor} from '../utils/AppUtils';
 import {useNavigation} from '@react-navigation/native';
 import {CircularName} from './CircularName';
 import {ConsultaService} from '../service/ConsultaService';
@@ -13,14 +13,16 @@ type Props = {
 };
 
 export default function HomeHeader({nome}: Props) {
-  const [dtProximaConsulta, setDtProximaConsulta] = useState<null | string>('');
+  const [dtProximaConsulta, setDtProximaConsulta] = useState<null | string>(
+    null,
+  );
   const consultaService = new ConsultaService();
   useEffect(() => {
     async function fetch() {
-      const proximaConsulta = await consultaService.buscaProximaConsulta();
-      console.log('proximaConsulta');
-      console.log(proximaConsulta);
-      setDtProximaConsulta(proximaConsulta?.dataFormatada);
+      const proximasConsultas = await consultaService.buscaProximaConsulta();
+      console.log('proximasConsultas');
+      console.log(proximasConsultas);
+      setDtProximaConsulta(proximasConsultas[0]?.dataFormatada);
     }
 
     fetch();
@@ -34,23 +36,23 @@ export default function HomeHeader({nome}: Props) {
         paddingHorizontal: 15,
       }}>
       <Top nome={nome} />
-      <Text>Sua próxima consulta está agendada para:</Text>
+      <Text
+        style={{fontSize: AppUtils.FontSize, marginTop: 20, marginBottom: 10}}>
+        Sua próxima consulta está agendada para:
+      </Text>
       <View
         style={{
           backgroundColor: '#fff',
           flexDirection: 'row',
           paddingVertical: 8,
-          paddingHorizontal: 10,
           alignItems: 'center',
-          justifyContent: 'center',
+          paddingLeft: 5,
           gap: 10,
-          minWidth: 170,
+          maxWidth: 170,
           marginBottom: 20,
           borderRadius: 10,
-          borderColor: '#8C8C8C',
-          borderWidth: 1,
         }}>
-        <FontAwesome name="calendar" color={'##002230'} />
+        <FontAwesome name="calendar" color={'##002230'} size={15} />
         <Text
           style={{
             color: '#002230',
@@ -95,7 +97,7 @@ function Top({nome}: Props) {
         </Text>
       </View>
       <TouchableOpacity onPress={() => nav.navigate('ScreenNotificacoes')}>
-        <Feather name="bell" color={'blue'} size={20} />
+        <Feather name="bell" color={BlueColor} size={20} />
       </TouchableOpacity>
     </View>
   );

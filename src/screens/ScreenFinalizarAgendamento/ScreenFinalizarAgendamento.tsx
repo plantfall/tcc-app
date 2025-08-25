@@ -7,6 +7,7 @@ import type {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParamList} from '../../routes/app.routes';
 import {Consulta, ConsultaService} from '../../service/ConsultaService';
 import {SessionContext} from '../../context/SessionContext';
+import {BlueColor, GreenColor} from '../../utils/AppUtils';
 
 const HORARIOS = [
   '08:00',
@@ -25,6 +26,7 @@ const HORARIOS = [
 
 export default function ScreenFinalizarAgendamento() {
   const [horarioSelected, setHorarioSelected] = useState<string>('');
+  const [isLoading, setLoading] = useState(false);
 
   const consultaService = new ConsultaService();
   const {user} = useContext(SessionContext);
@@ -55,11 +57,15 @@ export default function ScreenFinalizarAgendamento() {
   const handleAgendar = async () => {
     if (horarioSelected == '') return;
 
+    setLoading(true);
+
     consulta.horarioMarcado = horarioSelected;
 
     if (editMode) {
       await consultaService.editarConsulta(user?.uid, consulta);
     } else await consultaService.agendarConsulta(user?.uid, consulta);
+
+    setLoading(false);
 
     nav.navigate('ScreenConsultaAgendada', {
       consulta: consulta,
@@ -71,35 +77,42 @@ export default function ScreenFinalizarAgendamento() {
     <View style={{backgroundColor: '#fff', flex: 1}}>
       <Voltar text="Agendar Consulta" />
 
-      <View style={{padding: 15}}>
-        <View
-          style={{
-            flexDirection: 'row',
-            flexWrap: 'wrap',
-            justifyContent: 'space-between',
-            padding: 10,
-            marginBottom: 200,
-          }}>
-          {HORARIOS.map((v, index) => (
-            <TouchableOpacity
-              onPress={() => handleHorarioClick(v)}
-              key={index}
-              style={{
-                width: '30%', // 3 por linha (com espaçamento)
-                backgroundColor: v == horarioSelected ? '#BAE6C9' : '#F1F1F1',
-                padding: 15,
-                marginBottom: 10,
-                alignItems: 'center',
-                borderRadius: 5,
-              }}>
-              <Text>{v}</Text>
-            </TouchableOpacity>
-          ))}
+      <View style={{padding: 15, marginTop: 10}}>
+        <Text>Escolha o horário do atendimento</Text>
+        <View>
+          <View
+            style={{
+              flexDirection: 'row',
+              flexWrap: 'wrap',
+              justifyContent: 'space-between',
+              marginTop: 10,
+              marginBottom: 200,
+              backgroundColor: '#fbf9f9ff',
+              padding: 10,
+              borderRadius: 7,
+            }}>
+            {HORARIOS.map((v, index) => (
+              <TouchableOpacity
+                onPress={() => handleHorarioClick(v)}
+                key={index}
+                style={{
+                  width: '30%', // 3 por linha (com espaçamento)
+                  backgroundColor: v == horarioSelected ? GreenColor : '#fff',
+                  padding: 10,
+                  marginBottom: 10,
+                  alignItems: 'center',
+                  borderRadius: 5,
+                }}>
+                <Text>{v}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
         </View>
 
         <CustomButton
           text={editMode ? 'Alterar agendamento' : 'Agendar'}
           onClick={handleAgendar}
+          isLoading={isLoading}
         />
       </View>
     </View>

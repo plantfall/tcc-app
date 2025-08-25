@@ -9,7 +9,7 @@ import {useNavigation} from '@react-navigation/native';
 export default function Home() {
   const {user} = useContext(SessionContext);
   return (
-    <View style={{flex: 1, backgroundColor: '#F2F7F9'}}>
+    <View style={{flex: 1, backgroundColor: '#fff'}}>
       <StatusBar barStyle={'dark-content'} backgroundColor={'#fff'} />
       <HomeHeader nome={user?.nome!} />
       <View style={{rowGap: 20, marginTop: 50, marginHorizontal: 15}}>
@@ -47,14 +47,15 @@ function Item({text, iconName, destination}: Props) {
           flexDirection: 'row',
           alignItems: 'center',
           gap: 15,
-          padding: 25,
-          borderColor: '#8C8C8C',
+          borderColor: '#d3d1d1ff',
           borderWidth: 1,
           borderRadius: 10,
           backgroundColor: 'white',
+          height: 90,
+          paddingHorizontal: 15,
         }}>
-        <FontAwesome name={iconName} color={'#1B8CB9'} size={15} />
-        <Text style={{fontSize: AppUtils.FontSize}}>{text}</Text>
+        <FontAwesome name={iconName} color={'#1B8CB9'} size={20} />
+        <Text style={{fontSize: AppUtils.FontSizeMedium}}>{text}</Text>
       </View>
     </TouchableOpacity>
   );

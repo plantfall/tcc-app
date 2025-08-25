@@ -13,9 +13,10 @@ import CustomButton from '../../components/CustomButton';
 import {useLogin} from './useLogin.tsx';
 import React, {useEffect, useRef} from 'react';
 import {Animated} from 'react-native';
-import {AppUtils} from '../../utils/AppUtils.ts';
+import {AppUtils, BlueColor} from '../../utils/AppUtils.ts';
 import Feather from 'react-native-vector-icons/Feather';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {stylesAuth} from '../ScreenSignUp/ScreenSignUp.tsx';
 
 export default function ScreenLogin() {
   const {
@@ -51,8 +52,6 @@ export default function ScreenLogin() {
           contentContainerStyle={{
             alignItems: 'center',
             flex: 1,
-            marginTop: 20,
-            // flexGrow: 1,
             paddingTop: 0,
           }}
           keyboardShouldPersistTaps="handled">
@@ -76,6 +75,7 @@ export default function ScreenLogin() {
           </View>
 
           <View style={{width: '100%', marginTop: 60, paddingHorizontal: 30}}>
+            <Text style={{marginBottom: 7}}>Email</Text>
             <TextInput
               value={loginInput}
               onChangeText={setLoginInput}
@@ -83,10 +83,11 @@ export default function ScreenLogin() {
               placeholder="Insira o email"
               numberOfLines={1}
               autoCapitalize="none"
-              style={styles.input}
+              style={stylesAuth.input}
             />
 
-            <View style={styles.passwordContainer}>
+            <Text style={{marginBottom: 7}}>Senha</Text>
+            <View style={stylesAuth.passwordContainer}>
               <TextInput
                 value={password}
                 onChangeText={setPassword}
@@ -95,11 +96,11 @@ export default function ScreenLogin() {
                 secureTextEntry={!showPassword}
                 numberOfLines={1}
                 autoCapitalize="none"
-                style={styles.input}
+                style={stylesAuth.input}
               />
               <TouchableOpacity
                 onPress={() => setShowPassword(prev => !prev)}
-                style={styles.eyeButton}>
+                style={stylesAuth.eyeButton}>
                 <Feather
                   name={showPassword ? 'eye' : 'eye-off'}
                   size={20}
@@ -125,7 +126,7 @@ export default function ScreenLogin() {
             <CustomButton
               text="Entrar"
               isLoading={isLoading}
-              bgColor="#4A90E2"
+              bgColor={BlueColor}
               onClick={handleLogin}
             />
           </View>
@@ -147,31 +148,3 @@ export default function ScreenLogin() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  input: {
-    borderColor: '#1B8CB9',
-    borderWidth: 1,
-    borderRadius: 15,
-    width: '100%',
-    padding: 12,
-    marginBottom: 15,
-    color: 'black',
-    fontFamily: AppUtils.FontFamily,
-    fontSize: AppUtils.FontSize - 2,
-  },
-  passwordContainer: {
-    position: 'relative',
-    width: '100%',
-    marginBottom: 15,
-  },
-  eyeButton: {
-    position: 'absolute',
-    right: 0,
-    top: 0,
-    width: 40,
-    height: 45,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});

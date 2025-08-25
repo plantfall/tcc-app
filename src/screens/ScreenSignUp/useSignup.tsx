@@ -3,12 +3,12 @@ import {AuthService} from '../../service/AuthService';
 import {SessionContext} from '../../context/SessionContext';
 
 export function useSignUp() {
-  const [nomeInput, setNomeInput] = useState('Teste');
-  const [cartaoSusInput, setCartaoSusInput] = useState('12345678910');
+  const [nomeInput, setNomeInput] = useState('');
+  const [cartaoSusInput, setCartaoSusInput] = useState('');
 
-  const [emailInput, setEmailInput] = useState('teste1@gmail.com');
+  const [emailInput, setEmailInput] = useState('');
 
-  const [password, setPassword] = useState('12345678');
+  const [password, setPassword] = useState('');
   const [isLoading, setLoading] = useState(false);
   const [erro, setErro] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -18,6 +18,16 @@ export function useSignUp() {
 
   const handleSignUp = async () => {
     setLoading(true);
+
+    if (
+      isEmpty(nomeInput) ||
+      isEmpty(cartaoSusInput) ||
+      isEmpty(emailInput) ||
+      isEmpty(password)
+    ) {
+      setLoading(false);
+      return;
+    }
 
     await authService
       .signUp({
@@ -60,3 +70,7 @@ export function useSignUp() {
     setShowPassword,
   };
 }
+
+export const isEmpty = (value: string) => {
+  return value.trim() == '';
+};

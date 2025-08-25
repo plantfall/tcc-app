@@ -29,13 +29,15 @@ export class ConsultaService {
     try {
       consultaRequest.status = 'AGENDADA';
 
-      const data = await firestore()
+      const consultaRef = await firestore()
         .collection('users')
         .doc(uidUser)
         .collection('consultas')
         .add(consultaRequest);
 
-      consultaRequest.id = data.id;
+      const id = consultaRef.id;
+
+      await consultaRef.update({id: id});
 
       await this.saveConsultaLocally(consultaRequest);
 
@@ -214,12 +216,12 @@ export class ConsultaService {
     await this.saveConsultasLocally(consultas);
   }
 
-  public async buscaProximaConsulta(): Promise<Consulta | null> {
+  public async buscaProximaConsulta(): Promise<Consulta[]> {
     try {
       const consultas = await this.fetchConsultasLocally();
 
       if (!consultas || consultas.length === 0) {
-        return null;
+        return [];
       }
 
       const agora = Date.now();
@@ -235,7 +237,7 @@ export class ConsultaService {
         return dataConsulta.getTime() >= agora;
       });
 
-      if (futuras.length === 0) return null;
+      if (futuras.length === 0) return [];
 
       futuras.sort((a, b) => {
         const dataA = this.parseDataHora(a.dataFormatada, a.horarioMarcado);
@@ -243,10 +245,13 @@ export class ConsultaService {
         return dataA.getTime() - dataB.getTime();
       });
 
-      return futuras[0];
+      console.log('ndiwfhifhewifhewfhewio');
+      console.log(futuras);
+
+      return futuras;
     } catch (error) {
       console.error('Erro ao buscar próxima consulta:', error);
-      return null;
+      return [];
     }
   }
 

@@ -1,6 +1,6 @@
 import {ActivityIndicator} from '@ant-design/react-native';
 import {TouchableOpacity, Text} from 'react-native';
-import {AppUtils} from '../utils/AppUtils';
+import {AppUtils, BlueColor} from '../utils/AppUtils';
 
 type Props = {
   onClick: () => void;
@@ -15,7 +15,7 @@ type Props = {
 export default function CustomButton(props: Props) {
   const {isLoading, borderRadius, onClick, bgColor, text} = props;
 
-  const backgroundColor = bgColor ?? '#007bff';
+  const backgroundColor = bgColor ?? BlueColor;
   const disabled = isLoading;
 
   return (

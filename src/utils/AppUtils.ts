@@ -1,4 +1,5 @@
-export const GreenColor = '#80ef9aff';
+export const GreenColor = '#BAE6C9';
+export const BlueColor = '#1B8CB9';
 
 export class AppUtils {
   static TestMode = true;

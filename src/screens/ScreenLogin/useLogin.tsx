@@ -1,6 +1,7 @@
 import {useContext, useState} from 'react';
 import {AuthService} from '../../service/AuthService';
 import {SessionContext} from '../../context/SessionContext';
+import {isEmpty} from '../ScreenSignUp/useSignup';
 
 export function useLogin() {
   const [loginInput, setLoginInput] = useState('teste1@gmail.com');
@@ -14,6 +15,11 @@ export function useLogin() {
 
   const handleLogin = async () => {
     setLoading(true);
+
+    if (isEmpty(loginInput) || isEmpty(password)) {
+      setLoading(false);
+      return;
+    }
 
     await authService
       .login(loginInput, password)

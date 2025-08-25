@@ -13,7 +13,7 @@ type Notificacao = {
 
 export default function ScreenNotificacoes() {
   const [notificacoes, setNotificacoes] = useState<Notificacao[]>([]);
-  const [dtProximaConsulta, setDtProximaConsulta] = useState('');
+
   const consultaService = new ConsultaService();
   const nav = useNavigation();
 
@@ -22,32 +22,25 @@ export default function ScreenNotificacoes() {
 
     async function loadNotificacoes() {
       async function fetch() {
-        const proximaConsulta = await consultaService.buscaProximaConsulta();
-        console.log('proximaConsulta');
-        console.log(proximaConsulta);
-        setDtProximaConsulta(proximaConsulta?.dataFormatada);
+        const proximasConsultas = await consultaService.buscaProximaConsulta();
+        console.log('proximasConsultas');
+        console.log(proximasConsultas);
 
-        const lista: Notificacao[] = [
-          {
-            titulo: 'Agendamento',
-            mensagem: `Sua consulta com ${proximaConsulta?.especialista.nome} foi agendada com sucesso para ${proximaConsulta?.dataFormatada} as ${proximaConsulta?.horarioMarcado}!`,
-          },
-        ];
-        setNotificacoes(lista);
+        if (proximasConsultas.length == 0) {
+          return;
+        }
+
+        setNotificacoes(
+          proximasConsultas.map(consulta => {
+            return {
+              mensagem: `Sua consulta com ${consulta?.especialista.nome} foi agendada com sucesso para ${consulta?.dataFormatada} as ${consulta?.horarioMarcado}!`,
+              titulo: 'Ótimas Notícias',
+            };
+          }),
+        );
       }
 
       fetch();
-
-      //...
-      const lista: Notificacao[] = [
-        {
-          titulo: 'Agendamento',
-          mensagem:
-            'Sua consulta com o Dr. João Henrique foi agendada com sucesso para 15/08 as 15:00!',
-        },
-      ];
-      //setNotificacoes(lista);
-      //setNotificacoes([]);
     }
   }, []);
 
@@ -136,24 +129,32 @@ type Props = {
 function Card({notificacao}: Props) {
   const {titulo, mensagem} = notificacao;
 
+  //  const [iconName, seticonName] = useState('');
+
   return (
     <View
       style={{
-        borderRadius: 10,
         padding: 15,
-        backgroundColor: '#C0C0C036',
-        marginBottom: 10,
-        marginHorizontal: 10,
+        backgroundColor: '#1b8cb91a',
+        marginBottom: 5,
+        // marginHorizontal: 10,
       }}>
       <Text
         style={{
           fontSize: AppUtils.FontSizeMedium,
-          fontWeight: '700',
+          fontWeight: 'bold',
           marginBottom: 10,
         }}>
         {titulo}
       </Text>
-      <Text style={{fontSize: AppUtils.FontSizeMedium}}>{mensagem}</Text>
+      <Text
+        style={{
+          fontSize: AppUtils.FontSizeMedium,
+          fontWeight: '400',
+          color: '#2C2B2B',
+        }}>
+        {mensagem}
+      </Text>
     </View>
   );
 }

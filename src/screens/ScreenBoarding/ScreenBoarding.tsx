@@ -3,7 +3,7 @@ import CustomButton from '../../components/CustomButton.tsx';
 import {useLogin} from './useLogin.tsx';
 import React, {useEffect, useRef} from 'react';
 import {Animated} from 'react-native';
-import {AppUtils} from '../../utils/AppUtils.ts';
+import {AppUtils, BlueColor} from '../../utils/AppUtils.ts';
 import OutlineButton from '../../components/OutlineButton.tsx';
 import {useNavigation} from '@react-navigation/native';
 
@@ -26,14 +26,14 @@ export default function ScreenBoarding() {
       style={{
         paddingHorizontal: 20,
         flex: 1,
-        marginTop: 40,
-        paddingTop: 0,
+        paddingTop: 40,
+        backgroundColor: '#FFFFFF',
       }}>
       <StatusBar backgroundColor={'#000'} barStyle={'light-content'} />
 
       <Text
         style={{
-          color: 'black',
+          color: '#002230',
           textAlign: 'center',
           fontSize: AppUtils.FontSizeMedium,
           fontWeight: '800',
@@ -47,6 +47,7 @@ export default function ScreenBoarding() {
       <View
         style={{
           alignItems: 'center',
+          marginTop: 40,
         }}>
         <Animated.Image
           source={require('../../assets/images/boarding.png')}
@@ -71,7 +72,7 @@ export default function ScreenBoarding() {
 
       <Text
         style={{
-          color: 'black',
+          color: '#002230',
           fontSize: AppUtils.FontSizeGrande,
           fontWeight: '400',
           marginTop: 25,
@@ -81,11 +82,11 @@ export default function ScreenBoarding() {
         {'Gerencie e agende suas consultas\ncom facilidade.'}
       </Text>
 
-      <View style={{width: '100%', marginTop: 50}}>
+      <View style={{width: '100%', marginTop: 50, rowGap: 20}}>
         <CustomButton
           text="Já possuo conta"
           isLoading={isLoading}
-          bgColor="#4A90E2"
+          bgColor={BlueColor}
           onClick={() => nav.navigate('ScreenLogin')}
         />
 

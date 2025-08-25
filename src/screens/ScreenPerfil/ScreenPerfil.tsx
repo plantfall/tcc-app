@@ -22,7 +22,7 @@ export default function ScreenPerfil() {
   const nav = useNavigation();
 
   return (
-    <View style={{gap: 20, marginTop: 30}}>
+    <View style={{gap: 20, backgroundColor: '#fff'}}>
       <StatusBar backgroundColor={'#000'} barStyle={'light-content'} />
 
       <View

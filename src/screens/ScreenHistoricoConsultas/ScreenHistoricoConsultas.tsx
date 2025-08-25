@@ -5,7 +5,7 @@ import CardConsulta from '../../components/CardConsulta';
 import {Consulta, ConsultaService} from '../../service/ConsultaService';
 import {SessionContext} from '../../context/SessionContext';
 import CustomPopup from '../../components/CustomPopup';
-import {AppUtils} from '../../utils/AppUtils';
+import {AppUtils, BlueColor} from '../../utils/AppUtils';
 
 export default function ScreenHistoricoConsultas() {
   const [consultas, setConsultas] = useState<Consulta[]>([]);
@@ -36,7 +36,7 @@ export default function ScreenHistoricoConsultas() {
           {text: 'Foi sem querer', bgColor: '#e80d0dff', onClick: () => {}},
           {
             text: 'Confirmar',
-            bgColor: '#007BFF',
+            bgColor: BlueColor,
 
             onClick: async () => {
               console.log(consultaSelected);

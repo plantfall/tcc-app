@@ -1,7 +1,7 @@
 import {View, Text} from 'react-native';
 import Voltar from '../../components/Voltar';
 import {useNavigation, useRoute} from '@react-navigation/native';
-import {AppUtils} from '../../utils/AppUtils';
+import {AppUtils, GreenColor} from '../../utils/AppUtils';
 import {Calendar} from 'react-native-calendars';
 import {getNomeApropriado} from '../ScreenAgendarConsulta/ScreenAgendarConsulta';
 import {Especialista} from '../ScreenAgendarConsulta/useAgendarConsulta';
@@ -87,8 +87,8 @@ export default function ScreenEscolherDia() {
   diasDisponiveisFormatados.forEach(dateKey => {
     markedDates[dateKey] = {
       selected: true,
-      selectedColor: '#4CAF50',
-      selectedTextColor: '#fff',
+      selectedColor: '#72C4E58C',
+      selectedTextColor: 'black',
     };
   });
 
@@ -98,8 +98,8 @@ export default function ScreenEscolherDia() {
     markedDates[selKey] = {
       ...(markedDates[selKey] || {}),
       selected: true,
-      selectedColor: '#2196F3',
-      selectedTextColor: '#fff',
+      selectedColor: '#72C4E58C',
+      selectedTextColor: 'black',
     };
   }
 
@@ -125,7 +125,7 @@ export default function ScreenEscolherDia() {
   return (
     <View style={{backgroundColor: '#fff', flex: 1}}>
       <Voltar text="Calendário de Consulta" />
-      <View style={{paddingHorizontal: 10}}>
+      <View style={{marginHorizontal: 10, marginTop: 20}}>
         <Top especialista={especialista} />
         <Text style={{margin: 10, fontSize: AppUtils.FontSize}}>
           Selecione no calendário o dia em que deseja realizar sua consulta:
@@ -137,7 +137,6 @@ export default function ScreenEscolherDia() {
 
         <Calendar
           markedDates={markedDates}
-          style={{width: '100%'}}
           monthFormat="MMMM yyyy"
           onDayPress={day => {
             if (diasDisponiveisFormatados.includes(day.dateString)) {
@@ -179,7 +178,7 @@ function Top({especialista}: Props) {
     <View
       style={{
         borderRadius: 10,
-        borderColor: 'gray',
+        borderColor: GreenColor,
         borderWidth: 1,
         padding: 10,
         marginVertical: 10,

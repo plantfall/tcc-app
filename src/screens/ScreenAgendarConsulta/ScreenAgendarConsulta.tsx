@@ -25,7 +25,7 @@ export default function ScreenAgendarConsulta() {
                 especialista={v}
                 turnDatePickerOn={turnDatePickerOn}
               />
-              <View style={{height: 2, backgroundColor: '#F5F5F5'}} />
+              <View style={{height: 5, backgroundColor: '#F5F5F5'}} />
             </View>
           );
         })}
@@ -59,7 +59,7 @@ function EspecialistaCard({especialista, turnDatePickerOn}: Props) {
   }, []);
 
   return (
-    <View style={{padding: 15}}>
+    <View style={{paddingVertical: 20, paddingLeft: 40}}>
       <Top especialista={especialista} turnDatePickerOn={turnDatePickerOn} />
       <View
         style={{
@@ -107,7 +107,7 @@ function Top({especialista}: Props) {
     <View style={{flexDirection: 'row', gap: 15, alignItems: 'center'}}>
       {/* IMAGEM CIRCULAR */}
 
-      <CircleImage especialista={especialista} size={90} />
+      <CircleImage especialista={especialista} size={80} />
 
       <View>
         <Text style={{fontSize: AppUtils.FontSizeMedium, fontWeight: '600'}}>
