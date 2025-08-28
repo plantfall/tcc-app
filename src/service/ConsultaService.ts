@@ -38,6 +38,7 @@ export class ConsultaService {
       const id = consultaRef.id;
 
       await consultaRef.update({id: id});
+      consultaRequest.id = id;
 
       await this.saveConsultaLocally(consultaRequest);
 
@@ -216,7 +217,7 @@ export class ConsultaService {
     await this.saveConsultasLocally(consultas);
   }
 
-  public async buscaProximaConsulta(): Promise<Consulta[]> {
+  public async buscarProximasConsultas(): Promise<Consulta[]> {
     try {
       const consultas = await this.fetchConsultasLocally();
 
@@ -245,9 +246,6 @@ export class ConsultaService {
         return dataA.getTime() - dataB.getTime();
       });
 
-      console.log('ndiwfhifhewifhewfhewio');
-      console.log(futuras);
-
       return futuras;
     } catch (error) {
       console.error('Erro ao buscar próxima consulta:', error);
@@ -255,20 +253,17 @@ export class ConsultaService {
     }
   }
 
-  public async notificarProximaConsulta() {
-    const consulta = await this.buscaProximaConsulta();
-    if (!consulta) return;
+  public async notificarProximasConsultas() {
+    const consultas = await this.buscarProximasConsultas();
+    if (consultas.length == 0) return;
 
-    const dataConsulta = this.parseDataHora(
-      consulta.dataFormatada,
-      consulta.horarioMarcado,
-    );
-
-    // Notificar imediatamente ao abrir o app
-    NotificationService.showNotification(
-      'Consulta agendada',
-      `Você tem consulta com ${consulta.especialista.nome} em ${consulta.dataFormatada} às ${consulta.horarioMarcado}`,
-    );
+    consultas.forEach(consulta => {
+      // Notificar imediatamente ao abrir o app
+      NotificationService.showNotification(
+        'Consulta agendada',
+        `Você tem consulta com ${consulta.especialista.nome} em ${consulta.dataFormatada} às ${consulta.horarioMarcado}`,
+      );
+    });
   }
 
   // Utilitário privado para montar Date a partir do formato "25 de agosto de 2025"

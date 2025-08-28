@@ -1,4 +1,4 @@
-import {View, Text, TouchableOpacity} from 'react-native';
+import {View, Text, TouchableOpacity, ToastAndroid} from 'react-native';
 import Voltar from '../../components/Voltar';
 import {useContext, useEffect, useState} from 'react';
 import CustomButton from '../../components/CustomButton';
@@ -8,6 +8,7 @@ import {RootStackParamList} from '../../routes/app.routes';
 import {Consulta, ConsultaService} from '../../service/ConsultaService';
 import {SessionContext} from '../../context/SessionContext';
 import {BlueColor, GreenColor} from '../../utils/AppUtils';
+import {DataAlvoDadoEhValida} from '../../utils/DateUtils';
 
 const HORARIOS = [
   '08:00',
@@ -21,7 +22,7 @@ const HORARIOS = [
   '14:30',
   '15:00',
   '13:15',
-  '15:45',
+  '16:45',
 ];
 
 export default function ScreenFinalizarAgendamento() {
@@ -35,6 +36,7 @@ export default function ScreenFinalizarAgendamento() {
 
   const consulta: Consulta = params?.consulta;
   const editMode: boolean = params?.editMode;
+  const date: any = params?.date;
 
   console.log('editmode: ' + editMode);
 
@@ -57,9 +59,40 @@ export default function ScreenFinalizarAgendamento() {
   const handleAgendar = async () => {
     if (horarioSelected == '') return;
 
+    const userId = user?.uid;
+
     setLoading(true);
 
     consulta.horarioMarcado = horarioSelected;
+
+    if (!DataAlvoDadoEhValida(horarioSelected, date)) {
+      ToastAndroid.show(
+        'ERRO - O horário escolhido não é válido!',
+        ToastAndroid.LONG,
+      );
+
+      setLoading(false);
+      return;
+    }
+
+    const consultas = await consultaService.fetchConsultas(userId);
+
+    const founded = consultas.find(
+      v =>
+        v.dataFormatada == consulta.dataFormatada &&
+        v.horarioMarcado == consulta.horarioMarcado &&
+        v.especialista.nome == consulta.especialista.nome,
+    );
+
+    if (founded != undefined) {
+      ToastAndroid.show(
+        'ERRO - Você já registrou essa consulta com essa mesma data e horário!',
+        ToastAndroid.LONG,
+      );
+
+      setLoading(false);
+      return;
+    }
 
     if (editMode) {
       await consultaService.editarConsulta(user?.uid, consulta);

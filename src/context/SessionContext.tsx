@@ -1,6 +1,7 @@
 import {createContext, ReactNode, useEffect, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {LoginResponse, User} from '../@types/Auth.types';
+import {ConsultaService} from '../service/ConsultaService';
 
 type SessionContextType = {
   user: User | undefined;
@@ -40,6 +41,9 @@ export default function SessionProvider({children}: props) {
   async function saveDataLocal(authResponse: LoginResponse) {
     await AsyncStorage.setItem('@user', JSON.stringify(authResponse.user));
     console.log('salvou');
+
+    const consulta = new ConsultaService();
+    await consulta.fetchConsultas(authResponse.user.uid);
   }
 
   async function loadData() {

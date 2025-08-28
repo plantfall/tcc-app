@@ -1,5 +1,56 @@
 import firestore from '@react-native-firebase/firestore';
 
+export function DataAlvoDadoEhValida(
+  horarioAlvo: string,
+  dataSelecionda: any,
+): boolean {
+  const agora = new Date();
+  const options = {
+    timeZone: 'America/Sao_Paulo',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  };
+  const formatter = new Intl.DateTimeFormat('pt-BR', options);
+  const horarioAtual = formatter.format(agora); // ex: "15:28"
+
+  const minutosAlvo = paraMinutos(horarioAlvo);
+  const minutosAtual = paraMinutos(horarioAtual);
+
+  const timestampAgora = agora.getTime();
+  const timestampSelecionado = dataSelecionda.timestamp;
+
+  if (timestampSelecionado > timestampAgora) {
+    return true;
+  }
+
+  // Se for o mesmo dia (ou mesmo minuto), compara os horários
+  const dataSelecionadaString = dataSelecionda.dateString;
+
+  const hoje = new Date();
+  const hojeFormatado = formatarDataParaComparacao(hoje);
+
+  const mesmaData = dataSelecionadaString === hojeFormatado;
+
+  if (mesmaData) {
+    return minutosAlvo > minutosAtual;
+  }
+
+  return false;
+}
+
+function formatarDataParaComparacao(data: Date): string {
+  const ano = data.getFullYear();
+  const mes = String(data.getMonth() + 1).padStart(2, '0');
+  const dia = String(data.getDate()).padStart(2, '0');
+  return `${ano}-${mes}-${dia}`; // ex: "2025-08-28"
+}
+
+function paraMinutos(horario: string): number {
+  const [hora, minuto] = horario.split(':').map(Number);
+  return hora * 60 + minuto;
+}
+
 export function ConverterStringParaDataFormatoBrasileiroPorExtendo(
   dateString: string, // "2025-08-22"
 ): string {

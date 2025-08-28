@@ -19,7 +19,7 @@ export default function HomeHeader({nome}: Props) {
   const consultaService = new ConsultaService();
   useEffect(() => {
     async function fetch() {
-      const proximasConsultas = await consultaService.buscaProximaConsulta();
+      const proximasConsultas = await consultaService.buscarProximasConsultas();
       console.log('proximasConsultas');
       console.log(proximasConsultas);
       setDtProximaConsulta(proximasConsultas[0]?.dataFormatada);
@@ -72,10 +72,8 @@ function Top({nome}: Props) {
     if (texto == undefined) {
       return '';
     }
-    if (texto.length > limite) {
-      return texto.substring(0, limite) + '...';
-    }
-    return texto;
+
+    return texto.split(' ')[0];
   };
 
   const nav = useNavigation();

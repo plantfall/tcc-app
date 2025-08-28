@@ -30,7 +30,7 @@ export default function App() {
         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
           console.log('Permissão concedida');
           const consultaService = new ConsultaService();
-          consultaService.notificarProximaConsultaMock();
+          consultaService.notificarProximasConsultas();
 
           // iniciar serviço de background
           //await BackgroundNotificationService.startBackgroundService();
@@ -40,7 +40,6 @@ export default function App() {
       }
     } else {
       const consultaService = new ConsultaService();
-      consultaService.notificarProximaConsultaMock();
 
       // iniciar serviço de background
       //await BackgroundNotificationService.startBackgroundService();

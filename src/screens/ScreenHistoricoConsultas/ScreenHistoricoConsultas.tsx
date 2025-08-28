@@ -33,7 +33,11 @@ export default function ScreenHistoricoConsultas() {
         title="Tem certeza disso?"
         message="Realmente quer cancelar sua consulta?"
         btns={[
-          {text: 'Foi sem querer', bgColor: '#e80d0dff', onClick: () => {}},
+          {
+            text: 'Foi sem querer',
+            bgColor: '#e80d0dff',
+            onClick: () => setConsultaSelected(null),
+          },
           {
             text: 'Confirmar',
             bgColor: BlueColor,

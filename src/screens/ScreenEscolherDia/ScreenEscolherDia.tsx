@@ -161,6 +161,7 @@ export default function ScreenEscolherDia() {
               nav.navigate('ScreenFinalizarAgendamento', {
                 editMode: editMode,
                 consulta: consultaObj,
+                date: day,
               });
             }
           }}

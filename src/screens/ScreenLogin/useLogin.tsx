@@ -4,8 +4,8 @@ import {SessionContext} from '../../context/SessionContext';
 import {isEmpty} from '../ScreenSignUp/useSignup';
 
 export function useLogin() {
-  const [loginInput, setLoginInput] = useState('teste1@gmail.com');
-  const [password, setPassword] = useState('12345678');
+  const [loginInput, setLoginInput] = useState('');
+  const [password, setPassword] = useState('');
   const [isLoading, setLoading] = useState(false);
   const [erro, setErro] = useState('');
   const [showPassword, setShowPassword] = useState(false);

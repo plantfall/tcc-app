@@ -17,9 +17,21 @@ export default function ScreenPerfil() {
   const [cartaoSusVisibility, setcartaoSusVisibility] = useState(false);
 
   const {sair, user} = useContext(SessionContext);
-  const [cartaoSus, setCartaoSus] = useState(user?.cartaoSus);
+  const [cartaoSus, setCartaoSus] = useState<string>(user?.cartaoSus || '');
 
   const nav = useNavigation();
+
+  function formatarCartaoSus() {
+    const first = cartaoSus.at(0) + cartaoSus.at(1) + cartaoSus.at(2);
+    const second =
+      cartaoSus.at(3) + cartaoSus.at(4) + cartaoSus.at(5) + cartaoSus.at(6);
+    const third =
+      cartaoSus.at(7) + cartaoSus.at(8) + cartaoSus.at(9) + cartaoSus.at(10);
+    const fourth =
+      cartaoSus.at(11) + cartaoSus.at(12) + cartaoSus.at(13) + cartaoSus.at(14);
+
+    return `${first} ${second} ${third} ${fourth}`;
+  }
 
   return (
     <View style={{gap: 20, backgroundColor: '#fff'}}>
@@ -68,7 +80,9 @@ export default function ScreenPerfil() {
           <View style={styles.passwordContainer}>
             <View style={styles.container}>
               <Text>
-                {cartaoSusVisibility ? cartaoSus : 'xxxx.xxxxx.xxx/xx'}
+                {cartaoSusVisibility
+                  ? formatarCartaoSus()
+                  : '*** **** **** ****'}
               </Text>
             </View>
 

@@ -22,7 +22,8 @@ export default function ScreenNotificacoes() {
 
     async function loadNotificacoes() {
       async function fetch() {
-        const proximasConsultas = await consultaService.buscaProximaConsulta();
+        const proximasConsultas =
+          await consultaService.buscarProximasConsultas();
         console.log('proximasConsultas');
         console.log(proximasConsultas);
 

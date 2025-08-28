@@ -23,7 +23,8 @@ export function useSignUp() {
       isEmpty(nomeInput) ||
       isEmpty(cartaoSusInput) ||
       isEmpty(emailInput) ||
-      isEmpty(password)
+      isEmpty(password) ||
+      cartaoSusInput.length < 15
     ) {
       setLoading(false);
       return;

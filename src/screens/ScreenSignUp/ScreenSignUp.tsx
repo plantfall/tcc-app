@@ -15,6 +15,8 @@ import {Animated} from 'react-native';
 import {AppUtils, BlueColor} from '../../utils/AppUtils.ts';
 import Feather from 'react-native-vector-icons/Feather';
 import {useSignUp} from './useSignup.tsx';
+import MaskInput from 'react-native-mask-input';
+import {InputCartaoSus} from '../../components/InputCartaoSus.tsx';
 
 export default function ScreenSignUp() {
   const {
@@ -108,15 +110,9 @@ export default function ScreenSignUp() {
           />
 
           <Text style={{marginBottom: 7}}>Cartão do Sus</Text>
-          <TextInput
-            value={cartaoSusInput}
-            onChangeText={setCartaoSusInput}
-            placeholderTextColor="#808080"
-            placeholder="Informe seu cartão do SUS"
-            numberOfLines={1}
-            autoCapitalize="none"
-            style={stylesAuth.input}
-            keyboardType="number-pad"
+          <InputCartaoSus
+            cartaoSusInput={cartaoSusInput}
+            setCartaoSusInput={setCartaoSusInput}
           />
 
           <Text style={{marginBottom: 7}}>Email</Text>

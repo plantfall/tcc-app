@@ -7,7 +7,6 @@ import {
   Platform,
   ScrollView,
   TouchableOpacity,
-  StyleSheet,
 } from 'react-native';
 import CustomButton from '../../components/CustomButton';
 import {useLogin} from './useLogin.tsx';
