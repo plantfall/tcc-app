@@ -26,7 +26,7 @@ export default function Home() {
         <Item
           text="Localização da UBS"
           iconName="location-arrow"
-          destination="ScreenHistoricoConsultas"
+          destination="ScreenLocalizacaoUbs"
         />
       </View>
     </View>

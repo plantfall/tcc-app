@@ -34,6 +34,7 @@ export class AuthService {
       return loginResponse;
     } catch (error: any) {
       // Aqui você pode tratar erros específicos, como email já em uso
+      console.error(error);
       throw new Error(error.message);
     }
   }
@@ -65,6 +66,7 @@ export class AuthService {
 
       return loginResponse;
     } catch (error: any) {
+      console.error(error);
       throw new Error(error.message);
     }
   }
