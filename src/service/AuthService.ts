@@ -34,9 +34,7 @@ export class AuthService {
 
       return loginResponse;
     } catch (error: any) {
-      // Aqui você pode tratar erros específicos, como email já em uso
-      this.tratarErro(error.message);
-      console.log(error);
+      throw this.tratarErro(error.message);
     }
   }
 
@@ -45,6 +43,7 @@ export class AuthService {
       throw new Error('O nome está muito curto.');
     }
   }
+
   public async login(email: string, password: string): Promise<LoginResponse> {
     try {
       const userCredential = await auth().signInWithEmailAndPassword(
@@ -72,7 +71,33 @@ export class AuthService {
 
       return loginResponse;
     } catch (error: any) {
-      this.tratarErro(error.message);
+      throw this.tratarErro(error.message);
+    }
+  }
+
+  public async resetPassword(email: string): Promise<void> {
+    try {
+      this.validarEmail(email);
+
+      const userSnapshot = await firestore()
+        .collection('users')
+        .where('email', '==', email.trim())
+        .get();
+
+      if (userSnapshot.empty) {
+        throw new Error('Este email não está cadastrado.');
+      }
+
+      await auth().sendPasswordResetEmail(email.trim());
+      console.log(`Email de redefinição enviado para: ${email}`);
+    } catch (error: any) {
+      throw this.tratarErro(error.message);
+    }
+  }
+
+  private validarEmail(email: string) {
+    if (email.trim().length < 10 || !email.trim().includes('@')) {
+      throw new Error('Email inválido');
     }
   }
 
@@ -93,6 +118,9 @@ export class AuthService {
       newMessage = 'O email já está em uso.';
     else if (errorMessage.includes('auth/weak-password'))
       newMessage = 'A senha deve ter pelo menos 6 caracteres.';
+    else if (errorMessage.includes('auth/user-not-found'))
+      newMessage = 'Usuário não encontrado com esse email.';
+
     throw new Error(newMessage);
   }
 }

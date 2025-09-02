@@ -16,6 +16,7 @@ import {AppUtils, BlueColor} from '../../utils/AppUtils.ts';
 import Feather from 'react-native-vector-icons/Feather';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {stylesAuth} from '../ScreenSignUp/ScreenSignUp.tsx';
+import {useNavigation} from '@react-navigation/native';
 
 export default function ScreenLogin() {
   const {
@@ -39,6 +40,8 @@ export default function ScreenLogin() {
       useNativeDriver: true,
     }).start();
   }, []);
+
+  const nav = useNavigation();
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
@@ -130,7 +133,8 @@ export default function ScreenLogin() {
             />
           </View>
 
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => nav.navigate('ScreenEsqueciMinhaSenha')}>
             <Text
               style={{
                 fontSize: 14,

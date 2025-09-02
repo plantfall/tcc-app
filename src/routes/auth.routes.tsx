@@ -4,6 +4,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import ScreenLogin from '../screens/ScreenLogin/ScreenLogin';
 import ScreenBoarding from '../screens/ScreenBoarding/ScreenBoarding';
 import ScreenSignUp from '../screens/ScreenSignUp/ScreenSignUp';
+import ScreenEsqueciMinhaSenha from '../screens/ScreenEsqueciMinhaSenha/ScreenEsqueciMinhaSenha';
 
 export default function AuthRoutes() {
   return (
@@ -24,6 +25,10 @@ function AuthStackNavigator() {
         orientation: 'portrait',
       }}>
       <Stack.Screen name="ScreenBoarding" component={ScreenBoarding} />
+      <Stack.Screen
+        name="ScreenEsqueciMinhaSenha"
+        component={ScreenEsqueciMinhaSenha}
+      />
 
       <Stack.Screen name="ScreenLogin" component={ScreenLogin} />
 
