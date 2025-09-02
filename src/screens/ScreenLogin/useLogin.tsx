@@ -15,6 +15,7 @@ export function useLogin() {
 
   const handleLogin = async () => {
     setLoading(true);
+    setErro('');
 
     if (isEmpty(loginInput) || isEmpty(password)) {
       setLoading(false);
@@ -27,15 +28,8 @@ export function useLogin() {
         await salvarUsuario(r);
       })
       .catch(e => {
-        const {status, message} = e;
+        const {message} = e;
         setErro(message);
-        // if (status === 401) {
-        //   setErro('Email ou senha inválidos');
-        // } else if (status === 500) {
-        //   setErro('Erro interno no servidor');
-        // } else {
-        //   setErro('Erro desconhecido');
-        // }
       });
 
     setLoading(false);

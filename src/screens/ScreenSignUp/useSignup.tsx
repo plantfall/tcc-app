@@ -18,6 +18,7 @@ export function useSignUp() {
 
   const handleSignUp = async () => {
     setLoading(true);
+    setErro('');
 
     if (
       isEmpty(nomeInput) ||
