@@ -48,15 +48,16 @@ export default function HomeHeader({nome}: Props) {
           alignItems: 'center',
           paddingLeft: 5,
           gap: 10,
-          maxWidth: 170,
           marginBottom: 20,
           borderRadius: 10,
+          alignSelf: 'flex-start', // garante que a View não se estique
         }}>
         <FontAwesome name="calendar" color={'##002230'} size={15} />
         <Text
           style={{
             color: '#002230',
             fontSize: AppUtils.FontSize,
+            width: 150,
           }}>
           {dtProximaConsulta == null
             ? 'Nenhum agendamento encontrado'
