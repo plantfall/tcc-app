@@ -7,7 +7,6 @@ import ScreenEscolherDia from '../screens/ScreenEscolherDia/ScreenEscolherDia';
 import ScreenNotificacoes from '../screens/ScreenNotificacoes/ScreenNotificacoes';
 import ScreenConsultaAgendada from '../screens/ScreenConsultaAgendada/ScreenConsultaAgendada';
 import ScreenPerfil from '../screens/ScreenPerfil/ScreenPerfil';
-import ScreenBoarding from '../screens/ScreenBoarding/ScreenBoarding';
 
 export type RootStackParamList = {
   Home: undefined;

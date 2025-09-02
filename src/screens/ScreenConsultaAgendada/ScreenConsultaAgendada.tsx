@@ -19,10 +19,10 @@ export default function ScreenConsultaAgendada() {
 
   const {params} = useRoute();
 
-  const editMode = params.editMode;
+  const editMode = params?.editMode || false;
   const consulta = params.consulta;
   //const editMode = false;
-  //const consulta = consultaMock;
+  // const consulta = consultaMock;
 
   const consultaAgendada = consulta;
 
@@ -50,7 +50,6 @@ export default function ScreenConsultaAgendada() {
       <StatusBar backgroundColor={'#1B8CB9A1'} barStyle={'light-content'} />
       <View
         style={{
-          marginTop: 30,
           backgroundColor: '#1B8CB9A1',
           height: 270,
         }}>
