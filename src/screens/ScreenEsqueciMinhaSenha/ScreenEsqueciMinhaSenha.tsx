@@ -10,6 +10,7 @@ import React, {useState} from 'react';
 import {AuthService} from '../../service/AuthService.ts';
 import {AppUtils} from '../../utils/AppUtils.ts';
 import Voltar from '../../components/Voltar.tsx';
+import CustomButton from '../../components/CustomButton.tsx';
 
 export default function ResetPasswordScreen() {
   const [email, setEmail] = useState('');
@@ -36,23 +37,24 @@ export default function ResetPasswordScreen() {
     <View style={{flex: 1, backgroundColor: '#f5f5f5'}}>
       <Voltar text="Esqueci minha senha" />
       <View style={styles.container}>
-        <Text style={styles.title}>Redefinir Senha</Text>
+        <Text style={styles.description}>
+          Insira seu e-mail e enviaremos um link para redefinir sua senha
+        </Text>
         <TextInput
           style={styles.input}
           placeholder="Digite seu email"
+          placeholderTextColor={'#9E9E9E'}
           keyboardType="email-address"
           autoCapitalize="none"
           value={email}
           onChangeText={setEmail}
         />
-        <TouchableOpacity
-          style={styles.button}
-          onPress={handleResetPassword}
-          disabled={loading}>
-          <Text style={styles.buttonText}>
-            {loading ? 'Enviando...' : 'Enviar email de redefinição'}
-          </Text>
-        </TouchableOpacity>
+
+        <CustomButton
+          onClick={handleResetPassword}
+          text={loading ? 'Enviando...' : 'Enviar email de redefinição'}
+          isLoading={loading}
+        />
 
         {erro != '' && (
           <Text
@@ -77,19 +79,18 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
-  title: {
-    fontSize: AppUtils.FontSizeGrande + 4,
+  description: {
+    fontSize: AppUtils.FontSizeMedium + 2,
     marginBottom: 16,
-    textAlign: 'center',
     color: '#002230',
   },
   input: {
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: '#006083',
     color: 'black',
     borderRadius: 8,
     padding: 12,
-    marginBottom: 16,
+    marginBottom: 110,
     backgroundColor: '#fff',
     fontSize: AppUtils.FontSize,
   },
