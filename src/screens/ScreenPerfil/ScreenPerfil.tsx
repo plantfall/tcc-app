@@ -122,7 +122,7 @@ export default function ScreenPerfil() {
             </View>
           </View>
         </View>
-
+        {/* 
         <TouchableOpacity
           style={{
             flexDirection: 'row',
@@ -137,7 +137,7 @@ export default function ScreenPerfil() {
             }}>
             Excluir conta
           </Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
         <CustomButton
           text="Sair da conta"

@@ -22,10 +22,10 @@ export function useSignUp() {
 
     if (
       isEmpty(nomeInput) ||
-      isEmpty(cartaoSusInput) ||
+      // isEmpty(cartaoSusInput) ||
       isEmpty(emailInput) ||
-      isEmpty(password) ||
-      cartaoSusInput.length < 15
+      isEmpty(password)
+      //|| cartaoSusInput.length < 15
     ) {
       setLoading(false);
       return;

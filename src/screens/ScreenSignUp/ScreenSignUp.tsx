@@ -109,7 +109,7 @@ export default function ScreenSignUp() {
             style={stylesAuth.input}
           />
 
-          <Text style={{marginBottom: 7}}>Cartão do Sus</Text>
+          <Text style={{marginBottom: 7}}>Cartão do Sus (opcional)</Text>
           <InputCartaoSus
             cartaoSusInput={cartaoSusInput}
             setCartaoSusInput={setCartaoSusInput}
