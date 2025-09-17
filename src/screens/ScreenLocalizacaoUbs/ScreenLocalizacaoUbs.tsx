@@ -64,7 +64,7 @@ function Card() {
       <Text style={styles.label}>Segunda a sexta: 07h -16h</Text>
 
       <Text style={[styles.subtitle]}>Telefone</Text>
-      <Text style={styles.label}>Segunda a sexta: 07h -16h</Text>
+      <Text style={styles.label}>(32) 98410-6022</Text>
 
       <Text style={[styles.subtitle]}>Acessibilidade</Text>
       <CustomButton onClick={abrirNoGoogleMaps} text="Ver rotas no mapa" />
