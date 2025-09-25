@@ -8,7 +8,6 @@ import ScreenNotificacoes from '../screens/ScreenNotificacoes/ScreenNotificacoes
 import ScreenConsultaAgendada from '../screens/ScreenConsultaAgendada/ScreenConsultaAgendada';
 import ScreenPerfil from '../screens/ScreenPerfil/ScreenPerfil';
 import ScreenLocalizacaoUbs from '../screens/ScreenLocalizacaoUbs/ScreenLocalizacaoUbs';
-import ScreenEsqueciMinhaSenha from '../screens/ScreenEsqueciMinhaSenha/ScreenEsqueciMinhaSenha';
 
 export type RootStackParamList = {
   Home: undefined;
