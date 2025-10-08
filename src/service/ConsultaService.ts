@@ -33,6 +33,8 @@ export class ConsultaService {
     consultaRequest: Consulta,
   ): Promise<void> {
     try {
+      await this.validarConsulta(consultaRequest);
+
       consultaRequest.status = 'AGENDADA';
 
       console.log(consultaRequest);
@@ -69,6 +71,44 @@ export class ConsultaService {
     } catch (error: any) {
       throw new Error(error.message);
     }
+  }
+
+  private async validarConsulta(consulta: Consulta): Promise<void> {
+    const consultas = await this.fetchConsultasLocally();
+
+    //um unico agendamento por dia por especialista
+    const jaMarcada = consultas.find(
+      it =>
+        it.especialista.nome === consulta.especialista.nome &&
+        it.especialista.especializacao ===
+          consulta.especialista.especializacao &&
+        it.dataFormatada === consulta.dataFormatada,
+    );
+
+    if (jaMarcada !== undefined)
+      throw new Error(
+        'Não é possível realizar múltiplos agendamentos com o mesmo médico em um único dia.',
+      );
+
+    const duplicada = consultas.find(
+      it =>
+        it.especialista.nome == consulta.especialista.nome &&
+        it.especialista.especializacao ==
+          consulta.especialista.especializacao &&
+        it.dataFormatada == consulta.dataFormatada &&
+        it.horarioMarcado == consulta.horarioMarcado,
+    );
+
+    if (duplicada !== undefined)
+      throw new Error('Esta consulta já está agendada');
+  }
+
+  private async fetchConsultasLocally(): Promise<Consulta[]> {
+    const data = await AsyncStorage.getItem('@consultas');
+
+    const consultas: Consulta[] = data == null ? [] : JSON.parse(data);
+
+    return consultas;
   }
 
   private formatConsultaDate(
@@ -237,14 +277,6 @@ export class ConsultaService {
 
     await AsyncStorage.setItem('@consultas', JSON.stringify(consultas));
     console.log('adicionou localmente');
-  }
-
-  private async fetchConsultasLocally(): Promise<Consulta[]> {
-    const data = await AsyncStorage.getItem('@consultas');
-
-    const consultas: Consulta[] = data == null ? [] : JSON.parse(data);
-
-    return consultas;
   }
 
   private async updateConsultaLocally(consulta: Consulta): Promise<void> {

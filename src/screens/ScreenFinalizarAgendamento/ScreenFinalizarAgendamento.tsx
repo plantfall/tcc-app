@@ -1,14 +1,14 @@
-import {View, Text, TouchableOpacity, ToastAndroid} from 'react-native';
-import Voltar from '../../components/Voltar';
-import {useContext, useEffect, useState} from 'react';
-import CustomButton from '../../components/CustomButton';
-import {useNavigation, useRoute} from '@react-navigation/native';
-import type {StackNavigationProp} from '@react-navigation/stack';
-import {RootStackParamList} from '../../routes/app.routes';
 import {Consulta, ConsultaService} from '../../service/ConsultaService';
+import {Text, ToastAndroid, TouchableOpacity, View} from 'react-native';
+import {useContext, useEffect, useState} from 'react';
+import {useNavigation, useRoute} from '@react-navigation/native';
+
+import CustomButton from '../../components/CustomButton';
+import {GreenColor} from '../../utils/AppUtils';
+import {RootStackParamList} from '../../routes/app.routes';
 import {SessionContext} from '../../context/SessionContext';
-import {BlueColor, GreenColor} from '../../utils/AppUtils';
-import {DataAlvoDadoEhValida} from '../../utils/DateUtils';
+import type {StackNavigationProp} from '@react-navigation/stack';
+import Voltar from '../../components/Voltar';
 
 const HORARIOS = [
   '08:00',
@@ -59,51 +59,23 @@ export default function ScreenFinalizarAgendamento() {
   const handleAgendar = async () => {
     if (horarioSelected == '') return;
 
-    const userId = user?.uid;
-
     setLoading(true);
+    try {
+      consulta.horarioMarcado = horarioSelected;
 
-    consulta.horarioMarcado = horarioSelected;
+      if (editMode) {
+        await consultaService.editarConsulta(user?.uid, consulta);
+      } else await consultaService.agendarConsulta(user?.uid, consulta);
 
-    if (!DataAlvoDadoEhValida(horarioSelected, date)) {
-      ToastAndroid.show(
-        'ERRO - O horário escolhido não é válido!',
-        ToastAndroid.LONG,
-      );
-
+      nav.navigate('ScreenConsultaAgendada', {
+        consulta: consulta,
+        editMode: editMode,
+      });
+    } catch (e: any) {
+      ToastAndroid.show(e.message, ToastAndroid.LONG);
+    } finally {
       setLoading(false);
-      return;
     }
-
-    const consultas = await consultaService.fetchConsultas(userId);
-
-    const founded = consultas.find(
-      v =>
-        v.dataFormatada == consulta.dataFormatada &&
-        v.horarioMarcado == consulta.horarioMarcado &&
-        v.especialista.nome == consulta.especialista.nome,
-    );
-
-    if (founded != undefined) {
-      ToastAndroid.show(
-        'ERRO - Você já registrou essa consulta com essa mesma data e horário!',
-        ToastAndroid.LONG,
-      );
-
-      setLoading(false);
-      return;
-    }
-
-    if (editMode) {
-      await consultaService.editarConsulta(user?.uid, consulta);
-    } else await consultaService.agendarConsulta(user?.uid, consulta);
-
-    setLoading(false);
-
-    nav.navigate('ScreenConsultaAgendada', {
-      consulta: consulta,
-      editMode: editMode,
-    });
   };
 
   return (
