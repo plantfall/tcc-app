@@ -71,7 +71,8 @@ function geraDiasDisponiveis(qtdDias = 5): string[] {
 
   // Gera todos os dias úteis do mês
   const diasUteis: string[] = [];
-  for (let dia = hoje.getDate(); dia <= ultimoDia; dia++) {
+
+  for (let dia = hoje.getDate() + 1; dia <= ultimoDia; dia++) {
     const dataAtual = new Date(ano, mes, dia);
     const diaSemana = dataAtual.getDay();
     if (diaSemana !== 0 && diaSemana !== 6) {

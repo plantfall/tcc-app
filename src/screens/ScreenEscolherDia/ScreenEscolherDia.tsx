@@ -1,15 +1,14 @@
-import {View, Text} from 'react-native';
-import Voltar from '../../components/Voltar';
-import {useNavigation, useRoute} from '@react-navigation/native';
 import {AppUtils, GreenColor} from '../../utils/AppUtils';
-import {Calendar} from 'react-native-calendars';
-import {getNomeApropriado} from '../ScreenAgendarConsulta/ScreenAgendarConsulta';
-import {Especialista} from '../ScreenAgendarConsulta/useAgendarConsulta';
+import {Calendar, LocaleConfig} from 'react-native-calendars';
+import {Text, View} from 'react-native';
+import {useNavigation, useRoute} from '@react-navigation/native';
+
+import {CircleImage} from '../../components/CircleImage';
 import {Consulta} from '../../service/ConsultaService';
 import {ConverterStringParaDataFormatoBrasileiroPorExtendo} from '../../utils/DateUtils';
-import {CircleImage} from '../../components/CircleImage';
-
-import {LocaleConfig} from 'react-native-calendars';
+import {Especialista} from '../ScreenAgendarConsulta/useAgendarConsulta';
+import Voltar from '../../components/Voltar';
+import {getNomeApropriado} from '../ScreenAgendarConsulta/ScreenAgendarConsulta';
 
 // Configurar locale para português (opcional, mas recomendado)
 LocaleConfig.locales['pt'] = {
@@ -70,9 +69,14 @@ export default function ScreenEscolherDia() {
 
   const diasDisponiveis = especialista.diasDisponiveis;
 
-  const dateSelected = editMode
-    ? new Date(consulta.dataMarcadaMilisegundos)
-    : new Date();
+  console.log(diasDisponiveis);
+
+  let dateSelected: Date | null = null;
+
+  if (editMode) {
+    dateSelected = new Date(consulta.dataMarcadaMilisegundos);
+  }
+
   const nav = useNavigation();
 
   // Converter lista para formato do Calendar
@@ -95,12 +99,14 @@ export default function ScreenEscolherDia() {
   // Marcar dia selecionado (azul)
   if (dateSelected) {
     const selKey = dateSelected.toISOString().split('T')[0];
-    markedDates[selKey] = {
-      ...(markedDates[selKey] || {}),
-      selected: true,
-      selectedColor: '#72C4E58C',
-      selectedTextColor: 'black',
-    };
+    if (diasDisponiveisFormatados.includes(selKey)) {
+      markedDates[selKey] = {
+        ...(markedDates[selKey] || {}),
+        selected: true,
+        selectedColor: '#72C4E58C',
+        selectedTextColor: 'black',
+      };
+    }
   }
 
   // Bloquear todos os dias que não estão na lista de disponíveis

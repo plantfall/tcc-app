@@ -336,19 +336,6 @@ export class ConsultaService {
     }
   }
 
-  public async notificarProximasConsultas() {
-    const consultas = await this.buscarProximasConsultas();
-    if (consultas.length == 0) return;
-
-    consultas.forEach(consulta => {
-      // Notificar imediatamente ao abrir o app
-      NotificationService.showNotification(
-        'Consulta agendada',
-        `Você tem consulta com ${consulta.especialista.nome} em ${consulta.dataFormatada} às ${consulta.horarioMarcado}`,
-      );
-    });
-  }
-
   // Utilitário privado para montar Date a partir do formato "25 de agosto de 2025"
   private parseDataHora(dataFormatada: string, horario: string): Date {
     // Exemplo: "25 de agosto de 2025"
@@ -380,26 +367,6 @@ export class ConsultaService {
 
     const d = new Date(anoNum, mes, diaNum, hora, minuto, 0, 0);
     return d;
-  }
-
-  public notificarProximaConsultaMock() {
-    // Mock da consulta
-    const consulta = {
-      especialista: {nome: 'Dr. Mock'},
-      dataFormatada: '', // preenchido abaixo
-      horarioMarcado: '10:00',
-    };
-
-    // Data de amanhã
-    const dataAmanha = new Date();
-    dataAmanha.setDate(dataAmanha.getDate() + 1);
-    consulta.dataFormatada = dataAmanha.toLocaleDateString('pt-BR');
-
-    // Notificação imediata ao abrir o app
-    NotificationService.showNotification(
-      'Consulta agendada',
-      `Você tem consulta com ${consulta.especialista.nome} em ${consulta.dataFormatada} às ${consulta.horarioMarcado}`,
-    );
   }
 }
 
