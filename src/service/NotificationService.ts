@@ -1,6 +1,9 @@
+import {NativeModules} from 'react-native';
 import PushNotification from 'react-native-push-notification';
 
-class NotificationService {
+const {NotificationModule} = NativeModules;
+
+export class NotificationService {
   public showNotification(title: string, message: string) {
     PushNotification.localNotification({
       channelId: 'consultas-channel',
@@ -14,19 +17,22 @@ class NotificationService {
     console.log('notificou');
   }
 
-  public scheduleNotification(title: string, message: string, date: Date) {
-    PushNotification.localNotificationSchedule({
-      channelId: 'consultas-channel',
-      title,
-      message,
-      date, // deve ser uma data futura
-      allowWhileIdle: true,
-      playSound: true,
-      soundName: 'default',
-      vibrate: true,
-    });
-    console.log('Notificação agendada para:', date.toLocaleString());
+  /**
+   *
+   * @param title
+   * @param message
+   * @param date deve estar no formato: yyyy-MM-dd HH:mm → exemplo: '2025-10-08 14:50'.
+
+   */
+  public static ScheduleNotification(
+    title: string,
+    message: string,
+    date: string,
+  ) {
+    NotificationModule.scheduleNotification(
+      date,
+      'Reunião',
+      'Lembrete: reunião!',
+    );
   }
 }
-
-export default new NotificationService();

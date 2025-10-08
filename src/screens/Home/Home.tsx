@@ -1,13 +1,20 @@
-import {View, Text, StatusBar, TouchableOpacity} from 'react-native';
+import {StatusBar, Text, TouchableOpacity, View} from 'react-native';
+import {useContext, useEffect} from 'react';
+
+import {AppUtils} from '../../utils/AppUtils';
 import {FontAwesome} from '@react-native-vector-icons/fontawesome';
 import HomeHeader from '../../components/HomeHeader';
-import {useContext} from 'react';
+import {NativeModules} from 'react-native';
 import {SessionContext} from '../../context/SessionContext';
-import {AppUtils} from '../../utils/AppUtils';
 import {useNavigation} from '@react-navigation/native';
+
+const {NotificationModule} = NativeModules;
 
 export default function Home() {
   const {user} = useContext(SessionContext);
+
+  useEffect(() => {}, []);
+
   return (
     <View style={{flex: 1, backgroundColor: '#fff'}}>
       <StatusBar barStyle={'dark-content'} backgroundColor={'#fff'} />
