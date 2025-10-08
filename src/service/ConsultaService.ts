@@ -61,12 +61,39 @@ export class ConsultaService {
         consultaRequest.horarioMarcado,
       );
 
-      console.log('data formatada final: ' + dataFormatadaFinal);
+      // Converter a string no formato "YYYY-MM-DD HH:mm" para objeto Date
+      const [dataPart, horaPart] = dataFormatadaFinal.split(' ');
+      const [ano, mes, dia] = dataPart.split('-').map(Number);
+      const [hora, minuto] = horaPart.split(':').map(Number);
+      const dataFinal = new Date(ano, mes - 1, dia, hora, minuto);
 
+      // Gerar horários com antecedência
+      const dezMinAntes = new Date(dataFinal.getTime() - 10 * 60 * 1000);
+      const umDiaAntes = new Date(dataFinal.getTime() - 24 * 60 * 60 * 1000);
+
+      // Converter de volta pro formato "YYYY-MM-DD HH:mm"
+      const formatarData = (d: Date) =>
+        `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(
+          2,
+          '0',
+        )}-${String(d.getDate()).padStart(2, '0')} ${String(
+          d.getHours(),
+        ).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+
+      const titulo = 'Agendamento de Consulta';
+      const mensagem = `Com médico ${consultaRequest.especialista.nome} sobre ${consultaRequest.especialista.especializacao}`;
+
+      const strUmDiaAntes = formatarData(umDiaAntes);
+      // Notificação 1 dia antes
+      NotificationService.ScheduleNotification(titulo, mensagem, strUmDiaAntes);
+
+      const strDezMinANtes = formatarData(dezMinAntes);
+
+      // Notificação 10 minutos antes
       NotificationService.ScheduleNotification(
-        'Agendamento de Consulta',
-        `Com médico ${consultaRequest.especialista.nome} sobre ${consultaRequest.especialista.especializacao}`,
-        dataFormatadaFinal,
+        titulo,
+        mensagem,
+        strDezMinANtes,
       );
     } catch (error: any) {
       throw new Error(error.message);
