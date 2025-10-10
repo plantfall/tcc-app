@@ -35,17 +35,24 @@ export type FirestoreTimestamp = {
 };
 
 export class ConsultaService {
+  // private seconds:number =
+
+  // public injectSecondsInDevMode(seconds:number){
+
+  // }
+
   public async agendarConsulta(
     uidUser: string,
     consultaRequest: Consulta,
   ): Promise<void> {
     try {
-      //await this.validarConsulta(consultaRequest);
-      // const seg = 120;
+      // const seg = 1000;
 
       // consultaRequest.dataFormatada =
       //   this.gerarDataFormatadaHojeDaquiXSegundos(seg);
       // consultaRequest.horarioMarcado = this.gerarHorarioDaquiXsegundos(seg);
+
+      await this.validarConsulta(consultaRequest);
 
       consultaRequest.status = 'AGENDADA';
 
@@ -158,28 +165,12 @@ export class ConsultaService {
     const consultas = await this.listarConsultasAgendadas();
 
     //um unico agendamento por dia por horario
-    const horarioJaMArcado = consultas.find(
-      it =>
-        it.dataFormatada === consulta.dataFormatada &&
-        it.horarioMarcado === consulta.horarioMarcado,
+    const diaJaMArcado = consultas.find(
+      it => it.dataFormatada === consulta.dataFormatada,
     );
 
-    if (horarioJaMArcado !== undefined)
-      throw new Error('Você já possui um agendamento marcado nesse horário');
-
-    //um unico agendamento por dia por especialista
-    const jaMarcada = consultas.find(
-      it =>
-        it.especialista.nome === consulta.especialista.nome &&
-        it.especialista.especializacao ===
-          consulta.especialista.especializacao &&
-        it.dataFormatada === consulta.dataFormatada,
-    );
-
-    if (jaMarcada !== undefined)
-      throw new Error(
-        'Não é possível realizar múltiplos agendamentos com o mesmo médico em um único dia.',
-      );
+    if (diaJaMArcado !== undefined)
+      throw new Error('Você já possui um agendamento marcado nesse dia');
   }
 
   private async fetchConsultasLocally(): Promise<Consulta[]> {

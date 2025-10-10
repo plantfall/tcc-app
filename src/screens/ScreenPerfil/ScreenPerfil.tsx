@@ -17,13 +17,20 @@ import {SessionContext} from '../../context/SessionContext.tsx';
 import {AuthService} from '../../service/AuthService.ts';
 import {AppUtils} from '../../utils/AppUtils.ts';
 
+// Definição da constante para o tempo máximo entre cliques (ex: 500ms)
+const TRIPLE_CLICK_INTERVAL = 500;
+let clickTimer: NodeJS.Timeout | null = null;
+
 export default function ScreenPerfil() {
   const [cartaoSusVisibility, setcartaoSusVisibility] = useState(false);
   const [modoEdicao, setModoEdicao] = useState(false);
   const [atualizando, setAtualizando] = useState(false);
 
-  const {sair, user, updateCartaoSus} = useContext(SessionContext);
+  const {sair, user, updateCartaoSus, setModoDesenvolvedor} =
+    useContext(SessionContext);
   const [cartaoSus, setCartaoSus] = useState<string>(user?.cartaoSus || '');
+
+  const [clickCount, setClickCount] = useState(0);
 
   const nav = useNavigation();
 
@@ -60,6 +67,45 @@ export default function ScreenPerfil() {
       setModoEdicao(false);
     }
   };
+
+  const executeTripleClickAction = () => {
+    ToastAndroid.show('Função secreta executada! 🤫', ToastAndroid.LONG);
+    console.log('Triple click detectado e executado.');
+    setModoDesenvolvedor(true);
+  };
+
+  /**
+   * NOVO MÉTODO: Lógica para rastrear os cliques
+   */
+  const handleTripleClick = () => {
+    // 1. Limpa o timer anterior (se existir)
+    if (clickTimer) {
+      clearTimeout(clickTimer);
+    }
+
+    // 2. Incrementa a contagem de cliques
+    setClickCount(prevCount => {
+      const newCount = prevCount + 1;
+
+      if (newCount === 3) {
+        // 3. SE for o terceiro clique, executa a ação e reseta o contador
+        executeTripleClickAction();
+        return 0; // Reseta o contador
+      }
+
+      // 4. Configura um novo timer para resetar se não houver clique em TRIPLE_CLICK_INTERVAL (500ms)
+      // O timer só deve ser configurado se não for o último clique
+      if (newCount < 3) {
+        clickTimer = setTimeout(() => {
+          setClickCount(0); // Reseta se o tempo esgotar
+          clickTimer = null;
+        }, TRIPLE_CLICK_INTERVAL);
+      }
+
+      return newCount; // Atualiza a contagem
+    });
+  };
+
   return (
     <View style={{gap: 20, backgroundColor: '#fff', flex: 1}}>
       <StatusBar backgroundColor={'#000'} barStyle={'dark-content'} />
@@ -83,7 +129,10 @@ export default function ScreenPerfil() {
       <View style={{borderWidth: 0.6, borderBottomColor: '#CBCBCB'}} />
 
       <View style={{alignItems: 'center', marginTop: 20}}>
-        <CircularName nome={user?.nome!} size={90} fontSize={40} />
+        <TouchableOpacity onPress={handleTripleClick}>
+          <CircularName nome={user?.nome!} size={90} fontSize={40} />
+        </TouchableOpacity>
+
         <Text
           style={{
             fontSize: AppUtils.FontSizeGrande,

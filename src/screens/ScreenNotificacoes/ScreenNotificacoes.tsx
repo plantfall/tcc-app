@@ -157,7 +157,7 @@ export default function ScreenNotificacoes() {
                   color: '#fff',
                   fontWeight: 'bold',
                 }}>
-                Marcar todas como lidas
+                Limpar notificações
               </Text>
             </TouchableOpacity>
           </View>

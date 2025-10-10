@@ -11,6 +11,12 @@ type SessionContextType = {
   salvarUsuario(loginResponse: LoginResponse): Promise<void>;
   sair(): Promise<void>;
   updateCartaoSus(email: string): Promise<void>;
+  modoDesenvolvedor: boolean;
+  setModoDesenvolvedor: React.Dispatch<React.SetStateAction<boolean>>;
+  segundosParaAgendarConsultaEmDevMode: string;
+  setSegundosParaAgendarConsultaEmDevMode: React.Dispatch<
+    React.SetStateAction<string>
+  >;
 };
 
 type props = {
@@ -25,6 +31,11 @@ export default function SessionProvider({children}: props) {
   const [user, setUser] = useState<User | undefined>();
   const [signed, setSignIn] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [modoDesenvolvedor, setModoDesenvolvedor] = useState(false);
+  const [
+    segundosParaAgendarConsultaEmDevMode,
+    setSegundosParaAgendarConsultaEmDevMode,
+  ] = useState('10');
 
   useEffect(() => {
     loadData();
@@ -63,6 +74,7 @@ export default function SessionProvider({children}: props) {
   }
 
   async function loadData() {
+    //await AsyncStorage.removeItem('@consultas');
     const userData = await AsyncStorage.getItem('@user');
 
     if (userData != null) {
@@ -92,6 +104,10 @@ export default function SessionProvider({children}: props) {
         user,
         salvarUsuario,
         updateCartaoSus,
+        modoDesenvolvedor,
+        setModoDesenvolvedor,
+        segundosParaAgendarConsultaEmDevMode,
+        setSegundosParaAgendarConsultaEmDevMode,
       }}>
       {children}
     </SessionContext.Provider>

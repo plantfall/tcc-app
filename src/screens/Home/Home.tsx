@@ -1,14 +1,18 @@
 import {StatusBar, Text, TouchableOpacity, View} from 'react-native';
 
-import {AppUtils} from '../../utils/AppUtils';
 import {FontAwesome} from '@react-native-vector-icons/fontawesome';
+import {useNavigation} from '@react-navigation/native';
+import {useContext} from 'react';
 import HomeHeader from '../../components/HomeHeader';
 import {SessionContext} from '../../context/SessionContext';
-import {useContext} from 'react';
-import {useNavigation} from '@react-navigation/native';
+import {AppUtils} from '../../utils/AppUtils';
 
 export default function Home() {
-  const {user} = useContext(SessionContext);
+  const {
+    user,
+    segundosParaAgendarConsultaEmDevMode,
+    setSegundosParaAgendarConsultaEmDevMode,
+  } = useContext(SessionContext);
 
   return (
     <View style={{flex: 1, backgroundColor: '#fff'}}>
@@ -30,6 +34,17 @@ export default function Home() {
           iconName="location-arrow"
           destination="ScreenLocalizacaoUbs"
         />
+
+        {/* <TextInput
+          value={segundosParaAgendarConsultaEmDevMode}
+          onChangeText={setSegundosParaAgendarConsultaEmDevMode}
+          placeholderTextColor="#808080"
+          placeholder="Segundos para agendamento"
+          numberOfLines={1}
+          autoCapitalize="none"
+          keyboardType="numeric"
+          style={stylesAuth.input}
+        /> */}
       </View>
     </View>
   );
