@@ -1,38 +1,65 @@
-import {
-  View,
-  Text,
-  StatusBar,
-  TouchableOpacity,
-  StyleSheet,
-} from 'react-native';
-import CustomButton from '../../components/CustomButton.tsx';
 import {useContext, useState} from 'react';
-import Feather from 'react-native-vector-icons/Feather';
-import {AppUtils} from '../../utils/AppUtils.ts';
-import {CircularName} from '../../components/CircularName.tsx';
+import {
+  StatusBar,
+  StyleSheet,
+  Text,
+  ToastAndroid,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+
 import {useNavigation} from '@react-navigation/native';
+import Feather from 'react-native-vector-icons/Feather';
+import {CircularName} from '../../components/CircularName.tsx';
+import CustomButton from '../../components/CustomButton.tsx';
+import {InputCartaoSus} from '../../components/InputCartaoSus.tsx';
 import {SessionContext} from '../../context/SessionContext.tsx';
+import {AuthService} from '../../service/AuthService.ts';
+import {AppUtils} from '../../utils/AppUtils.ts';
 
 export default function ScreenPerfil() {
   const [cartaoSusVisibility, setcartaoSusVisibility] = useState(false);
+  const [modoEdicao, setModoEdicao] = useState(false);
+  const [atualizando, setAtualizando] = useState(false);
 
-  const {sair, user} = useContext(SessionContext);
+  const {sair, user, updateCartaoSus} = useContext(SessionContext);
   const [cartaoSus, setCartaoSus] = useState<string>(user?.cartaoSus || '');
 
   const nav = useNavigation();
 
   function formatarCartaoSus() {
-    const first = cartaoSus.at(0) + cartaoSus.at(1) + cartaoSus.at(2);
+    if (cartaoSus == '') {
+      return 'Vazio!';
+    }
+
+    const first = cartaoSus.at(0)! + cartaoSus.at(1) + cartaoSus.at(2);
     const second =
-      cartaoSus.at(3) + cartaoSus.at(4) + cartaoSus.at(5) + cartaoSus.at(6);
+      cartaoSus.at(3)! + cartaoSus.at(4) + cartaoSus.at(5) + cartaoSus.at(6);
     const third =
-      cartaoSus.at(7) + cartaoSus.at(8) + cartaoSus.at(9) + cartaoSus.at(10);
+      cartaoSus.at(7)! + cartaoSus.at(8) + cartaoSus.at(9) + cartaoSus.at(10);
     const fourth =
-      cartaoSus.at(11) + cartaoSus.at(12) + cartaoSus.at(13) + cartaoSus.at(14);
+      cartaoSus.at(11)! +
+      cartaoSus.at(12) +
+      cartaoSus.at(13) +
+      cartaoSus.at(14);
 
     return `${first} ${second} ${third} ${fourth}`;
   }
 
+  const handleAtualizarCartaoSus = async () => {
+    const as = new AuthService();
+    try {
+      setAtualizando(true);
+      await as.updateCartaoSus(cartaoSus, user?.uid!);
+      await updateCartaoSus(cartaoSus);
+      ToastAndroid.show('Atualizado com sucesso', ToastAndroid.LONG);
+    } catch (error: any) {
+      ToastAndroid.show(error.message, ToastAndroid.LONG);
+    } finally {
+      setAtualizando(false);
+      setModoEdicao(false);
+    }
+  };
   return (
     <View style={{gap: 20, backgroundColor: '#fff'}}>
       <StatusBar backgroundColor={'#000'} barStyle={'light-content'} />
@@ -55,7 +82,7 @@ export default function ScreenPerfil() {
       <View style={{borderWidth: 0.6, borderBottomColor: '#CBCBCB'}} />
 
       <View style={{alignItems: 'center', marginTop: 20}}>
-        <CircularName nome={user?.nome} size={90} fontSize={40} />
+        <CircularName nome={user?.nome!} size={90} fontSize={40} />
         <Text
           style={{
             fontSize: AppUtils.FontSizeGrande,
@@ -77,35 +104,55 @@ export default function ScreenPerfil() {
             }}>
             Cartão do SUS
           </Text>
-          <View style={styles.passwordContainer}>
-            <View style={styles.container}>
-              <Text>
-                {cartaoSusVisibility
-                  ? formatarCartaoSus()
-                  : '*** **** **** ****'}
-              </Text>
-            </View>
 
-            {/* <TextInput
-              value={cartaoSus}
-              onChangeText={setCartaoSus}
-              placeholder="xxxx.xxxxx.xxx/xx"
-              placeholderTextColor="#808080"
-              numberOfLines={1}
-              autoCapitalize="none"
-              style={styles.input}
-            /> */}
-            <TouchableOpacity
-              onPress={() => setcartaoSusVisibility(prev => !prev)}
-              style={styles.eyeButton}>
-              <Feather
-                name={cartaoSusVisibility ? 'eye-off' : 'eye'}
-                size={20}
-                color="#808080"
+          {!modoEdicao ? (
+            <View style={styles.passwordContainer}>
+              <View style={styles.container}>
+                <Text>
+                  {cartaoSusVisibility
+                    ? formatarCartaoSus()
+                    : '*** **** **** ****'}
+                </Text>
+                <TouchableOpacity
+                  onPress={() => setcartaoSusVisibility(prev => !prev)}
+                  style={styles.eyeButton}>
+                  <Feather
+                    name={cartaoSusVisibility ? 'eye-off' : 'eye'}
+                    size={20}
+                    color="#808080"
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
+          ) : (
+            <InputCartaoSus
+              style={styles.container}
+              cartaoSusInput={cartaoSus}
+              setCartaoSusInput={setCartaoSus}
+            />
+          )}
+
+          <CustomButton
+            text="Editar cartão sus"
+            borderRadius={12}
+            bgColor="green"
+            onClick={() => setModoEdicao(it => !it)}
+          />
+
+          {cartaoSus.length == 15 && modoEdicao && (
+            <>
+              <View style={{marginBottom: 15}} />
+              <CustomButton
+                text="Salvar cartão sus"
+                borderRadius={12}
+                onClick={handleAtualizarCartaoSus}
+                isLoading={atualizando}
               />
-            </TouchableOpacity>
-          </View>
+            </>
+          )}
         </View>
+
+        <View style={{marginBottom: 15}} />
 
         <View>
           <Text
@@ -116,10 +163,9 @@ export default function ScreenPerfil() {
             }}>
             Email
           </Text>
-          <View style={styles.passwordContainer}>
-            <View style={styles.container}>
-              <Text>{user?.email}</Text>
-            </View>
+
+          <View style={styles.container}>
+            <Text>{user?.email}</Text>
           </View>
         </View>
         {/* 

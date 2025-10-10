@@ -1,6 +1,7 @@
-import {createContext, ReactNode, useEffect, useState} from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {ReactNode, createContext, useEffect, useState} from 'react';
 import {LoginResponse, User} from '../@types/Auth.types';
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {ConsultaService} from '../service/ConsultaService';
 
 type SessionContextType = {
@@ -9,6 +10,7 @@ type SessionContextType = {
   loading: boolean;
   salvarUsuario(loginResponse: LoginResponse): Promise<void>;
   sair(): Promise<void>;
+  updateCartaoSus(email: string): Promise<void>;
 };
 
 type props = {
@@ -36,6 +38,20 @@ export default function SessionProvider({children}: props) {
 
     setUser(userResponse);
     setSignIn(true);
+  }
+
+  async function updateCartaoSus(cartaoSus: string) {
+    if (user != undefined) {
+      const updatedUser: User = {
+        ...user,
+        cartaoSus: cartaoSus,
+      };
+
+      setUser(updatedUser);
+
+      await AsyncStorage.setItem('@user', JSON.stringify(updatedUser));
+      console.log('atualizou');
+    }
   }
 
   async function saveDataLocal(authResponse: LoginResponse) {
@@ -75,6 +91,7 @@ export default function SessionProvider({children}: props) {
         sair,
         user,
         salvarUsuario,
+        updateCartaoSus,
       }}>
       {children}
     </SessionContext.Provider>

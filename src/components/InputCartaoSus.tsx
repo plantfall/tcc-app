@@ -4,8 +4,13 @@ import {stylesAuth} from '../screens/ScreenSignUp/ScreenSignUp';
 type props = {
   cartaoSusInput: string;
   setCartaoSusInput: (v: string) => void;
+  style?: any;
 };
-export function InputCartaoSus({cartaoSusInput, setCartaoSusInput}: props) {
+export function InputCartaoSus({
+  cartaoSusInput,
+  setCartaoSusInput,
+  style,
+}: props) {
   return (
     <MaskInput
       value={cartaoSusInput}
@@ -20,7 +25,7 @@ export function InputCartaoSus({cartaoSusInput, setCartaoSusInput}: props) {
       placeholder="Informe seu cartão do SUS"
       numberOfLines={1}
       autoCapitalize="none"
-      style={stylesAuth.input}
+      style={style !== undefined ? style : stylesAuth.input}
       keyboardType="number-pad"
       mask={[
         /\d/,

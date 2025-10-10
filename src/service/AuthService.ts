@@ -1,4 +1,5 @@
 import {AuthRequest, LoginResponse} from '../@types/Auth.types';
+
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 
@@ -98,6 +99,43 @@ export class AuthService {
   private validarEmail(email: string) {
     if (email.trim().length < 10 || !email.trim().includes('@')) {
       throw new Error('Email inválido');
+    }
+  }
+
+  public async updateCartaoSus(
+    cartaoSus: string,
+    userId: string,
+  ): Promise<void> {
+    try {
+      const trimmedCartaoSus = cartaoSus.trim();
+      const trimmedUserId = userId.trim();
+
+      // 1. Validação básica (opcional, mas recomendada)
+      if (!trimmedUserId) {
+        throw new Error('ID do usuário é obrigatório.');
+      }
+      if (trimmedCartaoSus.length !== 15 && trimmedCartaoSus.length !== 0) {
+        // O SUS tem 15 dígitos. Você pode ajustar a validação se necessário.
+        throw new Error('Número do Cartão SUS inválido. Deve ter 15 dígitos.');
+      }
+
+      await firestore().collection('users').doc(trimmedUserId).update({
+        cartao_sus: trimmedCartaoSus,
+        updatedAt: firestore.FieldValue.serverTimestamp(), // Adiciona um timestamp de atualização (opcional)
+      });
+
+      console.log(
+        `Cartão SUS do usuário ${trimmedUserId} atualizado com sucesso.`,
+      );
+    } catch (error: any) {
+      // Se o documento não existir, o Firestore lança um erro.
+      if (error.code === 'firestore/not-found') {
+        throw new Error(
+          'Usuário não encontrado no banco de dados para a atualização.',
+        );
+      }
+      // Usa sua função de tratamento de erro para lidar com outros possíveis erros.
+      throw this.tratarErro(error.message);
     }
   }
 

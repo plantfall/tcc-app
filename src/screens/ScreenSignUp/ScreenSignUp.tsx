@@ -1,22 +1,22 @@
+import React, {useEffect, useRef} from 'react';
 import {
-  View,
-  Text,
-  StatusBar,
-  TextInput,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
-  TouchableOpacity,
+  StatusBar,
   StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import CustomButton from '../../components/CustomButton.tsx';
-import React, {useEffect, useRef} from 'react';
-import {Animated} from 'react-native';
 import {AppUtils, BlueColor} from '../../utils/AppUtils.ts';
+
+import {Animated} from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
-import {useSignUp} from './useSignup.tsx';
-import MaskInput from 'react-native-mask-input';
+import CustomButton from '../../components/CustomButton.tsx';
 import {InputCartaoSus} from '../../components/InputCartaoSus.tsx';
+import {useSignUp} from './useSignup.tsx';
 
 export default function ScreenSignUp() {
   const {

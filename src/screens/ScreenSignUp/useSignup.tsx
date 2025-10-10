@@ -1,6 +1,7 @@
 import {useContext, useState} from 'react';
-import {AuthService} from '../../service/AuthService';
+
 import {SessionContext} from '../../context/SessionContext';
+import {AuthService} from '../../service/AuthService';
 
 export function useSignUp() {
   const [nomeInput, setNomeInput] = useState('');
@@ -20,13 +21,7 @@ export function useSignUp() {
     setLoading(true);
     setErro('');
 
-    if (
-      isEmpty(nomeInput) ||
-      // isEmpty(cartaoSusInput) ||
-      isEmpty(emailInput) ||
-      isEmpty(password)
-      //|| cartaoSusInput.length < 15
-    ) {
+    if (isEmpty(nomeInput) || isEmpty(emailInput) || isEmpty(password)) {
       setLoading(false);
       return;
     }
@@ -44,13 +39,6 @@ export function useSignUp() {
       .catch(e => {
         const {status, message} = e;
         setErro(message);
-        // if (status === 401) {
-        //   setErro('Email ou senha inválidos');
-        // } else if (status === 500) {
-        //   setErro('Erro interno no servidor');
-        // } else {
-        //   setErro('Erro desconhecido');
-        // }
       });
 
     setLoading(false);
