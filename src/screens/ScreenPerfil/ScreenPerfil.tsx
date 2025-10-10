@@ -61,15 +61,16 @@ export default function ScreenPerfil() {
     }
   };
   return (
-    <View style={{gap: 20, backgroundColor: '#fff'}}>
-      <StatusBar backgroundColor={'#000'} barStyle={'light-content'} />
+    <View style={{gap: 20, backgroundColor: '#fff', flex: 1}}>
+      <StatusBar backgroundColor={'#000'} barStyle={'dark-content'} />
 
       <View
         style={{
           flexDirection: 'row',
           columnGap: 20,
           alignItems: 'center',
-          paddingLeft: 20,
+          paddingLeft: 15,
+          marginTop: 20,
         }}>
         <TouchableOpacity style={{padding: 5}} onPress={() => nav.goBack()}>
           <Feather name="arrow-left" size={27} color={'#000'} />

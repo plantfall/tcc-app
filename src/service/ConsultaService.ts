@@ -41,11 +41,11 @@ export class ConsultaService {
   ): Promise<void> {
     try {
       //await this.validarConsulta(consultaRequest);
-      const seg = 10;
+      // const seg = 120;
 
-      consultaRequest.dataFormatada =
-        this.gerarDataFormatadaHojeDaquiXSegundos(seg);
-      consultaRequest.horarioMarcado = this.gerarHorarioDaquiXsegundos(seg);
+      // consultaRequest.dataFormatada =
+      //   this.gerarDataFormatadaHojeDaquiXSegundos(seg);
+      // consultaRequest.horarioMarcado = this.gerarHorarioDaquiXsegundos(seg);
 
       consultaRequest.status = 'AGENDADA';
 
@@ -407,7 +407,7 @@ export class ConsultaService {
       const futuras = consultas.filter(c => {
         if (c.status === 'CANCELADA') return false;
 
-        const dataConsulta = this.parseDataHora(
+        const dataConsulta = ConsultaService.ParseDataHora(
           c.dataFormatada,
           c.horarioMarcado,
         );
@@ -418,8 +418,14 @@ export class ConsultaService {
       if (futuras.length === 0) return [];
 
       futuras.sort((a, b) => {
-        const dataA = this.parseDataHora(a.dataFormatada, a.horarioMarcado);
-        const dataB = this.parseDataHora(b.dataFormatada, b.horarioMarcado);
+        const dataA = ConsultaService.ParseDataHora(
+          a.dataFormatada,
+          a.horarioMarcado,
+        );
+        const dataB = ConsultaService.ParseDataHora(
+          b.dataFormatada,
+          b.horarioMarcado,
+        );
         return dataA.getTime() - dataB.getTime();
       });
 
@@ -431,7 +437,7 @@ export class ConsultaService {
   }
 
   // Utilitário privado para montar Date a partir do formato "25 de agosto de 2025"
-  private parseDataHora(dataFormatada: string, horario: string): Date {
+  public static ParseDataHora(dataFormatada: string, horario: string): Date {
     // Exemplo: "25 de agosto de 2025"
     const [dia, _, resto] = dataFormatada.split(' ', 3);
     const [mesNome, ano] = dataFormatada

@@ -1,11 +1,12 @@
+import {useContext, useEffect, useState} from 'react';
 import {Pressable, Text, TouchableOpacity, View} from 'react-native';
-import {useMemo, useState} from 'react';
+import {Consulta, ConsultaService} from '../service/ConsultaService';
 
-import {AppUtils} from '../utils/AppUtils';
-import {Consulta} from '../service/ConsultaService';
 import FontAwesome from '@react-native-vector-icons/fontawesome';
-import {getEspecializacao} from '../screens/ScreenAgendarConsulta/ScreenAgendarConsulta';
 import {useNavigation} from '@react-navigation/native';
+import {SessionContext} from '../context/SessionContext';
+import {getEspecializacao} from '../screens/ScreenAgendarConsulta/ScreenAgendarConsulta';
+import {AppUtils} from '../utils/AppUtils';
 
 type Props = {
   consulta: Consulta;
@@ -20,33 +21,75 @@ export default function CardConsulta({
 }: Props) {
   const {dataFormatada, especialista, status, horarioMarcado} = consulta;
 
-  const size = 10;
-
-  const [status_, setStatus_] = useState('');
+  const [currentStatus, setCurrentStatus] = useState(consulta.status);
+  const [statusText, setStatusText] = useState('');
   const [corCirculo, setCorCirculo] = useState('');
-  const [iconName, seticonName] = useState('');
+  const [iconName, setIconName] = useState('');
 
-  const nav = useNavigation();
+  const size = 10;
+  const cs = new ConsultaService();
 
-  useMemo(() => {
-    switch (status) {
+  const {user} = useContext(SessionContext);
+
+  /**
+   * Função que calcula o status de exibição, considerando o tempo.
+   */
+  const checkStatus = async () => {
+    const {dataFormatada, horarioMarcado, status} = consulta;
+    const date = ConsultaService.ParseDataHora(dataFormatada, horarioMarcado);
+    const now = Date.now();
+    let calculatedStatus = status;
+
+    // Se a consulta estava AGENDADA e a hora já passou, consideramos CONCLUIDA na UI
+    if (date.getTime() < now && status === 'AGENDADA') {
+      // ATENÇÃO: Se você precisar salvar essa alteração no Firestore,
+      // você deve chamar um serviço aqui ou no componente pai.
+      calculatedStatus = 'CONCLUIDA';
+      consulta.status = 'CONCLUIDA';
+
+      await cs.editarConsulta(user?.uid!, consulta);
+    }
+
+    // Mapeamento visual baseado no status calculado ou vindo do prop
+    switch (calculatedStatus) {
       case 'AGENDADA':
-        setStatus_('Agendada');
+        setStatusText('Agendada');
         setCorCirculo('green');
-        seticonName('calendar');
+        setIconName('calendar');
         break;
       case 'CANCELADA':
-        setStatus_('Cancelada');
+        setStatusText('Cancelada');
         setCorCirculo('red');
-        seticonName('remove');
+        setIconName('remove');
         break;
       case 'CONCLUIDA':
-        setStatus_('Concluída');
+      default: // Cobre CONCLUIDA e qualquer outro valor inesperado
+        setStatusText('Concluída');
         setCorCirculo('#003950');
-        seticonName('check-square-o');
+        setIconName('check-square-o');
         break;
     }
-  }, [status]);
+
+    // Atualiza o estado local do status calculado para renderização e lógica condicional
+    setCurrentStatus(calculatedStatus);
+  };
+
+  // 1. useEffect para rodar a lógica de status na montagem e sempre que a prop 'consulta' mudar
+  useEffect(() => {
+    checkStatus();
+
+    // 2. Se a consulta estiver AGENDADA, configure um intervalo para verificar o status
+    // A cada 1 minuto (60000ms), a função checkStatus será chamada.
+    if (consulta.status === 'AGENDADA') {
+      const intervalId = setInterval(checkStatus, 60000);
+
+      // Limpeza: Importante para parar o intervalo quando o componente for desmontado ou
+      // quando o status da consulta mudar (e o useEffect for re-executado).
+      return () => clearInterval(intervalId);
+    }
+  }, [consulta]); // Depende da prop 'consulta'
+
+  const nav = useNavigation();
 
   return (
     <View
@@ -109,13 +152,15 @@ export default function CardConsulta({
             />
 
             <TouchableOpacity>
-              <Text style={{fontSize: AppUtils.FontSize - 2}}>{status_}</Text>
+              <Text style={{fontSize: AppUtils.FontSize - 2}}>
+                {statusText}
+              </Text>
             </TouchableOpacity>
           </View>
         )}
       </View>
 
-      {status == 'AGENDADA' && !emScreenConsultaAgendada && (
+      {currentStatus == 'AGENDADA' && !emScreenConsultaAgendada && (
         <View
           style={{
             flexDirection: 'row',
