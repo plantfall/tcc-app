@@ -1,11 +1,12 @@
-import {View, FlatList, Text} from 'react-native';
-import Voltar from '../../components/Voltar';
 import {useContext, useEffect, useState} from 'react';
-import CardConsulta from '../../components/CardConsulta';
+import {FlatList, Text, ToastAndroid, View} from 'react-native';
 import {Consulta, ConsultaService} from '../../service/ConsultaService';
-import {SessionContext} from '../../context/SessionContext';
-import CustomPopup from '../../components/CustomPopup';
 import {AppUtils, BlueColor} from '../../utils/AppUtils';
+
+import CardConsulta from '../../components/CardConsulta';
+import CustomPopup from '../../components/CustomPopup';
+import Voltar from '../../components/Voltar';
+import {SessionContext} from '../../context/SessionContext';
 
 export default function ScreenHistoricoConsultas() {
   const [consultas, setConsultas] = useState<Consulta[]>([]);
@@ -21,9 +22,32 @@ export default function ScreenHistoricoConsultas() {
     loadConsultas();
 
     async function loadConsultas() {
-      setConsultas(await consultaService.fetchConsultas(user?.uid));
+      setConsultas(await consultaService.fetchConsultas(user?.uid!));
     }
   }, []);
+
+  const handleCancelarConsulta = async () => {
+    try {
+      if (consultaSelected != null) {
+        await consultaService.cancelarConsulta(
+          user?.uid!,
+          consultaSelected.id!,
+        );
+
+        console.log(consultaSelected);
+
+        setConsultas(oldConsultas =>
+          oldConsultas.map(c =>
+            c.id === consultaSelected.id! ? {...c, status: 'CANCELADA'} : c,
+          ),
+        );
+      }
+    } catch (e: any) {
+      ToastAndroid.show(e.message, ToastAndroid.LONG);
+    } finally {
+      setConsultaSelected(null);
+    }
+  };
 
   return (
     <View style={{backgroundColor: '#fff', flex: 1}}>
@@ -32,6 +56,8 @@ export default function ScreenHistoricoConsultas() {
       <CustomPopup
         title="Tem certeza disso?"
         message="Realmente quer cancelar sua consulta?"
+        visible={consultaSelected != null}
+        onClose={() => {}}
         btns={[
           {
             text: 'Foi sem querer',
@@ -41,30 +67,11 @@ export default function ScreenHistoricoConsultas() {
           {
             text: 'Confirmar',
             bgColor: BlueColor,
-
             onClick: async () => {
-              console.log(consultaSelected);
-              const cancelou = await consultaService.cancelarConsulta(
-                user?.uid,
-                consultaSelected.id,
-              );
-
-              if (cancelou) {
-                setConsultas(oldConsultas =>
-                  oldConsultas.map(c =>
-                    c.id === consultaSelected.id
-                      ? {...c, status: 'CANCELADA'}
-                      : c,
-                  ),
-                );
-              }
-
-              setConsultaSelected(null);
+              await handleCancelarConsulta();
             },
           },
         ]}
-        visible={consultaSelected != null}
-        onClose={() => {}}
       />
       <View style={{padding: 15}}>
         <FlatList

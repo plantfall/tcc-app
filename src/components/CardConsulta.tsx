@@ -1,10 +1,11 @@
-import {useState, useMemo} from 'react';
-import {View, Text, TouchableOpacity, Image, Pressable} from 'react-native';
-import {getNomeApropriado} from '../screens/ScreenAgendarConsulta/ScreenAgendarConsulta';
+import {Pressable, Text, TouchableOpacity, View} from 'react-native';
+import {useMemo, useState} from 'react';
+
 import {AppUtils} from '../utils/AppUtils';
 import {Consulta} from '../service/ConsultaService';
-import {useNavigation} from '@react-navigation/native';
 import FontAwesome from '@react-native-vector-icons/fontawesome';
+import {getEspecializacao} from '../screens/ScreenAgendarConsulta/ScreenAgendarConsulta';
+import {useNavigation} from '@react-navigation/native';
 
 type Props = {
   consulta: Consulta;
@@ -83,7 +84,7 @@ export default function CardConsulta({
               {especialista.nome}
             </Text>
             <Text style={{fontSize: AppUtils.FontSizeMedium}}>
-              {getNomeApropriado(especialista.especializacao)}
+              {getEspecializacao(especialista.especializacao)}
             </Text>
           </View>
         </View>

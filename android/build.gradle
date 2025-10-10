@@ -13,6 +13,10 @@ buildscript {
     }
     dependencies {
 
+        // Adicione a dependência do plugin de serialização aqui
+        // 🚀 CORREÇÃO: Usa a mesma versão do Kotlin que você já definiu (ou a que você precisa)
+        classpath("org.jetbrains.kotlin:kotlin-serialization:1.9.22")
+
         classpath("com.android.tools.build:gradle")
         classpath("com.facebook.react:react-native-gradle-plugin")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin")

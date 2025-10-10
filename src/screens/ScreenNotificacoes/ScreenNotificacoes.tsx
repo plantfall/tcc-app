@@ -1,52 +1,66 @@
-import {View, Text, FlatList, Image, TouchableOpacity} from 'react-native';
-import {useEffect, useState} from 'react';
-import {AppUtils} from '../../utils/AppUtils';
-import Feather from 'react-native-vector-icons/Feather';
-import AntDesignIcon from 'react-native-vector-icons/AntDesign';
-import {useNavigation} from '@react-navigation/native';
-import {ConsultaService} from '../../service/ConsultaService';
+import {useContext, useEffect, useState} from 'react';
+import {
+  FlatList,
+  Image,
+  Text,
+  ToastAndroid,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import {
+  Notificacao,
+  NotificationService,
+} from '../../service/NotificationService';
 
-type Notificacao = {
-  titulo: string;
-  mensagem: string;
-};
+import {useNavigation} from '@react-navigation/native';
+import AntDesignIcon from 'react-native-vector-icons/AntDesign';
+import Feather from 'react-native-vector-icons/Feather';
+import {SessionContext} from '../../context/SessionContext';
+import {AppUtils} from '../../utils/AppUtils';
 
 export default function ScreenNotificacoes() {
   const [notificacoes, setNotificacoes] = useState<Notificacao[]>([]);
 
-  const consultaService = new ConsultaService();
   const nav = useNavigation();
+
+  const {user} = useContext(SessionContext);
 
   useEffect(() => {
     loadNotificacoes();
 
     async function loadNotificacoes() {
-      async function fetch() {
-        const proximasConsultas =
-          await consultaService.buscarProximasConsultas();
-        console.log('proximasConsultas');
-        console.log(proximasConsultas);
+      const list = await NotificationService.ListarNotificacoes(user?.uid!);
+      setNotificacoes(list);
 
-        if (proximasConsultas.length == 0) {
-          return;
-        }
+      // const aux: Notificacao[] = [];
+      // for (let i = 0; i < 30; i++) {
+      //   aux.push({
+      //     id: i + '',
+      //     titulo: 'Agendamento de COnsulta',
+      //     mensagem: 'Com X dia 10 de outubro de 2025 Às 12:45',
+      //   });
+      // }
 
-        setNotificacoes(
-          proximasConsultas.map(consulta => {
-            return {
-              mensagem: `Sua consulta com ${consulta?.especialista.nome} foi agendada com sucesso para ${consulta?.dataFormatada} as ${consulta?.horarioMarcado}!`,
-              titulo: 'Ótimas Notícias',
-            };
-          }),
-        );
-      }
-
-      fetch();
+      // setNotificacoes(aux);
     }
   }, []);
 
+  const marcarTodasComoLidas = async () => {
+    notificacoes.forEach(async it => {
+      try {
+        await NotificationService.LimparNotificacao(it.id);
+        setNotificacoes([]);
+      } catch (e: any) {
+        const message = e.message;
+        ToastAndroid.show(message, ToastAndroid.LONG);
+      }
+    });
+  };
+
   return (
+    // 1. O contêiner principal com flex: 1 garante que ele ocupe toda a tela.
     <View style={{backgroundColor: '#fff', flex: 1}}>
+      {/* 2. Cabeçalho (Fixo no topo) */}
       <View
         style={{
           flexDirection: 'row',
@@ -74,16 +88,27 @@ export default function ScreenNotificacoes() {
         </TouchableOpacity>
       </View>
 
+      {/* 3. CONTEÚDO PRINCIPAL: FlatList e o botão.
+           Este View tem flex: 1 para ocupar o espaço restante da tela,
+           e seus filhos serão dispostos em coluna por padrão. */}
       <View style={{flex: 1}}>
+        {/* 4. FLATLIST: Colocamos flex: 1 nela para que ocupe todo o espaço disponível
+           entre o cabeçalho e o botão (que virá a seguir). */}
         <FlatList
           data={notificacoes}
           renderItem={({item}) => <Card notificacao={item} />}
+          // Adicionando um paddingBottom para que o último item não fique colado no botão, caso exista.
+          contentContainerStyle={{
+            paddingBottom: notificacoes.length > 0 ? 10 : 0,
+          }}
           ListEmptyComponent={() => (
             <View
               style={{
                 justifyContent: 'center',
                 alignItems: 'center',
-                height: 600,
+                // Removendo o 'height: 600' fixo para que ocupe o espaço restante
+                // no container com flex: 1. Podemos usar 'flex: 1' aqui também.
+                flex: 1,
                 marginHorizontal: 15,
               }}>
               <Image
@@ -102,27 +127,47 @@ export default function ScreenNotificacoes() {
           )}
         />
 
-        {/* {notificacoes.length > 0 && (
+        {/* 5. BOTÃO "LIMPAR": Ocupa uma porção fixa (height: 100) e fica na parte inferior,
+           logo após a FlatList. Como a FlatList tem flex: 1, ela preenche o espaço
+           restante e o botão fica fixo no final. */}
+        {notificacoes.length > 0 && (
           <View
             style={{
               height: 100,
               justifyContent: 'center',
               alignItems: 'center',
               borderTopColor: '#002230',
-              borderWidth: 1,
+              borderTopWidth: 1, // Usando borderTopWidth para evitar a borda lateral.
+              backgroundColor: '#fff', // Adicionando cor de fundo para garantir que cubra qualquer coisa
+              paddingHorizontal: 15,
             }}>
-            <TouchableOpacity>
-              <Text style={{fontSize: AppUtils.FontSizeMedium}}>
+            <TouchableOpacity
+              onPress={marcarTodasComoLidas}
+              style={{
+                backgroundColor: '#1b8cb9',
+                paddingVertical: 12,
+                paddingHorizontal: 30,
+                borderRadius: 8,
+                width: '90%', // Tornando o botão um pouco maior
+                alignItems: 'center',
+              }}>
+              <Text
+                style={{
+                  fontSize: AppUtils.FontSizeMedium,
+                  color: '#fff',
+                  fontWeight: 'bold',
+                }}>
                 Marcar todas como lidas
               </Text>
             </TouchableOpacity>
           </View>
-        )} */}
+        )}
       </View>
     </View>
   );
 }
 
+// O componente Card deve ser mantido ou importado
 type Props = {
   notificacao: Notificacao;
 };
@@ -130,15 +175,12 @@ type Props = {
 function Card({notificacao}: Props) {
   const {titulo, mensagem} = notificacao;
 
-  //  const [iconName, seticonName] = useState('');
-
   return (
     <View
       style={{
         padding: 15,
         backgroundColor: '#1b8cb91a',
         marginBottom: 5,
-        // marginHorizontal: 10,
       }}>
       <Text
         style={{

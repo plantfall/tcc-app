@@ -24,15 +24,45 @@ export class NotificationService {
    * @param date deve estar no formato: yyyy-MM-dd HH:mm → exemplo: '2025-10-08 14:50'.
 
    */
-  public static ScheduleNotification(
+  public static async ScheduleNotification(
     title: string,
     message: string,
+    uidUser: string,
     date: string,
   ) {
-    NotificationModule.scheduleNotification(
+    const id = await NotificationModule.scheduleNotification(
       date,
-      'Reunião',
-      'Lembrete: reunião!',
+      title,
+      message,
+      uidUser,
     );
+    return id;
+  }
+
+  public static async CancelarNotificaoAgendada(id: string) {
+    await NotificationModule.cancelNotification(id);
+    await NotificationModule.removeNotificationFromFile(id);
+  }
+
+  public static async ListarNotificacoes(
+    userId: String,
+  ): Promise<Notificacao[]> {
+    const list = await NotificationModule.readNotificationsFromFile(userId);
+
+    console.log(list);
+
+    const notificacoes: Notificacao[] = JSON.parse(list);
+
+    return notificacoes;
+  }
+
+  public static async LimparNotificacao(id: string): Promise<void> {
+    await NotificationModule.removeNotificationFromFile(id);
   }
 }
+
+export type Notificacao = {
+  id: string;
+  titulo: string;
+  mensagem: string;
+};

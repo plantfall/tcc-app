@@ -1,15 +1,15 @@
-import {View, FlatList, Text, TouchableOpacity, Image} from 'react-native';
-import Voltar from '../../components/Voltar';
+import {AppUtils, GreenColor} from '../../utils/AppUtils';
 import ScreenConfimacaoHook, {
   Especialista,
   Especializacao,
-  imagens,
 } from './useAgendarConsulta';
-import {useNavigation} from '@react-navigation/native';
-import Feather from 'react-native-vector-icons/Feather';
-import {AppUtils, GreenColor} from '../../utils/AppUtils';
+import {Text, TouchableOpacity, View} from 'react-native';
 import {useEffect, useState} from 'react';
+
 import {CircleImage} from '../../components/CircleImage';
+import Feather from 'react-native-vector-icons/Feather';
+import Voltar from '../../components/Voltar';
+import {useNavigation} from '@react-navigation/native';
 
 export default function ScreenAgendarConsulta() {
   const {especialistas, turnDatePickerOn} = ScreenConfimacaoHook();
@@ -114,14 +114,14 @@ function Top({especialista}: Props) {
           {especialista.nome}
         </Text>
         <Text style={{fontSize: AppUtils.FontSize}}>
-          {getNomeApropriado(especialista.especializacao)}
+          {getEspecializacao(especialista.especializacao)}
         </Text>
       </View>
     </View>
   );
 }
 
-export function getNomeApropriado(especializacao: Especializacao) {
+export function getEspecializacao(especializacao: Especializacao) {
   switch (especializacao) {
     case 'CLINICO_GERAL':
       return 'Clínico Geral';

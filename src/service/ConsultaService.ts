@@ -1,9 +1,13 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import firestore from '@react-native-firebase/firestore';
 import {Especialista} from '../screens/ScreenAgendarConsulta/useAgendarConsulta';
 import {NotificationService} from './NotificationService';
-import firestore from '@react-native-firebase/firestore';
 
 export type Status = 'AGENDADA' | 'CANCELADA' | 'CONCLUIDA' | 'REAJENDADA';
+export type NotificacaoData = {
+  id: string;
+  ativa: boolean;
+};
 export type Consulta = {
   id?: string;
   especialista: Especialista;
@@ -20,6 +24,9 @@ export type Consulta = {
    */
   horarioMarcado: string;
   status: Status;
+
+  notificacaoUmDiaAntes: NotificacaoData;
+  notificacao10MinAntes: NotificacaoData;
 };
 
 export type FirestoreTimestamp = {
@@ -33,7 +40,12 @@ export class ConsultaService {
     consultaRequest: Consulta,
   ): Promise<void> {
     try {
-      await this.validarConsulta(consultaRequest);
+      //await this.validarConsulta(consultaRequest);
+      const seg = 10;
+
+      consultaRequest.dataFormatada =
+        this.gerarDataFormatadaHojeDaquiXSegundos(seg);
+      consultaRequest.horarioMarcado = this.gerarHorarioDaquiXsegundos(seg);
 
       consultaRequest.status = 'AGENDADA';
 
@@ -49,12 +61,6 @@ export class ConsultaService {
 
       await consultaRef.update({id: id});
       consultaRequest.id = id;
-
-      await this.saveConsultaLocally(consultaRequest);
-
-      //consultaRequest.dataFormatada = '08 de outubro de 2025';
-
-      //consultaRequest.horarioMarcado = '13:35';
 
       let dataFormatadaFinal = this.formatConsultaDate(
         consultaRequest.dataFormatada,
@@ -81,27 +87,85 @@ export class ConsultaService {
         ).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
 
       const titulo = 'Agendamento de Consulta';
-      const mensagem = `Com médico ${consultaRequest.especialista.nome} sobre ${consultaRequest.especialista.especializacao}`;
+
+      const mensagem = `Com ${consultaRequest.especialista.nome} dia ${consultaRequest.dataFormatada} às ${consultaRequest.horarioMarcado}`;
 
       const strUmDiaAntes = formatarData(umDiaAntes);
       // Notificação 1 dia antes
-      NotificationService.ScheduleNotification(titulo, mensagem, strUmDiaAntes);
+      const idNotificacaoUmDiaAntes =
+        await NotificationService.ScheduleNotification(
+          titulo,
+          mensagem,
+          uidUser,
+          strUmDiaAntes,
+        );
 
       const strDezMinANtes = formatarData(dezMinAntes);
 
       // Notificação 10 minutos antes
-      NotificationService.ScheduleNotification(
-        titulo,
-        mensagem,
-        strDezMinANtes,
-      );
+      const idNotificacao10minAntes =
+        await NotificationService.ScheduleNotification(
+          titulo,
+          mensagem,
+          uidUser,
+          strDezMinANtes,
+        );
+
+      consultaRequest.notificacaoUmDiaAntes = {
+        ativa: true,
+        id: idNotificacaoUmDiaAntes,
+      };
+
+      consultaRequest.notificacao10MinAntes = {
+        ativa: true,
+        id: idNotificacao10minAntes,
+      };
+
+      await this.saveConsultaLocally(consultaRequest);
     } catch (error: any) {
       throw new Error(error.message);
     }
   }
 
+  private gerarDataFormatadaHojeDaquiXSegundos(segundos: number): string {
+    const agora = new Date();
+    const daquiXSegundos = new Date(agora.getTime() + segundos * 1000);
+
+    const dia = daquiXSegundos.getDate();
+    const mes = daquiXSegundos.toLocaleString('pt-BR', {month: 'long'});
+    const ano = daquiXSegundos.getFullYear();
+
+    const dataFormatada = `${dia} de ${mes} de ${ano}`;
+
+    console.log(dataFormatada);
+    return dataFormatada;
+  }
+
+  private gerarHorarioDaquiXsegundos(segundos: number): string {
+    const agora = new Date();
+    const daquiXSegundos = new Date(agora.getTime() + segundos * 1000);
+
+    const horas = String(daquiXSegundos.getHours()).padStart(2, '0');
+    const minutos = String(daquiXSegundos.getMinutes()).padStart(2, '0');
+
+    const horarioMarcado = `${horas}:${minutos}`;
+    console.log(horarioMarcado);
+
+    return horarioMarcado;
+  }
+
   private async validarConsulta(consulta: Consulta): Promise<void> {
-    const consultas = await this.fetchConsultasLocally();
+    const consultas = await this.listarConsultasAgendadas();
+
+    //um unico agendamento por dia por horario
+    const horarioJaMArcado = consultas.find(
+      it =>
+        it.dataFormatada === consulta.dataFormatada &&
+        it.horarioMarcado === consulta.horarioMarcado,
+    );
+
+    if (horarioJaMArcado !== undefined)
+      throw new Error('Você já possui um agendamento marcado nesse horário');
 
     //um unico agendamento por dia por especialista
     const jaMarcada = consultas.find(
@@ -116,18 +180,6 @@ export class ConsultaService {
       throw new Error(
         'Não é possível realizar múltiplos agendamentos com o mesmo médico em um único dia.',
       );
-
-    const duplicada = consultas.find(
-      it =>
-        it.especialista.nome == consulta.especialista.nome &&
-        it.especialista.especializacao ==
-          consulta.especialista.especializacao &&
-        it.dataFormatada == consulta.dataFormatada &&
-        it.horarioMarcado == consulta.horarioMarcado,
-    );
-
-    if (duplicada !== undefined)
-      throw new Error('Esta consulta já está agendada');
   }
 
   private async fetchConsultasLocally(): Promise<Consulta[]> {
@@ -136,6 +188,12 @@ export class ConsultaService {
     const consultas: Consulta[] = data == null ? [] : JSON.parse(data);
 
     return consultas;
+  }
+
+  private async listarConsultasAgendadas(): Promise<Consulta[]> {
+    const consultas = await this.fetchConsultasLocally();
+
+    return consultas.filter(it => it.status == 'AGENDADA');
   }
 
   private formatConsultaDate(
@@ -200,7 +258,7 @@ export class ConsultaService {
   public async cancelarConsulta(
     uidUser: string,
     consultaId: string,
-  ): Promise<boolean> {
+  ): Promise<void> {
     try {
       console.log(consultaId);
 
@@ -219,15 +277,23 @@ export class ConsultaService {
       if (consulta) {
         // atualiza o status
         consulta.status = 'CANCELADA';
+        consulta.notificacao10MinAntes.ativa = false;
+        consulta.notificacaoUmDiaAntes.ativa = false;
         // atualiza localmente
         await this.updateConsultaLocally(consulta);
-      }
+        await NotificationService.CancelarNotificaoAgendada(
+          consulta?.notificacaoUmDiaAntes.id!!,
+        );
+        await NotificationService.CancelarNotificaoAgendada(
+          consulta?.notificacao10MinAntes.id!!,
+        );
 
-      console.log(`Consulta ${consultaId} cancelada com sucesso`);
-      return true;
+        console.log(`Consulta ${consultaId} cancelada com sucesso`);
+      }
     } catch (error: any) {
-      console.error('Erro ao cancelar consulta:', error.message);
-      return false;
+      const message = error.message;
+      console.log(message);
+      throw new Error('Erro ao cancelar consulta: ' + error.message);
     }
   }
 
@@ -327,6 +393,7 @@ export class ConsultaService {
     await this.saveConsultasLocally(consultas);
   }
 
+  /** @deprecated */
   public async buscarProximasConsultas(): Promise<Consulta[]> {
     try {
       const consultas = await this.fetchConsultasLocally();

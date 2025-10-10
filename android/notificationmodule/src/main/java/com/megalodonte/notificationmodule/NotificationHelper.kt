@@ -11,6 +11,7 @@ import android.os.Build
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import android.util.Log
 
 class NotificationHelper(private val context: Context) {
 
@@ -52,31 +53,45 @@ class NotificationHelper(private val context: Context) {
         }
     }
 
-    fun scheduleNotification(title: String, message: String, timeInMillis: Long) {
+    fun scheduleNotification(title: String, message: String, uidUser:String, timeInMillis: Long): Int {
+        val id = System.currentTimeMillis().toInt()
+
         val intent = Intent(context, NotificationReceiver::class.java).apply {
             putExtra("title", title)
             putExtra("message", message)
+            putExtra("notification_id", id)
+            putExtra("user_id", uidUser)
         }
 
         val pendingIntent = PendingIntent.getBroadcast(
             context,
-            System.currentTimeMillis().toInt(), // ID único
+            id,
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-//        alarmManager.setExactAndAllowWhileIdle(
-//            AlarmManager.RTC_WAKEUP,
-//            timeInMillis,
-//            pendingIntent
-//        )
-        alarmManager.setAndAllowWhileIdle(
-            AlarmManager.RTC_WAKEUP,
-            timeInMillis,
-            pendingIntent
+        alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent)
+
+        return id
+    }
+
+    fun cancelScheduledNotification(id: Int) {
+        val intent = Intent(context, NotificationReceiver::class.java)
+
+        val pendingIntent = PendingIntent.getBroadcast(
+            context,
+            id,
+            intent,
+            PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE
         )
 
+        if (pendingIntent != null) {
+            val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            alarmManager.cancel(pendingIntent)
+            pendingIntent.cancel()
+            Log.e("AGENDAMENTO","cancelou")
+        }
     }
 
 }

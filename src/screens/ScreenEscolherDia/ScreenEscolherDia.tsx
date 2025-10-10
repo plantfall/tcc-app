@@ -8,7 +8,7 @@ import {Consulta} from '../../service/ConsultaService';
 import {ConverterStringParaDataFormatoBrasileiroPorExtendo} from '../../utils/DateUtils';
 import {Especialista} from '../ScreenAgendarConsulta/useAgendarConsulta';
 import Voltar from '../../components/Voltar';
-import {getNomeApropriado} from '../ScreenAgendarConsulta/ScreenAgendarConsulta';
+import {getEspecializacao} from '../ScreenAgendarConsulta/ScreenAgendarConsulta';
 
 // Configurar locale para português (opcional, mas recomendado)
 LocaleConfig.locales['pt'] = {
@@ -198,7 +198,7 @@ function Top({especialista}: Props) {
             {especialista.nome}
           </Text>
           <Text style={{fontSize: AppUtils.FontSize}}>
-            {getNomeApropriado(especialista.especializacao)}
+            {getEspecializacao(especialista.especializacao)}
           </Text>
         </View>
       </View>

@@ -1,6 +1,9 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
+
+    // ✅ CORREÇÃO: Apenas chame o plugin
+    id("org.jetbrains.kotlin.plugin.serialization")
 }
 
 android {
@@ -43,4 +46,7 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.3.0")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.7.0")
+    // Adiciona a dependência do runtime de serialização
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2")
+
 }
