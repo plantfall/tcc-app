@@ -1,4 +1,4 @@
-import {AppUtils, BlueColor} from '../utils/AppUtils';
+import {AppUtils, BlueColor, theme} from '../utils/AppUtils';
 import {Text, TouchableOpacity, View} from 'react-native';
 import {useContext, useEffect, useState} from 'react';
 
@@ -134,7 +134,7 @@ function Top({nome}: Props) {
           <View
             style={{
               position: 'absolute',
-              backgroundColor: 'red',
+              backgroundColor: theme.secondondaryColor,
               height: circleSize,
               width: circleSize,
               borderRadius: circleSize / 2,
