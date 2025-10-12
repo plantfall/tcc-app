@@ -1,15 +1,17 @@
-import {Text, TouchableOpacity, View} from 'react-native';
+import {Text, TextInput, TouchableOpacity, View} from 'react-native';
+import {AppUtils, theme} from '../../utils/AppUtils';
 
 import {FontAwesome} from '@react-native-vector-icons/fontawesome';
 import {useNavigation} from '@react-navigation/native';
 import {useContext} from 'react';
 import HomeHeader from '../../components/HomeHeader';
 import {SessionContext} from '../../context/SessionContext';
-import {AppUtils} from '../../utils/AppUtils';
+import {stylesAuth} from '../ScreenSignUp/ScreenSignUp';
 
 export default function Home() {
   const {
     user,
+    modoDesenvolvedor,
     segundosParaAgendarConsultaEmDevMode,
     setSegundosParaAgendarConsultaEmDevMode,
   } = useContext(SessionContext);
@@ -34,16 +36,28 @@ export default function Home() {
           destination="ScreenLocalizacaoUbs"
         />
 
-        {/* <TextInput
-          value={segundosParaAgendarConsultaEmDevMode}
-          onChangeText={setSegundosParaAgendarConsultaEmDevMode}
-          placeholderTextColor="#808080"
-          placeholder="Segundos para agendamento"
-          numberOfLines={1}
-          autoCapitalize="none"
-          keyboardType="numeric"
-          style={stylesAuth.input}
-        /> */}
+        {modoDesenvolvedor && (
+          <View>
+            <Text
+              style={{
+                color: theme.secondondaryColor,
+                fontWeight: '700',
+                fontSize: 15,
+              }}>
+              Funcionalidade restrita
+            </Text>
+            <TextInput
+              value={segundosParaAgendarConsultaEmDevMode}
+              onChangeText={setSegundosParaAgendarConsultaEmDevMode}
+              placeholderTextColor="#808080"
+              placeholder="Segundos para agendamento"
+              numberOfLines={1}
+              autoCapitalize="none"
+              keyboardType="numeric"
+              style={stylesAuth.input}
+            />
+          </View>
+        )}
       </View>
     </View>
   );

@@ -1,7 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {Especialista} from '../screens/ScreenAgendarConsulta/useAgendarConsulta';
-import {NotificationService} from './NotificationService';
 import firestore from '@react-native-firebase/firestore';
+import {Especialista} from '../screens/ScreenAgendarConsulta/useAgendarConsulta';
+import {isEmpty} from '../utils/AppUtils';
+import {NotificationService} from './NotificationService';
 
 export type Status = 'AGENDADA' | 'CANCELADA' | 'CONCLUIDA' | 'REAJENDADA';
 export type NotificacaoData = {
@@ -35,22 +36,37 @@ export type FirestoreTimestamp = {
 };
 
 export class ConsultaService {
-  // private seconds:number =
+  async deleteAll() {
+    await AsyncStorage.removeItem('@consultas');
+  }
+  private seconds: number = 10;
+  private devMode: boolean = false;
 
-  // public injectSecondsInDevMode(seconds:number){
-
-  // }
+  public injectSecondsInDevMode(seconds: string) {
+    if (isEmpty(seconds) || seconds == '0') {
+      this.devMode = false;
+      return;
+    }
+    try {
+      this.seconds = Number(seconds);
+      this.devMode = true;
+    } catch (e: any) {
+      this.devMode = false;
+    }
+  }
 
   public async agendarConsulta(
     uidUser: string,
     consultaRequest: Consulta,
   ): Promise<void> {
     try {
-      // const seg = 15;
+      if (this.devMode) {
+        const seg = this.seconds;
 
-      // consultaRequest.dataFormatada =
-      //   this.gerarDataFormatadaHojeDaquiXSegundos(seg);
-      // consultaRequest.horarioMarcado = this.gerarHorarioDaquiXsegundos(seg);
+        consultaRequest.dataFormatada =
+          this.gerarDataFormatadaHojeDaquiXSegundos(seg);
+        consultaRequest.horarioMarcado = this.gerarHorarioDaquiXsegundos(seg);
+      }
 
       await this.validarConsulta(consultaRequest);
 

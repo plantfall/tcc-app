@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {AppUtils, theme} from '../../utils/AppUtils.ts';
+import {AppUtils, isEmpty, theme} from '../../utils/AppUtils.ts';
 
 import {useNavigation} from '@react-navigation/native';
 import Feather from 'react-native-vector-icons/Feather';
@@ -15,7 +15,7 @@ import CustomButton from '../../components/CustomButton.tsx';
 import CustomPopup from '../../components/CustomPopup.tsx';
 import {SessionContext} from '../../context/SessionContext.tsx';
 import {AuthService} from '../../service/AuthService.ts';
-import {isEmpty} from '../ScreenSignUp/useSignup.tsx';
+import {UserService} from '../../service/UserService.ts';
 
 // Definição da constante para o tempo máximo entre cliques (ex: 500ms)
 const TRIPLE_CLICK_INTERVAL = 500;
@@ -34,9 +34,10 @@ export default function ScreenPerfil() {
 
   async function handleDeleteAccount() {
     const authService = new AuthService();
-
+    const userService = new UserService();
     try {
-      await authService.deleteAccount(user?.uid!);
+      await authService.deleteAccount();
+      await userService.delete(user?.uid!);
       await sair();
     } catch (e: any) {
       ToastAndroid.show(e.message, ToastAndroid.LONG);

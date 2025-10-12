@@ -4,6 +4,7 @@ import {Consulta, ConsultaService} from '../../service/ConsultaService';
 import {AppUtils, BlueColor} from '../../utils/AppUtils';
 
 import CardConsulta from '../../components/CardConsulta';
+import CustomButton from '../../components/CustomButton';
 import CustomPopup from '../../components/CustomPopup';
 import Voltar from '../../components/Voltar';
 import {SessionContext} from '../../context/SessionContext';
@@ -16,7 +17,7 @@ export default function ScreenHistoricoConsultas() {
     null,
   );
 
-  const {user} = useContext(SessionContext);
+  const {user, modoDesenvolvedor} = useContext(SessionContext);
 
   useEffect(() => {
     loadConsultas();
@@ -25,6 +26,11 @@ export default function ScreenHistoricoConsultas() {
       setConsultas(await consultaService.fetchConsultas(user?.uid!));
     }
   }, []);
+
+  const handleDeleteAll = async () => {
+    await consultaService.deleteAll();
+    setConsultas([]);
+  };
 
   const handleCancelarConsulta = async () => {
     try {
@@ -74,6 +80,13 @@ export default function ScreenHistoricoConsultas() {
         ]}
       />
       <View style={{padding: 15}}>
+        {modoDesenvolvedor && (
+          <CustomButton
+            text="Excluir tudo"
+            onClick={handleDeleteAll}
+            bgColor="red"
+          />
+        )}
         <FlatList
           data={consultas}
           renderItem={({item}) => (

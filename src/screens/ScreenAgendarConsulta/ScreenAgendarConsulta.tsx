@@ -1,15 +1,15 @@
+import {useEffect, useState} from 'react';
+import {Text, TouchableOpacity, View} from 'react-native';
 import {AppUtils, GreenColor} from '../../utils/AppUtils';
 import ScreenConfimacaoHook, {
   Especialista,
   Especializacao,
 } from './useAgendarConsulta';
-import {Text, TouchableOpacity, View} from 'react-native';
-import {useEffect, useState} from 'react';
 
-import {CircleImage} from '../../components/CircleImage';
-import Feather from 'react-native-vector-icons/Feather';
-import Voltar from '../../components/Voltar';
 import {useNavigation} from '@react-navigation/native';
+import Feather from 'react-native-vector-icons/Feather';
+import {CircleImage} from '../../components/CircleImage';
+import Voltar from '../../components/Voltar';
 
 export default function ScreenAgendarConsulta() {
   const {especialistas, turnDatePickerOn} = ScreenConfimacaoHook();

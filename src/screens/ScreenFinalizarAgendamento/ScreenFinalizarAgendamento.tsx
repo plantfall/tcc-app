@@ -1,14 +1,14 @@
-import {Consulta, ConsultaService} from '../../service/ConsultaService';
-import {Text, ToastAndroid, TouchableOpacity, View} from 'react-native';
-import {useContext, useEffect, useState} from 'react';
 import {useNavigation, useRoute} from '@react-navigation/native';
+import {useContext, useEffect, useState} from 'react';
+import {Text, ToastAndroid, TouchableOpacity, View} from 'react-native';
+import {Consulta, ConsultaService} from '../../service/ConsultaService';
 
-import CustomButton from '../../components/CustomButton';
-import {GreenColor} from '../../utils/AppUtils';
-import {RootStackParamList} from '../../routes/app.routes';
-import {SessionContext} from '../../context/SessionContext';
 import type {StackNavigationProp} from '@react-navigation/stack';
+import CustomButton from '../../components/CustomButton';
 import Voltar from '../../components/Voltar';
+import {SessionContext} from '../../context/SessionContext';
+import {RootStackParamList} from '../../routes/app.routes';
+import {GreenColor} from '../../utils/AppUtils';
 
 const HORARIOS = [
   '08:00',
@@ -30,7 +30,11 @@ export default function ScreenFinalizarAgendamento() {
   const [isLoading, setLoading] = useState(false);
 
   const consultaService = new ConsultaService();
-  const {user} = useContext(SessionContext);
+
+  const {user, segundosParaAgendarConsultaEmDevMode} =
+    useContext(SessionContext);
+
+  consultaService.injectSecondsInDevMode(segundosParaAgendarConsultaEmDevMode);
 
   const {params} = useRoute();
 

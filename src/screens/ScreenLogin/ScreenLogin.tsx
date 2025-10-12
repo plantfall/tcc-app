@@ -1,36 +1,35 @@
-import {AppUtils, BlueColor} from '../../utils/AppUtils.ts';
+import React, {useEffect, useRef} from 'react';
 import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
-  StatusBar,
   Text,
   TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect, useRef} from 'react';
+import {AppUtils, BlueColor} from '../../utils/AppUtils.ts';
 
-import {Animated} from 'react-native';
-import CustomButton from '../../components/CustomButton';
-import Feather from 'react-native-vector-icons/Feather';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {stylesAuth} from '../ScreenSignUp/ScreenSignUp.tsx';
-import {useLogin} from './useLogin.tsx';
 import {useNavigation} from '@react-navigation/native';
+import {Animated} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import Feather from 'react-native-vector-icons/Feather';
+import CustomButton from '../../components/CustomButton';
+import {useAuth} from '../../hooks/useAuth.tsx';
+import {stylesAuth} from '../ScreenSignUp/ScreenSignUp.tsx';
 
 export default function ScreenLogin() {
   const {
-    setLoginInput,
+    setEmailInput,
     handleLogin,
     erro,
     isLoading,
     password,
     setPassword,
-    loginInput,
+    emailInput,
     showPassword,
     setShowPassword,
-  } = useLogin();
+  } = useAuth();
 
   const logoAnim = useRef(new Animated.Value(0)).current;
 
@@ -78,8 +77,8 @@ export default function ScreenLogin() {
           <View style={{width: '100%', marginTop: 60, paddingHorizontal: 30}}>
             <Text style={{marginBottom: 7}}>Email</Text>
             <TextInput
-              value={loginInput}
-              onChangeText={setLoginInput}
+              value={emailInput}
+              onChangeText={setEmailInput}
               placeholderTextColor="#808080"
               placeholder="Insira o email"
               numberOfLines={1}

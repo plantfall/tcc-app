@@ -1,16 +1,13 @@
-import {AppUtils, BlueColor} from '../../utils/AppUtils.ts';
 import React, {useEffect, useRef} from 'react';
-import {StatusBar, Text, View} from 'react-native';
+import {Text, View} from 'react-native';
+import {AppUtils, BlueColor} from '../../utils/AppUtils.ts';
 
+import {useNavigation} from '@react-navigation/native';
 import {Animated} from 'react-native';
 import CustomButton from '../../components/CustomButton.tsx';
 import OutlineButton from '../../components/OutlineButton.tsx';
-import {useLogin} from './useLogin.tsx';
-import {useNavigation} from '@react-navigation/native';
 
 export default function ScreenBoarding() {
-  const {handleLogin, isLoading} = useLogin();
-
   const nav = useNavigation();
   const logoAnim = useRef(new Animated.Value(0)).current;
 
@@ -84,7 +81,6 @@ export default function ScreenBoarding() {
       <View style={{width: '100%', marginTop: 50, rowGap: 20}}>
         <CustomButton
           text="Já possuo conta"
-          isLoading={isLoading}
           bgColor={BlueColor}
           onClick={() => nav.navigate('ScreenLogin')}
         />

@@ -15,7 +15,7 @@ import {Animated} from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import CustomButton from '../../components/CustomButton.tsx';
 import {InputCartaoSus} from '../../components/InputCartaoSus.tsx';
-import {useSignUp} from './useSignup.tsx';
+import {useAuth} from '../../hooks/useAuth.tsx';
 
 export default function ScreenSignUp() {
   const {
@@ -32,7 +32,7 @@ export default function ScreenSignUp() {
     setPassword,
     showPassword,
     setShowPassword,
-  } = useSignUp();
+  } = useAuth();
 
   const logoAnim = useRef(new Animated.Value(0)).current;
 
@@ -200,3 +200,21 @@ export const stylesAuth = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
+function useSignUp(): {
+  emailInput: any;
+  setNomeInput: any;
+  cartaoSusInput: any;
+  setCartaoSusInput: any;
+  nomeInput: any;
+  setEmailInput: any;
+  handleSignUp: any;
+  erro: any;
+  isLoading: any;
+  password: any;
+  setPassword: any;
+  showPassword: any;
+  setShowPassword: any;
+} {
+  throw new Error('Function not implemented.');
+}

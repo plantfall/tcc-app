@@ -6,7 +6,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import CustomButton from '../../components/CustomButton.tsx';
 import {InputCartaoSus} from '../../components/InputCartaoSus.tsx';
 import {SessionContext} from '../../context/SessionContext.tsx';
-import {AuthService} from '../../service/AuthService.ts';
+import {UserService} from '../../service/UserService.ts';
 import {AppUtils} from '../../utils/AppUtils.ts';
 import {perfilStyles} from '../ScreenPerfil/ScreenPerfil.tsx';
 
@@ -23,7 +23,7 @@ export default function ScreenEditarCartaoSus() {
   const editMode = route.params?.editMode as boolean;
 
   const handleAtualizarCartaoSus = async () => {
-    const as = new AuthService();
+    const as = new UserService();
     try {
       setAtualizando(true);
       await as.updateCartaoSus(cartaoSus, user?.uid!);

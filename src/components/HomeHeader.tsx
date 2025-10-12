@@ -1,15 +1,15 @@
-import {AppUtils, BlueColor, theme} from '../utils/AppUtils';
-import {Text, TouchableOpacity, View} from 'react-native';
 import {useContext, useEffect, useState} from 'react';
+import {Text, TouchableOpacity, View} from 'react-native';
+import {AppUtils, BlueColor, theme} from '../utils/AppUtils';
 
-import {CircularName} from './CircularName';
-import {ConsultaService} from '../service/ConsultaService';
-import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from '@react-native-vector-icons/fontawesome';
-import LinearGradient from 'react-native-linear-gradient';
-import {NotificationService} from '../service/NotificationService';
-import {SessionContext} from '../context/SessionContext';
 import {useNavigation} from '@react-navigation/native';
+import LinearGradient from 'react-native-linear-gradient';
+import Feather from 'react-native-vector-icons/Feather';
+import {SessionContext} from '../context/SessionContext';
+import {ConsultaService} from '../service/ConsultaService';
+import {NotificationService} from '../service/NotificationService';
+import {CircularName} from './CircularName';
 
 type Props = {
   nome: string;
@@ -123,7 +123,7 @@ function Top({nome}: Props) {
         </Text>
       </View>
 
-      <View>
+      <TouchableOpacity onPress={() => nav.navigate('ScreenNotificacoes')}>
         <TouchableOpacity
           style={{position: 'relative'}}
           onPress={() => nav.navigate('ScreenNotificacoes')}>
@@ -131,7 +131,8 @@ function Top({nome}: Props) {
         </TouchableOpacity>
 
         {notificacoesAmount > 0 && (
-          <View
+          <TouchableOpacity
+            onPress={() => nav.navigate('ScreenNotificacoes')}
             style={{
               position: 'absolute',
               backgroundColor: theme.secondondaryColor,
@@ -141,7 +142,7 @@ function Top({nome}: Props) {
             }}
           />
         )}
-      </View>
+      </TouchableOpacity>
     </View>
   );
 }

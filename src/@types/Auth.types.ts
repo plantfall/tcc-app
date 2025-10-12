@@ -1,4 +1,4 @@
-export type StatusErro = 401 | 500 | 404;
+import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
 
 export type AuthRequest = {
   name: string;
@@ -7,13 +7,10 @@ export type AuthRequest = {
   password: string;
 };
 
-export type LoginResponse = {
-  user: User;
-};
-
 export type User = {
   nome: string;
   cartaoSus: string;
   email: string;
   uid: string;
+  createdAt?: FirebaseFirestoreTypes.FieldValue;
 };

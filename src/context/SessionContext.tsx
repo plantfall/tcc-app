@@ -1,14 +1,14 @@
 import {ReactNode, createContext, useEffect, useState} from 'react';
-import {LoginResponse, User} from '../@types/Auth.types';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {User} from '../@types/Auth.types';
 import {ConsultaService} from '../service/ConsultaService';
 
 type SessionContextType = {
   user: User | undefined;
   signed: boolean;
   loading: boolean;
-  salvarUsuario(loginResponse: LoginResponse): Promise<void>;
+  salvarUsuario(user: User): Promise<void>;
   sair(): Promise<void>;
   updateCartaoSus(email: string): Promise<void>;
   modoDesenvolvedor: boolean;
@@ -35,7 +35,7 @@ export default function SessionProvider({children}: props) {
   const [
     segundosParaAgendarConsultaEmDevMode,
     setSegundosParaAgendarConsultaEmDevMode,
-  ] = useState('10');
+  ] = useState('0');
 
   useEffect(() => {
     loadData();
@@ -43,11 +43,10 @@ export default function SessionProvider({children}: props) {
     setLoading(false);
   }, []);
 
-  async function salvarUsuario(loginResponse: LoginResponse) {
-    await saveDataLocal(loginResponse);
-    const userResponse = loginResponse.user;
+  async function salvarUsuario(user: User) {
+    await saveDataLocal(user);
 
-    setUser(userResponse);
+    setUser(user);
     setSignIn(true);
   }
 
@@ -65,12 +64,12 @@ export default function SessionProvider({children}: props) {
     }
   }
 
-  async function saveDataLocal(authResponse: LoginResponse) {
-    await AsyncStorage.setItem('@user', JSON.stringify(authResponse.user));
+  async function saveDataLocal(user: User) {
+    await AsyncStorage.setItem('@user', JSON.stringify(user));
     console.log('salvou');
 
     const consulta = new ConsultaService();
-    await consulta.fetchConsultas(authResponse.user.uid);
+    await consulta.fetchConsultas(user.uid);
   }
 
   async function loadData() {
@@ -91,6 +90,8 @@ export default function SessionProvider({children}: props) {
 
   async function sair() {
     await AsyncStorage.clear();
+    setModoDesenvolvedor(false);
+    setSegundosParaAgendarConsultaEmDevMode('0');
 
     setSignIn(false);
   }

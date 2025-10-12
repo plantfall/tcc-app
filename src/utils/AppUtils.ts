@@ -47,3 +47,7 @@ export class AppUtils {
     return phone;
   }
 }
+
+export const isEmpty = (value: string) => {
+  return value.trim() == '';
+};

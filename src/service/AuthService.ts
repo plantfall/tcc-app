@@ -1,76 +1,35 @@
-import {AuthRequest, LoginResponse} from '../@types/Auth.types';
+import {
+  validateLoginData,
+  validateRegisterData,
+} from '../validators/auth.validators';
 
 import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
+import {AuthRequest} from '../@types/Auth.types';
 
 export class AuthService {
-  public async signUp(authRequest: AuthRequest): Promise<LoginResponse> {
+  public async signUp(authRequest: AuthRequest): Promise<string> {
     try {
-      this.validarCadastro(authRequest);
-      // 1️⃣ Cria o usuário no Firebase Auth
+      validateRegisterData(authRequest);
+
       const userCredential = await auth().createUserWithEmailAndPassword(
         authRequest.email.trim(),
         authRequest.password.trim(),
       );
-
-      const {uid} = userCredential.user;
-
-      // 2️⃣ Salva os dados do usuário no Firestore usando o UID como ID do documento
-      await firestore().collection('users').doc(uid).set({
-        name: authRequest.name.trim(),
-        email: authRequest.email.trim(),
-        cartao_sus: authRequest.cartao_sus.trim(),
-        createdAt: firestore.FieldValue.serverTimestamp(),
-      });
-
-      const loginResponse: LoginResponse = {
-        user: {
-          cartaoSus: authRequest.cartao_sus,
-          email: authRequest.email.trim(),
-          nome: authRequest.name.trim(),
-          uid: uid,
-        },
-      };
-      console.log(loginResponse);
-
-      return loginResponse;
+      return userCredential.user.uid;
     } catch (error: any) {
       throw this.tratarErro(error.message);
     }
   }
 
-  private validarCadastro(authRequest: AuthRequest) {
-    if (authRequest.name.length < 7) {
-      throw new Error('O nome está muito curto.');
-    }
-  }
-
-  public async login(email: string, password: string): Promise<LoginResponse> {
+  public async login(email: string, password: string): Promise<string> {
     try {
+      validateLoginData(email, password);
       const userCredential = await auth().signInWithEmailAndPassword(
         email.trim(),
         password.trim(),
       );
-      const {uid} = userCredential.user;
 
-      const userDoc = await firestore().collection('users').doc(uid).get();
-
-      if (!userDoc.exists) {
-        throw new Error('Dados do usuário não encontrados no Firestore.');
-      }
-
-      const userData = userDoc.data();
-
-      const loginResponse: LoginResponse = {
-        user: {
-          uid,
-          nome: userData?.name || '',
-          email: userData?.email || '',
-          cartaoSus: userData?.cartao_sus || '',
-        },
-      };
-
-      return loginResponse;
+      return userCredential.user.uid;
     } catch (error: any) {
       throw this.tratarErro(error.message);
     }
@@ -78,17 +37,6 @@ export class AuthService {
 
   public async resetPassword(email: string): Promise<void> {
     try {
-      this.validarEmail(email);
-
-      const userSnapshot = await firestore()
-        .collection('users')
-        .where('email', '==', email.trim())
-        .get();
-
-      if (userSnapshot.empty) {
-        throw new Error('Este email não está cadastrado.');
-      }
-
       await auth().sendPasswordResetEmail(email.trim());
       console.log(`Email de redefinição enviado para: ${email}`);
     } catch (error: any) {
@@ -96,50 +44,7 @@ export class AuthService {
     }
   }
 
-  private validarEmail(email: string) {
-    if (email.trim().length < 10 || !email.trim().includes('@')) {
-      throw new Error('Email inválido');
-    }
-  }
-
-  public async updateCartaoSus(
-    cartaoSus: string,
-    userId: string,
-  ): Promise<void> {
-    try {
-      const trimmedCartaoSus = cartaoSus.trim();
-      const trimmedUserId = userId.trim();
-
-      // 1. Validação básica (opcional, mas recomendada)
-      if (!trimmedUserId) {
-        throw new Error('ID do usuário é obrigatório.');
-      }
-      if (trimmedCartaoSus.length !== 15 && trimmedCartaoSus.length !== 0) {
-        // O SUS tem 15 dígitos. Você pode ajustar a validação se necessário.
-        throw new Error('Número do Cartão SUS inválido. Deve ter 15 dígitos.');
-      }
-
-      await firestore().collection('users').doc(trimmedUserId).update({
-        cartao_sus: trimmedCartaoSus,
-        updatedAt: firestore.FieldValue.serverTimestamp(), // Adiciona um timestamp de atualização (opcional)
-      });
-
-      console.log(
-        `Cartão SUS do usuário ${trimmedUserId} atualizado com sucesso.`,
-      );
-    } catch (error: any) {
-      // Se o documento não existir, o Firestore lança um erro.
-      if (error.code === 'firestore/not-found') {
-        throw new Error(
-          'Usuário não encontrado no banco de dados para a atualização.',
-        );
-      }
-      // Usa sua função de tratamento de erro para lidar com outros possíveis erros.
-      throw this.tratarErro(error.message);
-    }
-  }
-
-  public async deleteAccount(userId: string): Promise<void> {
+  public async deleteAccount(): Promise<void> {
     try {
       const user = auth().currentUser;
 
@@ -147,12 +52,6 @@ export class AuthService {
         await user.delete();
         console.log('Usuário excluído do Auth com sucesso');
       }
-
-      // 2. Depois, marcar como deletado no Firestore
-      await firestore().collection('users').doc(userId.trim()).update({
-        deleted: true,
-        updatedAt: firestore.FieldValue.serverTimestamp(),
-      });
     } catch (error: any) {
       console.error('Erro ao excluir conta:', error);
       throw new Error(error.message);
