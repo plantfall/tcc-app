@@ -1,4 +1,4 @@
-import {useContext, useState} from 'react';
+import {AppUtils, isEmpty, theme} from '../../utils/AppUtils.ts';
 import {
   StyleSheet,
   Text,
@@ -6,16 +6,18 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {AppUtils, isEmpty, theme} from '../../utils/AppUtils.ts';
+import {useContext, useState} from 'react';
 
-import {useNavigation} from '@react-navigation/native';
-import Feather from 'react-native-vector-icons/Feather';
+import {AuthService} from '../../service/AuthService.ts';
 import {CircularName} from '../../components/CircularName.tsx';
 import CustomButton from '../../components/CustomButton.tsx';
 import CustomPopup from '../../components/CustomPopup.tsx';
+import Feather from 'react-native-vector-icons/Feather';
+import FontAwesome from '@react-native-vector-icons/fontawesome';
+import MI from 'react-native-vector-icons/MaterialIcons';
 import {SessionContext} from '../../context/SessionContext.tsx';
-import {AuthService} from '../../service/AuthService.ts';
 import {UserService} from '../../service/UserService.ts';
+import {useNavigation} from '@react-navigation/native';
 
 // Definição da constante para o tempo máximo entre cliques (ex: 500ms)
 const TRIPLE_CLICK_INTERVAL = 500;
@@ -25,7 +27,8 @@ export default function ScreenPerfil() {
   const [cartaoSusVisibility, setcartaoSusVisibility] = useState(false);
 
   const {sair, user, setModoDesenvolvedor} = useContext(SessionContext);
-  const cartaoSus = user?.cartaoSus!;
+  //const cartaoSus = user?.cartaoSus!;
+  const cartaoSus = '';
 
   const [clickCount, setClickCount] = useState(0);
   const [popupVisibility, setPopupVisibility] = useState(false);
@@ -35,7 +38,9 @@ export default function ScreenPerfil() {
   async function handleDeleteAccount() {
     const authService = new AuthService();
     const userService = new UserService();
+
     try {
+      await authService.reauthenticate(user?.email!, user?.password!);
       await authService.deleteAccount();
       await userService.delete(user?.uid!);
       await sair();
@@ -123,19 +128,24 @@ export default function ScreenPerfil() {
       <View style={{borderWidth: 0.6, borderBottomColor: '#CBCBCB'}} />
 
       <CustomPopup
-        title="Tem certeza disso?"
-        message="Realmente quer cancelar sua conta?"
+        title="Tem certeza que quer excluir sua conta?"
+        message="Todos os seus dados serão apagados e não será possível recuperá-los depois. Esperamos ver você por aqui novamente!"
         visible={popupVisibility}
         onClose={() => setPopupVisibility(false)}
         btns={[
           {
-            text: 'Foi engano',
-            bgColor: '#e80d0dff',
+            text: 'Cancelar',
+            color: theme.blueColor,
+            borderRadius: 10,
+            borderColor: theme.blueColor,
+            borderWidth: 1,
+            bgColor: 'white',
             onClick: () => setPopupVisibility(false),
           },
           {
             text: 'Confirmar',
             bgColor: theme.secondondaryColor,
+            borderRadius: 10,
             onClick: async () => {
               await handleDeleteAccount();
             },
@@ -159,91 +169,7 @@ export default function ScreenPerfil() {
         </Text>
       </View>
 
-      <View style={{marginTop: 70, paddingHorizontal: 20}}>
-        <View>
-          <Text
-            style={{
-              fontSize: AppUtils.FontSize,
-              fontWeight: '700',
-              marginBottom: 5,
-            }}>
-            Cartão do SUS
-          </Text>
-
-          {!isEmpty(cartaoSus) && (
-            <View style={perfilStyles.passwordContainer}>
-              <View style={perfilStyles.container}>
-                <Text>
-                  {cartaoSusVisibility
-                    ? formatarCartaoSus()
-                    : '*** **** **** ****'}
-                </Text>
-                <TouchableOpacity
-                  onPress={() => setcartaoSusVisibility(prev => !prev)}
-                  style={perfilStyles.eyeButton}>
-                  <Feather
-                    name={cartaoSusVisibility ? 'eye-off' : 'eye'}
-                    size={20}
-                    color="#808080"
-                  />
-                </TouchableOpacity>
-              </View>
-            </View>
-          )}
-
-          <TouchableOpacity
-            onPress={() => {
-              nav.navigate('ScreenEditarCartaoSus', {
-                editMode: !isEmpty(cartaoSus),
-              });
-            }}
-            style={{
-              flexDirection: 'row',
-              columnGap: 10,
-              alignItems: 'center',
-              alignSelf: 'flex-start',
-            }}>
-            <Feather name={'external-link'} size={20} color="#808080" />
-            <Text
-              style={{
-                fontSize: AppUtils.FontSizeMedium,
-                color: theme.secondondaryColor,
-                fontWeight: '600',
-              }}>
-              {isEmpty(cartaoSus)
-                ? 'Adicionar cartão do SUS'
-                : 'Editar cartão do SUS'}
-            </Text>
-          </TouchableOpacity>
-
-          <View style={{marginBottom: 15}} />
-          <View
-            style={{borderColor: 'gray', width: '100%', borderWidth: 0.2}}
-          />
-          <View style={{marginBottom: 15}} />
-
-          <TouchableOpacity
-            onPress={() => setPopupVisibility(true)}
-            style={{
-              flexDirection: 'row',
-              columnGap: 10,
-              alignItems: 'center',
-              alignSelf: 'flex-start',
-            }}>
-            <Feather name={'trash-2'} size={20} color="#808080" />
-            <Text
-              style={{
-                fontSize: AppUtils.FontSizeMedium,
-                color: theme.secondondaryColor,
-                fontWeight: '600',
-              }}>
-              Excluir conta
-            </Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={{marginBottom: 30}} />
-
+      <View style={{marginTop: 30, paddingHorizontal: 20}}>
         <View>
           <Text
             style={{
@@ -258,6 +184,99 @@ export default function ScreenPerfil() {
             <Text>{user?.email}</Text>
           </View>
         </View>
+
+        {!isEmpty(cartaoSus) && (
+          <View
+            style={[
+              perfilStyles.passwordContainer,
+              {
+                marginTop: 10,
+              },
+            ]}>
+            <Text
+              style={{
+                fontSize: AppUtils.FontSize,
+                fontWeight: '700',
+                marginBottom: 5,
+              }}>
+              Cartão do SUS
+            </Text>
+            <View style={perfilStyles.container}>
+              <Text>
+                {cartaoSusVisibility
+                  ? formatarCartaoSus()
+                  : '*** **** **** ****'}
+              </Text>
+              <TouchableOpacity
+                onPress={() => setcartaoSusVisibility(prev => !prev)}
+                style={perfilStyles.eyeButton}>
+                <Feather
+                  name={cartaoSusVisibility ? 'eye-off' : 'eye'}
+                  size={20}
+                  color="#808080"
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
+        )}
+
+        <TouchableOpacity
+          onPress={() => {
+            nav.navigate('ScreenEditarCartaoSus', {
+              editMode: !isEmpty(cartaoSus),
+            });
+          }}
+          style={{
+            flexDirection: 'row',
+            columnGap: 10,
+            alignItems: 'center',
+            alignSelf: 'flex-start',
+            marginTop: 40,
+          }}>
+          {isEmpty(cartaoSus) ? (
+            <FontAwesome name={'address-card'} size={20} color="#808080" />
+          ) : (
+            <MI name={'mode-edit'} size={20} color="#808080" />
+          )}
+
+          <Text
+            style={{
+              fontSize: AppUtils.FontSizeMedium,
+              color: theme.secondondaryColor,
+              fontWeight: '600',
+            }}>
+            {isEmpty(cartaoSus)
+              ? 'Adicionar cartão do SUS'
+              : 'Editar cartão do SUS'}
+          </Text>
+        </TouchableOpacity>
+
+        <View style={{marginBottom: 15}} />
+        <View
+          style={{borderColor: theme.line, width: '100%', borderWidth: 0.2}}
+        />
+        <View style={{marginBottom: 15}} />
+
+        <TouchableOpacity
+          onPress={() => setPopupVisibility(true)}
+          style={{
+            flexDirection: 'row',
+            columnGap: 10,
+            alignItems: 'center',
+            alignSelf: 'flex-start',
+          }}>
+          <Feather name={'trash-2'} size={20} color="#808080" />
+          <Text
+            style={{
+              fontSize: AppUtils.FontSizeMedium,
+              color: theme.secondondaryColor,
+              fontWeight: '600',
+            }}>
+            Excluir conta
+          </Text>
+        </TouchableOpacity>
+
+        <View style={{marginBottom: 30}} />
 
         <View style={{marginBottom: 25}} />
 

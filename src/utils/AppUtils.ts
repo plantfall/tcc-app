@@ -3,6 +3,8 @@ export const BlueColor = '#1B8CB9';
 
 export const theme = {
   secondondaryColor: '#021E2A',
+  blueColor: '#1B8CB9',
+  line: '#D9D9D9',
 };
 
 export class AppUtils {

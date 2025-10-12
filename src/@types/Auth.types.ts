@@ -10,6 +10,7 @@ export type AuthRequest = {
 export type User = {
   nome: string;
   cartaoSus: string;
+  password: string;
   email: string;
   uid: string;
   createdAt?: FirebaseFirestoreTypes.FieldValue;

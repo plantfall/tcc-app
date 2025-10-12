@@ -109,9 +109,9 @@ export class ConsultaService {
           d.getHours(),
         ).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
 
-      const titulo = 'Agendamento de Consulta';
+      const titulo = 'Lembrete de Consulta';
 
-      const mensagem = `Com ${consultaRequest.especialista.nome} dia ${consultaRequest.dataFormatada} às ${consultaRequest.horarioMarcado}`;
+      const mensagem = `Não esqueça da sua consulta com ${consultaRequest.especialista.nome} no dia ${consultaRequest.dataFormatada} às ${consultaRequest.horarioMarcado} `;
 
       const strUmDiaAntes = formatarData(umDiaAntes);
       // Notificação 1 dia antes
@@ -288,12 +288,15 @@ export class ConsultaService {
         consulta.notificacaoUmDiaAntes.ativa = false;
         // atualiza localmente
         await this.updateConsultaLocally(consulta);
-        await NotificationService.CancelarNotificaoAgendada(
-          consulta?.notificacaoUmDiaAntes.id!!,
-        );
-        await NotificationService.CancelarNotificaoAgendada(
-          consulta?.notificacao10MinAntes.id!!,
-        );
+
+        try {
+          await NotificationService.CancelarNotificaoAgendada(
+            consulta?.notificacaoUmDiaAntes.id!!,
+          );
+          await NotificationService.CancelarNotificaoAgendada(
+            consulta?.notificacao10MinAntes.id!!,
+          );
+        } catch (error: any) {}
 
         console.log(`Consulta ${consultaId} cancelada com sucesso`);
       }

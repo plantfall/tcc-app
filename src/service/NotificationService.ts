@@ -1,22 +1,8 @@
 import {NativeModules} from 'react-native';
-import PushNotification from 'react-native-push-notification';
 
 const {NotificationModule} = NativeModules;
 
 export class NotificationService {
-  public showNotification(title: string, message: string) {
-    PushNotification.localNotification({
-      channelId: 'consultas-channel',
-      title,
-      message,
-      playSound: true,
-      soundName: 'default',
-      vibrate: true,
-    });
-
-    console.log('notificou');
-  }
-
   /**
    *
    * @param title

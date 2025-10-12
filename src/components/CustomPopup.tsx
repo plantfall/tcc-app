@@ -1,10 +1,15 @@
+import {Modal, Pressable, StyleSheet, Text, View} from 'react-native';
+
 import React from 'react';
-import {Modal, View, Text, StyleSheet, Pressable} from 'react-native';
 
 type buttonProp = {
   text: string;
+  color?: string;
   bgColor: string;
   onClick: () => void;
+  borderRadius?: number;
+  borderColor?: string;
+  borderWidth?: number;
 };
 type Props = {
   visible: boolean;
@@ -21,7 +26,6 @@ export default function CustomPopup({
   onClose,
   title = 'Erro',
   message = 'Algo deu errado.',
-  emoji = '😢',
   btns,
 }: Props) {
   return (
@@ -32,7 +36,6 @@ export default function CustomPopup({
       onRequestClose={onClose}>
       <View style={styles.modalOverlay}>
         <View style={styles.modalContent}>
-          <Text style={styles.modalEmoji}>{emoji}</Text>
           <Text style={styles.modalTitle}>{title}</Text>
           <Text style={styles.modalMessage}>{message}</Text>
 
@@ -43,9 +46,16 @@ export default function CustomPopup({
                 style={{
                   ...styles.modalButton,
                   backgroundColor: current.bgColor,
+                  borderRadius: current.borderRadius,
+                  borderWidth: current.borderWidth ? current.borderWidth : 0,
+                  borderColor: current.borderColor,
                 }}
                 onPress={current.onClick}>
-                <Text style={{color: 'white', fontWeight: 'bold'}}>
+                <Text
+                  style={{
+                    color: current.color ? current.color : 'white',
+                    fontWeight: 'bold',
+                  }}>
                   {current.text}
                 </Text>
               </Pressable>
@@ -87,7 +97,6 @@ const styles = StyleSheet.create({
   },
   modalMessage: {
     fontSize: 14,
-    textAlign: 'center',
     marginBottom: 20,
   },
   modalButton: {

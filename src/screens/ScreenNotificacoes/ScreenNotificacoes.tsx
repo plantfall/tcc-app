@@ -11,12 +11,13 @@ import {
   Notificacao,
   NotificationService,
 } from '../../service/NotificationService';
+import {AppUtils, theme} from '../../utils/AppUtils';
 
 import {useNavigation} from '@react-navigation/native';
 import AntDesignIcon from 'react-native-vector-icons/AntDesign';
 import Feather from 'react-native-vector-icons/Feather';
+import Foundation from 'react-native-vector-icons/Foundation';
 import {SessionContext} from '../../context/SessionContext';
-import {AppUtils} from '../../utils/AppUtils';
 
 export default function ScreenNotificacoes() {
   const [notificacoes, setNotificacoes] = useState<Notificacao[]>([]);
@@ -29,19 +30,19 @@ export default function ScreenNotificacoes() {
     loadNotificacoes();
 
     async function loadNotificacoes() {
-      const list = await NotificationService.ListarNotificacoes(user?.uid!);
-      setNotificacoes(list);
+      // const list = await NotificationService.ListarNotificacoes(user?.uid!);
+      /// setNotificacoes(list);
 
-      // const aux: Notificacao[] = [];
-      // for (let i = 0; i < 30; i++) {
-      //   aux.push({
-      //     id: i + '',
-      //     titulo: 'Agendamento de COnsulta',
-      //     mensagem: 'Com X dia 10 de outubro de 2025 Às 12:45',
-      //   });
-      // }
+      const aux: Notificacao[] = [];
+      for (let i = 0; i < 30; i++) {
+        aux.push({
+          id: i + '',
+          titulo: 'Agendamento de COnsulta',
+          mensagem: 'Com X dia 10 de outubro de 2025 Às 12:45',
+        });
+      }
 
-      // setNotificacoes(aux);
+      setNotificacoes(aux);
     }
   }, []);
 
@@ -136,9 +137,9 @@ export default function ScreenNotificacoes() {
               height: 100,
               justifyContent: 'center',
               alignItems: 'center',
-              borderTopColor: '#002230',
-              borderTopWidth: 1, // Usando borderTopWidth para evitar a borda lateral.
-              backgroundColor: '#fff', // Adicionando cor de fundo para garantir que cubra qualquer coisa
+              borderTopColor: theme.line,
+              borderTopWidth: 0.5,
+              backgroundColor: '#fff',
               paddingHorizontal: 15,
             }}>
             <TouchableOpacity
@@ -179,17 +180,24 @@ function Card({notificacao}: Props) {
     <View
       style={{
         padding: 15,
-        backgroundColor: '#1b8cb91a',
+        backgroundColor: 'white',
         marginBottom: 5,
+        borderBottomColor: theme.line,
+        borderBottomWidth: 0.5,
+        marginHorizontal: 10,
       }}>
-      <Text
-        style={{
-          fontSize: AppUtils.FontSizeMedium,
-          fontWeight: 'bold',
-          marginBottom: 10,
-        }}>
-        {titulo}
-      </Text>
+      <View style={{flexDirection: 'row', columnGap: 10}}>
+        <Foundation name="alert" size={20} color={'#ffc100'} />
+        <Text
+          style={{
+            fontSize: AppUtils.FontSizeMedium,
+            fontWeight: 'bold',
+            marginBottom: 10,
+          }}>
+          {titulo}
+        </Text>
+      </View>
+
       <Text
         style={{
           fontSize: AppUtils.FontSizeMedium,
@@ -197,6 +205,15 @@ function Card({notificacao}: Props) {
           color: '#2C2B2B',
         }}>
         {mensagem}
+      </Text>
+
+      <Text
+        style={{
+          fontSize: AppUtils.FontSize,
+          fontWeight: '300',
+          color: '#2C2B2B',
+        }}>
+        Se não for possível comparecer, lembre-se de desmarcar.
       </Text>
     </View>
   );

@@ -1,9 +1,9 @@
+import auth, {EmailAuthProvider} from '@react-native-firebase/auth';
 import {
   validateLoginData,
   validateRegisterData,
 } from '../validators/auth.validators';
 
-import auth from '@react-native-firebase/auth';
 import {AuthRequest} from '../@types/Auth.types';
 
 export class AuthService {
@@ -41,6 +41,33 @@ export class AuthService {
       console.log(`Email de redefinição enviado para: ${email}`);
     } catch (error: any) {
       throw this.tratarErro(error.message);
+    }
+  }
+
+  /**
+   * Reautentica o usuário atual com e-mail e senha.
+   * Isso deve ser feito antes de operações sensíveis como deleteAccount ou updatePassword.
+   */
+  public async reauthenticate(email: string, password: string): Promise<void> {
+    const user = auth().currentUser;
+
+    if (!user || !email || !password) {
+      throw new Error('Usuário não logado ou credenciais ausentes.');
+    }
+
+    // 1. Cria a credencial de reautenticação
+    const credential = EmailAuthProvider.credential(
+      email.trim(),
+      password.trim(),
+    );
+
+    try {
+      // 2. Tenta reautenticar o usuário atual
+      await user.reauthenticateWithCredential(credential);
+      console.log('Usuário reautenticado com sucesso.');
+    } catch (error: any) {
+      console.error('Erro na reautenticação:', error);
+      throw this.tratarErro(error.message); // Use seu método de tratamento de erro
     }
   }
 

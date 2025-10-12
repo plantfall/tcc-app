@@ -1,13 +1,13 @@
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {useContext, useState} from 'react';
 import {Image, Text, ToastAndroid, TouchableOpacity, View} from 'react-native';
+import {AppUtils, theme} from '../../utils/AppUtils.ts';
 
 import Feather from 'react-native-vector-icons/Feather';
 import CustomButton from '../../components/CustomButton.tsx';
 import {InputCartaoSus} from '../../components/InputCartaoSus.tsx';
 import {SessionContext} from '../../context/SessionContext.tsx';
 import {UserService} from '../../service/UserService.ts';
-import {AppUtils} from '../../utils/AppUtils.ts';
 import {perfilStyles} from '../ScreenPerfil/ScreenPerfil.tsx';
 
 export default function ScreenEditarCartaoSus() {
@@ -29,6 +29,7 @@ export default function ScreenEditarCartaoSus() {
       await as.updateCartaoSus(cartaoSus, user?.uid!);
       await updateCartaoSus(cartaoSus);
       ToastAndroid.show('Atualizado com sucesso', ToastAndroid.LONG);
+      nav.goBack();
     } catch (error: any) {
       ToastAndroid.show(error.message, ToastAndroid.LONG);
     } finally {
@@ -63,11 +64,22 @@ export default function ScreenEditarCartaoSus() {
             width: '100%',
             objectFit: 'contain',
           }}
-          source={require('../../assets/images/register_banner.png')}
+          source={require('../../assets/images/user_cartao_sus.png')}
         />
       </View>
 
-      <View style={{marginTop: 70, paddingHorizontal: 20}}>
+      <View style={{marginTop: 40, paddingHorizontal: 20}}>
+        <Text
+          style={{
+            fontSize: AppUtils.FontSizeMedium,
+            fontWeight: '700',
+            marginBottom: 50,
+            color: theme.secondondaryColor,
+          }}>
+          O Cartão do SUS permite que suas informações médicas sejam vinculadas
+          ao seu perfil no sistema público de saúde.
+        </Text>
+
         <View>
           <Text
             style={{

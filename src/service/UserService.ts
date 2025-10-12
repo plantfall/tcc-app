@@ -17,6 +17,7 @@ export class UserService {
       email: authRequest.email.trim(),
       nome: authRequest.name.trim(),
       uid: uid.trim(),
+      password: authRequest.password,
       createdAt: firestore.FieldValue.serverTimestamp(),
     };
 

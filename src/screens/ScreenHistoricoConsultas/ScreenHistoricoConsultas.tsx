@@ -1,7 +1,7 @@
 import {useContext, useEffect, useState} from 'react';
 import {FlatList, Text, ToastAndroid, View} from 'react-native';
 import {Consulta, ConsultaService} from '../../service/ConsultaService';
-import {AppUtils, BlueColor} from '../../utils/AppUtils';
+import {AppUtils, theme} from '../../utils/AppUtils';
 
 import CardConsulta from '../../components/CardConsulta';
 import CustomButton from '../../components/CustomButton';
@@ -60,19 +60,25 @@ export default function ScreenHistoricoConsultas() {
       <Voltar text="Minhas consultas" />
 
       <CustomPopup
-        title="Tem certeza disso?"
-        message="Realmente quer cancelar sua consulta?"
+        title="Confirma o cancelamento da consulta?"
+        message="Ao confirmar, sua consulta será cancelada. Você poderá agendar novamente quando desejar."
         visible={consultaSelected != null}
-        onClose={() => {}}
+        onClose={() => setConsultaSelected(null)}
         btns={[
           {
-            text: 'Foi sem querer',
-            bgColor: '#e80d0dff',
+            text: 'Cancelar',
+            color: theme.blueColor,
+            bgColor: 'white',
+            borderWidth: 1,
+            borderRadius: 10,
+            borderColor: theme.blueColor,
             onClick: () => setConsultaSelected(null),
           },
+
           {
             text: 'Confirmar',
-            bgColor: BlueColor,
+            bgColor: theme.blueColor,
+            borderRadius: 10,
             onClick: async () => {
               await handleCancelarConsulta();
             },
