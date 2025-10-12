@@ -1,12 +1,15 @@
-import FontAwesome from '@react-native-vector-icons/fontawesome';
-import {useEffect, useState} from 'react';
-import {Text, TouchableOpacity, View} from 'react-native';
-import Feather from 'react-native-vector-icons/Feather';
-import LinearGradient from 'react-native-linear-gradient';
 import {AppUtils, BlueColor} from '../utils/AppUtils';
-import {useNavigation} from '@react-navigation/native';
+import {Text, TouchableOpacity, View} from 'react-native';
+import {useContext, useEffect, useState} from 'react';
+
 import {CircularName} from './CircularName';
 import {ConsultaService} from '../service/ConsultaService';
+import Feather from 'react-native-vector-icons/Feather';
+import FontAwesome from '@react-native-vector-icons/fontawesome';
+import LinearGradient from 'react-native-linear-gradient';
+import {NotificationService} from '../service/NotificationService';
+import {SessionContext} from '../context/SessionContext';
+import {useNavigation} from '@react-navigation/native';
 
 type Props = {
   nome: string;
@@ -68,6 +71,7 @@ export default function HomeHeader({nome}: Props) {
   );
 }
 
+const circleSize = 10;
 function Top({nome}: Props) {
   const limitarNome = (texto: string | undefined, limite = 15) => {
     if (texto == undefined) {
@@ -77,7 +81,30 @@ function Top({nome}: Props) {
     return texto.split(' ')[0];
   };
 
+  const [notificacoesAmount, setNotificacoesAmount] = useState(0);
   const nav = useNavigation();
+  const {user} = useContext(SessionContext);
+
+  useEffect(() => {
+    async function loadNotificacoes() {
+      try {
+        const list = await NotificationService.ListarNotificacoes(user?.uid!);
+        setNotificacoesAmount(list.length);
+      } catch (error) {
+        console.error('Erro ao carregar notificações:', error);
+      }
+    }
+
+    // Carrega imediatamente
+    loadNotificacoes();
+
+    // Configura o intervalo para buscar a cada 3 segundos
+    const intervalId = setInterval(loadNotificacoes, 3000);
+
+    // Cleanup: remove o intervalo quando o componente desmontar
+    return () => clearInterval(intervalId);
+  }, []); // Adicione dependências se necessário
+
   return (
     <View
       style={{
@@ -95,9 +122,26 @@ function Top({nome}: Props) {
           Ola, {limitarNome(nome)}!
         </Text>
       </View>
-      <TouchableOpacity onPress={() => nav.navigate('ScreenNotificacoes')}>
-        <Feather name="bell" color={BlueColor} size={20} />
-      </TouchableOpacity>
+
+      <View>
+        <TouchableOpacity
+          style={{position: 'relative'}}
+          onPress={() => nav.navigate('ScreenNotificacoes')}>
+          <Feather name="bell" color={BlueColor} size={20} />
+        </TouchableOpacity>
+
+        {notificacoesAmount > 0 && (
+          <View
+            style={{
+              position: 'absolute',
+              backgroundColor: 'red',
+              height: circleSize,
+              width: circleSize,
+              borderRadius: circleSize / 2,
+            }}
+          />
+        )}
+      </View>
     </View>
   );
 }

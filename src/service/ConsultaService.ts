@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import firestore from '@react-native-firebase/firestore';
 import {Especialista} from '../screens/ScreenAgendarConsulta/useAgendarConsulta';
 import {NotificationService} from './NotificationService';
+import firestore from '@react-native-firebase/firestore';
 
 export type Status = 'AGENDADA' | 'CANCELADA' | 'CONCLUIDA' | 'REAJENDADA';
 export type NotificacaoData = {
@@ -46,13 +46,13 @@ export class ConsultaService {
     consultaRequest: Consulta,
   ): Promise<void> {
     try {
-      // const seg = 1000;
+      const seg = 15;
 
-      // consultaRequest.dataFormatada =
-      //   this.gerarDataFormatadaHojeDaquiXSegundos(seg);
-      // consultaRequest.horarioMarcado = this.gerarHorarioDaquiXsegundos(seg);
+      consultaRequest.dataFormatada =
+        this.gerarDataFormatadaHojeDaquiXSegundos(seg);
+      consultaRequest.horarioMarcado = this.gerarHorarioDaquiXsegundos(seg);
 
-      await this.validarConsulta(consultaRequest);
+      //await this.validarConsulta(consultaRequest);
 
       consultaRequest.status = 'AGENDADA';
 
