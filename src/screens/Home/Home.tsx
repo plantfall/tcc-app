@@ -1,4 +1,4 @@
-import {StatusBar, Text, TouchableOpacity, View} from 'react-native';
+import {Text, TouchableOpacity, View} from 'react-native';
 
 import {FontAwesome} from '@react-native-vector-icons/fontawesome';
 import {useNavigation} from '@react-navigation/native';
@@ -16,7 +16,6 @@ export default function Home() {
 
   return (
     <View style={{flex: 1, backgroundColor: '#fff'}}>
-      <StatusBar barStyle={'dark-content'} backgroundColor={'#fff'} />
       <HomeHeader nome={user?.nome!} />
       <View style={{rowGap: 20, marginTop: 50, marginHorizontal: 15}}>
         <Item

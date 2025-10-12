@@ -1,10 +1,10 @@
-import {PermissionsAndroid, Platform} from 'react-native';
 import React, {useEffect} from 'react';
+import {PermissionsAndroid, Platform, StatusBar} from 'react-native';
 
 import {NavigationContainer} from '@react-navigation/native';
-import Routes from './src/routes/Routes';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import SessionProvider from './src/context/SessionContext.tsx';
+import Routes from './src/routes/Routes';
 
 export default function App() {
   useEffect(() => {
@@ -37,6 +37,7 @@ export default function App() {
     <NavigationContainer>
       <SessionProvider>
         <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
+          <StatusBar backgroundColor={'#000'} barStyle={'dark-content'} />
           <Routes />
         </SafeAreaView>
       </SessionProvider>

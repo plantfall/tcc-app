@@ -1,20 +1,21 @@
-import {AppUtils, theme} from '../../utils/AppUtils.ts';
+import {useContext, useState} from 'react';
 import {
-  StatusBar,
   StyleSheet,
   Text,
   ToastAndroid,
   TouchableOpacity,
   View,
 } from 'react-native';
-import {useContext, useState} from 'react';
+import {AppUtils, theme} from '../../utils/AppUtils.ts';
 
+import {useNavigation} from '@react-navigation/native';
+import Feather from 'react-native-vector-icons/Feather';
 import {CircularName} from '../../components/CircularName.tsx';
 import CustomButton from '../../components/CustomButton.tsx';
-import Feather from 'react-native-vector-icons/Feather';
+import CustomPopup from '../../components/CustomPopup.tsx';
 import {SessionContext} from '../../context/SessionContext.tsx';
+import {AuthService} from '../../service/AuthService.ts';
 import {isEmpty} from '../ScreenSignUp/useSignup.tsx';
-import {useNavigation} from '@react-navigation/native';
 
 // Definição da constante para o tempo máximo entre cliques (ex: 500ms)
 const TRIPLE_CLICK_INTERVAL = 500;
@@ -22,18 +23,25 @@ let clickTimer: NodeJS.Timeout | null = null;
 
 export default function ScreenPerfil() {
   const [cartaoSusVisibility, setcartaoSusVisibility] = useState(false);
-  const [modoEdicao, setModoEdicao] = useState(false);
 
-  const {sair, user, updateCartaoSus, setModoDesenvolvedor} =
-    useContext(SessionContext);
-  const [cartaoSus, setCartaoSus] = useState<string>(user?.cartaoSus || '');
+  const {sair, user, setModoDesenvolvedor} = useContext(SessionContext);
+  const cartaoSus = user?.cartaoSus!;
 
   const [clickCount, setClickCount] = useState(0);
+  const [popupVisibility, setPopupVisibility] = useState(false);
 
   const nav = useNavigation();
 
-  function handleDeleteAccount() {
-    //
+  async function handleDeleteAccount() {
+    const authService = new AuthService();
+
+    try {
+      await authService.deleteAccount(user?.uid!);
+      await sair();
+    } catch (e: any) {
+      ToastAndroid.show(e.message, ToastAndroid.LONG);
+      setPopupVisibility(false);
+    }
   }
 
   function formatarCartaoSus() {
@@ -95,8 +103,6 @@ export default function ScreenPerfil() {
 
   return (
     <View style={{gap: 20, backgroundColor: '#fff', flex: 1}}>
-      <StatusBar backgroundColor={'#000'} barStyle={'dark-content'} />
-
       <View
         style={{
           flexDirection: 'row',
@@ -114,6 +120,27 @@ export default function ScreenPerfil() {
         </Text>
       </View>
       <View style={{borderWidth: 0.6, borderBottomColor: '#CBCBCB'}} />
+
+      <CustomPopup
+        title="Tem certeza disso?"
+        message="Realmente quer cancelar sua conta?"
+        visible={popupVisibility}
+        onClose={() => setPopupVisibility(false)}
+        btns={[
+          {
+            text: 'Foi engano',
+            bgColor: '#e80d0dff',
+            onClick: () => setPopupVisibility(false),
+          },
+          {
+            text: 'Confirmar',
+            bgColor: theme.secondondaryColor,
+            onClick: async () => {
+              await handleDeleteAccount();
+            },
+          },
+        ]}
+      />
 
       <View style={{alignItems: 'center', marginTop: 20}}>
         <TouchableOpacity onPress={handleTripleClick}>
@@ -195,7 +222,7 @@ export default function ScreenPerfil() {
           <View style={{marginBottom: 15}} />
 
           <TouchableOpacity
-            onPress={handleDeleteAccount}
+            onPress={() => setPopupVisibility(true)}
             style={{
               flexDirection: 'row',
               columnGap: 10,

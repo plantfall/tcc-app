@@ -1,10 +1,11 @@
-import {View, Text, StatusBar} from 'react-native';
-import CustomButton from '../../components/CustomButton.tsx';
-import {useLogin} from './useLogin.tsx';
-import React, {useEffect, useRef} from 'react';
-import {Animated} from 'react-native';
 import {AppUtils, BlueColor} from '../../utils/AppUtils.ts';
+import React, {useEffect, useRef} from 'react';
+import {StatusBar, Text, View} from 'react-native';
+
+import {Animated} from 'react-native';
+import CustomButton from '../../components/CustomButton.tsx';
 import OutlineButton from '../../components/OutlineButton.tsx';
+import {useLogin} from './useLogin.tsx';
 import {useNavigation} from '@react-navigation/native';
 
 export default function ScreenBoarding() {
@@ -29,8 +30,6 @@ export default function ScreenBoarding() {
         paddingTop: 40,
         backgroundColor: '#FFFFFF',
       }}>
-      <StatusBar backgroundColor={'#000'} barStyle={'light-content'} />
-
       <Text
         style={{
           color: '#002230',

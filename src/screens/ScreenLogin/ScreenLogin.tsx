@@ -1,21 +1,22 @@
+import {AppUtils, BlueColor} from '../../utils/AppUtils.ts';
 import {
-  View,
-  Text,
-  StatusBar,
-  TextInput,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  StatusBar,
+  Text,
+  TextInput,
   TouchableOpacity,
+  View,
 } from 'react-native';
-import CustomButton from '../../components/CustomButton';
-import {useLogin} from './useLogin.tsx';
 import React, {useEffect, useRef} from 'react';
+
 import {Animated} from 'react-native';
-import {AppUtils, BlueColor} from '../../utils/AppUtils.ts';
+import CustomButton from '../../components/CustomButton';
 import Feather from 'react-native-vector-icons/Feather';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {stylesAuth} from '../ScreenSignUp/ScreenSignUp.tsx';
+import {useLogin} from './useLogin.tsx';
 import {useNavigation} from '@react-navigation/native';
 
 export default function ScreenLogin() {
@@ -48,8 +49,6 @@ export default function ScreenLogin() {
       <KeyboardAvoidingView
         style={{flex: 1, backgroundColor: 'white'}}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-        <StatusBar backgroundColor={'#000'} barStyle={'light-content'} />
-
         <ScrollView
           contentContainerStyle={{
             alignItems: 'center',

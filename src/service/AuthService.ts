@@ -139,6 +139,26 @@ export class AuthService {
     }
   }
 
+  public async deleteAccount(userId: string): Promise<void> {
+    try {
+      const user = auth().currentUser;
+
+      if (user) {
+        await user.delete();
+        console.log('Usuário excluído do Auth com sucesso');
+      }
+
+      // 2. Depois, marcar como deletado no Firestore
+      await firestore().collection('users').doc(userId.trim()).update({
+        deleted: true,
+        updatedAt: firestore.FieldValue.serverTimestamp(),
+      });
+    } catch (error: any) {
+      console.error('Erro ao excluir conta:', error);
+      throw new Error(error.message);
+    }
+  }
+
   private tratarErro(errorMessage: string) {
     console.log(errorMessage);
     console.log(errorMessage.includes('auth/invalid-credential'));

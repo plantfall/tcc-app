@@ -3,7 +3,6 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
   TextInput,
@@ -51,8 +50,6 @@ export default function ScreenSignUp() {
     <KeyboardAvoidingView
       style={{flex: 1, backgroundColor: '#fff'}}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-      <StatusBar backgroundColor={'#000'} barStyle={'light-content'} />
-
       <ScrollView
         contentContainerStyle={{
           paddingHorizontal: 20,

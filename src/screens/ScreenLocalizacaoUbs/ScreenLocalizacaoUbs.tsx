@@ -1,8 +1,9 @@
-import {View, Text, StatusBar, Linking, StyleSheet} from 'react-native';
-import CustomButton from '../../components/CustomButton.tsx';
+import {Linking, StatusBar, StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useRef} from 'react';
+
 import {Animated} from 'react-native';
 import {AppUtils} from '../../utils/AppUtils.ts';
+import CustomButton from '../../components/CustomButton.tsx';
 import Voltar from '../../components/Voltar.tsx';
 
 export default function ScreenLocalizacaoUbs() {
@@ -22,7 +23,6 @@ export default function ScreenLocalizacaoUbs() {
         flex: 1,
         backgroundColor: '#FFFFFF',
       }}>
-      <StatusBar backgroundColor={'#000'} barStyle={'light-content'} />
       <Voltar text="Localização da UBS" />
       <View>
         <Animated.Image

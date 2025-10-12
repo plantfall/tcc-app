@@ -1,20 +1,13 @@
-import {
-  Image,
-  StatusBar,
-  Text,
-  ToastAndroid,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import {useContext, useState} from 'react';
 import {useNavigation, useRoute} from '@react-navigation/native';
+import {useContext, useState} from 'react';
+import {Image, Text, ToastAndroid, TouchableOpacity, View} from 'react-native';
 
-import {AppUtils} from '../../utils/AppUtils.ts';
-import {AuthService} from '../../service/AuthService.ts';
-import CustomButton from '../../components/CustomButton.tsx';
 import Feather from 'react-native-vector-icons/Feather';
+import CustomButton from '../../components/CustomButton.tsx';
 import {InputCartaoSus} from '../../components/InputCartaoSus.tsx';
 import {SessionContext} from '../../context/SessionContext.tsx';
+import {AuthService} from '../../service/AuthService.ts';
+import {AppUtils} from '../../utils/AppUtils.ts';
 import {perfilStyles} from '../ScreenPerfil/ScreenPerfil.tsx';
 
 export default function ScreenEditarCartaoSus() {
@@ -45,8 +38,6 @@ export default function ScreenEditarCartaoSus() {
 
   return (
     <View style={{gap: 20, backgroundColor: '#fff', flex: 1}}>
-      <StatusBar backgroundColor={'#000'} barStyle={'dark-content'} />
-
       <View
         style={{
           flexDirection: 'row',
