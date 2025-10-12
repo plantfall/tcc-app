@@ -46,13 +46,13 @@ export class ConsultaService {
     consultaRequest: Consulta,
   ): Promise<void> {
     try {
-      const seg = 15;
+      // const seg = 15;
 
-      consultaRequest.dataFormatada =
-        this.gerarDataFormatadaHojeDaquiXSegundos(seg);
-      consultaRequest.horarioMarcado = this.gerarHorarioDaquiXsegundos(seg);
+      // consultaRequest.dataFormatada =
+      //   this.gerarDataFormatadaHojeDaquiXSegundos(seg);
+      // consultaRequest.horarioMarcado = this.gerarHorarioDaquiXsegundos(seg);
 
-      //await this.validarConsulta(consultaRequest);
+      await this.validarConsulta(consultaRequest);
 
       consultaRequest.status = 'AGENDADA';
 

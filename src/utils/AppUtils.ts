@@ -1,6 +1,10 @@
 export const GreenColor = '#BAE6C9';
 export const BlueColor = '#1B8CB9';
 
+export const theme = {
+  secondondaryColor: '#021E2A',
+};
+
 export class AppUtils {
   static TestMode = true;
 

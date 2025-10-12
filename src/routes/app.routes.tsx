@@ -1,13 +1,14 @@
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Home from '../screens/Home/Home';
 import ScreenAgendarConsulta from '../screens/ScreenAgendarConsulta/ScreenAgendarConsulta';
+import ScreenConsultaAgendada from '../screens/ScreenConsultaAgendada/ScreenConsultaAgendada';
+import ScreenEditarCartaoSus from '../screens/ScreenEditarCartaoSus/ScreenEditarCartaoSus';
+import ScreenEscolherDia from '../screens/ScreenEscolherDia/ScreenEscolherDia';
 import ScreenFinalizarAgendamento from '../screens/ScreenFinalizarAgendamento/ScreenFinalizarAgendamento';
 import ScreenHistoricoConsultas from '../screens/ScreenHistoricoConsultas/ScreenHistoricoConsultas';
-import ScreenEscolherDia from '../screens/ScreenEscolherDia/ScreenEscolherDia';
-import ScreenNotificacoes from '../screens/ScreenNotificacoes/ScreenNotificacoes';
-import ScreenConsultaAgendada from '../screens/ScreenConsultaAgendada/ScreenConsultaAgendada';
-import ScreenPerfil from '../screens/ScreenPerfil/ScreenPerfil';
 import ScreenLocalizacaoUbs from '../screens/ScreenLocalizacaoUbs/ScreenLocalizacaoUbs';
+import ScreenNotificacoes from '../screens/ScreenNotificacoes/ScreenNotificacoes';
+import ScreenPerfil from '../screens/ScreenPerfil/ScreenPerfil';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 export type RootStackParamList = {
   Home: undefined;
@@ -62,6 +63,10 @@ function HomeStackNavigator() {
       <Stack.Screen
         name="ScreenFinalizarAgendamento"
         component={ScreenFinalizarAgendamento}
+      />
+      <Stack.Screen
+        name="ScreenEditarCartaoSus"
+        component={ScreenEditarCartaoSus}
       />
 
       <Stack.Screen name="ScreenNotificacoes" component={ScreenNotificacoes} />

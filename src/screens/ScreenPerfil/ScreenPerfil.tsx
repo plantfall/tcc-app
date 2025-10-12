@@ -1,4 +1,4 @@
-import {useContext, useState} from 'react';
+import {AppUtils, theme} from '../../utils/AppUtils.ts';
 import {
   StatusBar,
   StyleSheet,
@@ -7,15 +7,14 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import {useContext, useState} from 'react';
 
-import {useNavigation} from '@react-navigation/native';
-import Feather from 'react-native-vector-icons/Feather';
 import {CircularName} from '../../components/CircularName.tsx';
 import CustomButton from '../../components/CustomButton.tsx';
-import {InputCartaoSus} from '../../components/InputCartaoSus.tsx';
+import Feather from 'react-native-vector-icons/Feather';
 import {SessionContext} from '../../context/SessionContext.tsx';
-import {AuthService} from '../../service/AuthService.ts';
-import {AppUtils} from '../../utils/AppUtils.ts';
+import {isEmpty} from '../ScreenSignUp/useSignup.tsx';
+import {useNavigation} from '@react-navigation/native';
 
 // Definição da constante para o tempo máximo entre cliques (ex: 500ms)
 const TRIPLE_CLICK_INTERVAL = 500;
@@ -24,7 +23,6 @@ let clickTimer: NodeJS.Timeout | null = null;
 export default function ScreenPerfil() {
   const [cartaoSusVisibility, setcartaoSusVisibility] = useState(false);
   const [modoEdicao, setModoEdicao] = useState(false);
-  const [atualizando, setAtualizando] = useState(false);
 
   const {sair, user, updateCartaoSus, setModoDesenvolvedor} =
     useContext(SessionContext);
@@ -33,6 +31,10 @@ export default function ScreenPerfil() {
   const [clickCount, setClickCount] = useState(0);
 
   const nav = useNavigation();
+
+  function handleDeleteAccount() {
+    //
+  }
 
   function formatarCartaoSus() {
     if (cartaoSus == '') {
@@ -52,21 +54,6 @@ export default function ScreenPerfil() {
 
     return `${first} ${second} ${third} ${fourth}`;
   }
-
-  const handleAtualizarCartaoSus = async () => {
-    const as = new AuthService();
-    try {
-      setAtualizando(true);
-      await as.updateCartaoSus(cartaoSus, user?.uid!);
-      await updateCartaoSus(cartaoSus);
-      ToastAndroid.show('Atualizado com sucesso', ToastAndroid.LONG);
-    } catch (error: any) {
-      ToastAndroid.show(error.message, ToastAndroid.LONG);
-    } finally {
-      setAtualizando(false);
-      setModoEdicao(false);
-    }
-  };
 
   const executeTripleClickAction = () => {
     ToastAndroid.show('Função secreta executada! 🤫', ToastAndroid.LONG);
@@ -155,9 +142,9 @@ export default function ScreenPerfil() {
             Cartão do SUS
           </Text>
 
-          {!modoEdicao ? (
-            <View style={styles.passwordContainer}>
-              <View style={styles.container}>
+          {!isEmpty(cartaoSus) && (
+            <View style={perfilStyles.passwordContainer}>
+              <View style={perfilStyles.container}>
                 <Text>
                   {cartaoSusVisibility
                     ? formatarCartaoSus()
@@ -165,7 +152,7 @@ export default function ScreenPerfil() {
                 </Text>
                 <TouchableOpacity
                   onPress={() => setcartaoSusVisibility(prev => !prev)}
-                  style={styles.eyeButton}>
+                  style={perfilStyles.eyeButton}>
                   <Feather
                     name={cartaoSusVisibility ? 'eye-off' : 'eye'}
                     size={20}
@@ -174,35 +161,60 @@ export default function ScreenPerfil() {
                 </TouchableOpacity>
               </View>
             </View>
-          ) : (
-            <InputCartaoSus
-              style={styles.container}
-              cartaoSusInput={cartaoSus}
-              setCartaoSusInput={setCartaoSus}
-            />
           )}
 
-          <CustomButton
-            text="Editar cartão sus"
-            borderRadius={12}
-            bgColor="green"
-            onClick={() => setModoEdicao(it => !it)}
+          <TouchableOpacity
+            onPress={() => {
+              nav.navigate('ScreenEditarCartaoSus', {
+                editMode: !isEmpty(cartaoSus),
+              });
+            }}
+            style={{
+              flexDirection: 'row',
+              columnGap: 10,
+              alignItems: 'center',
+              alignSelf: 'flex-start',
+            }}>
+            <Feather name={'external-link'} size={20} color="#808080" />
+            <Text
+              style={{
+                fontSize: AppUtils.FontSizeMedium,
+                color: theme.secondondaryColor,
+                fontWeight: '600',
+              }}>
+              {isEmpty(cartaoSus)
+                ? 'Adicionar cartão do SUS'
+                : 'Editar cartão do SUS'}
+            </Text>
+          </TouchableOpacity>
+
+          <View style={{marginBottom: 15}} />
+          <View
+            style={{borderColor: 'gray', width: '100%', borderWidth: 0.2}}
           />
+          <View style={{marginBottom: 15}} />
 
-          {cartaoSus.length == 15 && modoEdicao && (
-            <>
-              <View style={{marginBottom: 15}} />
-              <CustomButton
-                text="Salvar cartão sus"
-                borderRadius={12}
-                onClick={handleAtualizarCartaoSus}
-                isLoading={atualizando}
-              />
-            </>
-          )}
+          <TouchableOpacity
+            onPress={handleDeleteAccount}
+            style={{
+              flexDirection: 'row',
+              columnGap: 10,
+              alignItems: 'center',
+              alignSelf: 'flex-start',
+            }}>
+            <Feather name={'trash-2'} size={20} color="#808080" />
+            <Text
+              style={{
+                fontSize: AppUtils.FontSizeMedium,
+                color: theme.secondondaryColor,
+                fontWeight: '600',
+              }}>
+              Excluir conta
+            </Text>
+          </TouchableOpacity>
         </View>
 
-        <View style={{marginBottom: 15}} />
+        <View style={{marginBottom: 30}} />
 
         <View>
           <Text
@@ -214,26 +226,12 @@ export default function ScreenPerfil() {
             Email
           </Text>
 
-          <View style={styles.container}>
+          <View style={perfilStyles.container}>
             <Text>{user?.email}</Text>
           </View>
         </View>
-        {/* 
-        <TouchableOpacity
-          style={{
-            flexDirection: 'row',
-            columnGap: 20,
-            width: 150,
-            marginBottom: 50,
-          }}>
-          <Feather name={'trash'} size={20} color="#808080" />
-          <Text
-            style={{
-              fontSize: AppUtils.FontSize,
-            }}>
-            Excluir conta
-          </Text>
-        </TouchableOpacity> */}
+
+        <View style={{marginBottom: 25}} />
 
         <CustomButton
           text="Sair da conta"
@@ -248,7 +246,7 @@ export default function ScreenPerfil() {
   );
 }
 
-const styles = StyleSheet.create({
+export const perfilStyles = StyleSheet.create({
   container: {
     borderColor: 'gray',
     borderWidth: 1,

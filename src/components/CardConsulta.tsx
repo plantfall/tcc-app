@@ -1,12 +1,12 @@
-import {useContext, useEffect, useState} from 'react';
-import {Pressable, Text, TouchableOpacity, View} from 'react-native';
 import {Consulta, ConsultaService} from '../service/ConsultaService';
+import {Pressable, Text, TouchableOpacity, View} from 'react-native';
+import {useContext, useEffect, useState} from 'react';
 
+import {AppUtils} from '../utils/AppUtils';
 import FontAwesome from '@react-native-vector-icons/fontawesome';
-import {useNavigation} from '@react-navigation/native';
 import {SessionContext} from '../context/SessionContext';
 import {getEspecializacao} from '../screens/ScreenAgendarConsulta/ScreenAgendarConsulta';
-import {AppUtils} from '../utils/AppUtils';
+import {useNavigation} from '@react-navigation/native';
 
 type Props = {
   consulta: Consulta;
@@ -14,6 +14,7 @@ type Props = {
   callbackCancelar?: (consulta: Consulta) => void;
 };
 
+const size = 10;
 export default function CardConsulta({
   consulta,
   emScreenConsultaAgendada,
@@ -26,7 +27,6 @@ export default function CardConsulta({
   const [corCirculo, setCorCirculo] = useState('');
   const [iconName, setIconName] = useState('');
 
-  const size = 10;
   const cs = new ConsultaService();
 
   const {user} = useContext(SessionContext);
