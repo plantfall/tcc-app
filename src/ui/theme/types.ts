@@ -26,6 +26,7 @@ export interface Theme {
     primary: string;
     secondary: string;
     textSecondary: string;
+    textLabel: string;
   };
   typography: ThemeTypography;
 }

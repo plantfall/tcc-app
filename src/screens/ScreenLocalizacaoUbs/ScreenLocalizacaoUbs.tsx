@@ -1,10 +1,15 @@
+import {
+  Body,
+  Label,
+  Title,
+} from '../../ui/theme/components/typography/index.tsx';
+import {Linking, StyleSheet, View} from 'react-native';
 import React, {useEffect, useRef} from 'react';
-import {Linking, StyleSheet, Text, View} from 'react-native';
 
 import {Animated} from 'react-native';
 import CustomButton from '../../components/CustomButton.tsx';
+import Spacer from '../../components/Spacer.tsx';
 import Voltar from '../../components/Voltar.tsx';
-import {AppUtils} from '../../utils/AppUtils.ts';
 
 export default function ScreenLocalizacaoUbs() {
   const logoAnim = useRef(new Animated.Value(0)).current;
@@ -56,17 +61,19 @@ function Card() {
 
   return (
     <View style={styles.card_view}>
-      <Text style={styles.title}>UBS Brás Pires</Text>
+      <Title>UBS Brás Pires</Title>
+      <Spacer height={30} />
 
-      <Text style={[styles.subtitle, {marginTop: 30}]}>
-        Horário de funcionamento
-      </Text>
-      <Text style={styles.label}>Segunda a sexta: 07h -16h</Text>
+      <Body weight="bold">Horário de funcionamento</Body>
+      <Label style={styles.label}>Segunda a sexta: 07h -16h</Label>
 
-      <Text style={[styles.subtitle]}>Telefone</Text>
-      <Text style={styles.label}>(32) 98410-6022</Text>
+      <Spacer />
+      <Body weight="bold">Telefone</Body>
+      <Label style={styles.label}>(32) 98410-6022</Label>
+      <Spacer />
 
-      <Text style={[styles.subtitle, {marginBottom: 10}]}>Acessibilidade</Text>
+      <Body weight="bold">Acessibilidade</Body>
+      <Spacer />
       <CustomButton onClick={abrirNoGoogleMaps} text="Ver rotas no mapa" />
     </View>
   );
@@ -80,23 +87,5 @@ const styles = StyleSheet.create({
     borderColor: '#BAE6C9',
     marginTop: 20,
     marginHorizontal: 10,
-  },
-
-  title: {
-    fontSize: AppUtils.FontSizeGrande + 2,
-    fontWeight: 'bold',
-  },
-
-  subtitle: {
-    fontSize: AppUtils.FontSizeMedium,
-    fontWeight: '600',
-    marginTop: 10,
-  },
-
-  label: {
-    fontSize: AppUtils.FontSize,
-    color: '#6A6868',
-    fontWeight: 'normal',
-    marginTop: 2,
   },
 });
