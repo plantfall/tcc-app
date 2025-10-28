@@ -31,7 +31,10 @@ export const Body = (props: ThemedTextProps) => {
   const {children} = props;
 
   return (
-    <ThemedText size={theme.typography.fontSize.medium} weight={props.weight}>
+    <ThemedText
+      size={theme.typography.fontSize.medium}
+      weight={props.weight}
+      color={props.color}>
       {children}
     </ThemedText>
   );
@@ -60,6 +63,17 @@ export const Label = (props: ThemedTextProps) => {
       size={theme.typography.fontSize.small}
       weight="regular"
       color={theme.colors.textLabel}>
+      {children}
+    </ThemedText>
+  );
+};
+
+export const StatusText = (props: ThemedTextProps) => {
+  const {theme} = useTheme();
+  const {children} = props;
+
+  return (
+    <ThemedText size={theme.typography.fontSize.tiny} weight="regular">
       {children}
     </ThemedText>
   );

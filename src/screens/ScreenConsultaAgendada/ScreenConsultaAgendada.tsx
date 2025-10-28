@@ -1,13 +1,19 @@
-import {View, Text, Image, TouchableOpacity, StatusBar} from 'react-native';
+import {
+  BackHandler,
+  Image,
+  StatusBar,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {useEffect, useState} from 'react';
-import {AppUtils} from '../../utils/AppUtils';
-import AntDesignIcon from 'react-native-vector-icons/AntDesign';
 import {useNavigation, useRoute} from '@react-navigation/native';
-import CardConsulta from '../../components/CardConsulta';
+
+import AntDesignIcon from 'react-native-vector-icons/AntDesign';
+import {AppUtils} from '../../utils/AppUtils';
+import CardConsulta from '../ScreenHistoricoConsultas/components/CardConsulta';
 import CustomButton from '../../components/CustomButton';
 import OutlineButton from '../../components/OutlineButton';
-import {consultaMock} from '../../mocks/Consultas.mock';
-import {BackHandler} from 'react-native';
 
 type Notificacao = {
   titulo: string;

@@ -1,12 +1,21 @@
-import {Consulta, ConsultaService} from '../service/ConsultaService';
-import {Pressable, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Body,
+  Caption,
+  StatusText,
+} from '../../../ui/theme/components/typography';
+import {Consulta, ConsultaService} from '../../../service/ConsultaService';
 import {useContext, useEffect, useState} from 'react';
 
-import {AppUtils} from '../utils/AppUtils';
+import CustomButton from '../../../components/CustomButton';
+import {Especialista} from '../../ScreenAgendarConsulta/useAgendarConsulta';
 import FontAwesome from '@react-native-vector-icons/fontawesome';
-import {SessionContext} from '../context/SessionContext';
-import {getEspecializacao} from '../screens/ScreenAgendarConsulta/ScreenAgendarConsulta';
+import {SessionContext} from '../../../context/SessionContext';
+import Spacer from '../../../components/Spacer';
+import {Theme} from '../../../ui/theme/types';
+import {View} from 'react-native';
+import {getEspecializacao} from '../../ScreenAgendarConsulta/ScreenAgendarConsulta';
 import {useNavigation} from '@react-navigation/native';
+import {useTheme} from '../../../context/ThemeContext';
 
 type Props = {
   consulta: Consulta;
@@ -20,7 +29,7 @@ export default function CardConsulta({
   emScreenConsultaAgendada,
   callbackCancelar,
 }: Props) {
-  const {dataFormatada, especialista, status, horarioMarcado} = consulta;
+  const {dataFormatada, especialista, horarioMarcado} = consulta;
 
   const [currentStatus, setCurrentStatus] = useState(consulta.status);
   const [statusText, setStatusText] = useState('');
@@ -30,6 +39,8 @@ export default function CardConsulta({
   const cs = new ConsultaService();
 
   const {user} = useContext(SessionContext);
+
+  const {theme} = useTheme();
 
   /**
    * Função que calcula o status de exibição, considerando o tempo.
@@ -106,58 +117,20 @@ export default function CardConsulta({
           flexDirection: 'row',
           justifyContent: 'space-between',
         }}>
-        {/* LEFT */}
+        <Left
+          corCirculo={corCirculo}
+          especialista={especialista}
+          iconName={iconName}
+          dataFormatada={dataFormatada}
+          horarioMarcado={horarioMarcado}
+          theme={theme}
+        />
 
-        <View style={{flexDirection: 'row', columnGap: 20}}>
-          <FontAwesome name={iconName} color={corCirculo} size={20} />
-          <View>
-            <Text style={{fontSize: AppUtils.FontSizeMedium}}>
-              Data: {dataFormatada}
-            </Text>
-            <Text style={{fontSize: AppUtils.FontSizeMedium}}>
-              Horário: {horarioMarcado}
-            </Text>
-            <Text
-              style={{
-                color: '#002230',
-                fontSize: AppUtils.FontSizeGrande,
-                marginTop: 20,
-                fontWeight: '700',
-              }}>
-              {especialista.nome}
-            </Text>
-            <Text style={{fontSize: AppUtils.FontSizeMedium}}>
-              {getEspecializacao(especialista.especializacao)}
-            </Text>
-          </View>
-        </View>
-
-        {/* DIRETA */}
-
-        {!emScreenConsultaAgendada && (
-          <View
-            style={{
-              flexDirection: 'row',
-              gap: 5,
-              alignItems: 'center',
-              height: 20,
-            }}>
-            <View
-              style={{
-                height: size,
-                width: size,
-                borderRadius: size / 2,
-                backgroundColor: corCirculo,
-              }}
-            />
-
-            <TouchableOpacity>
-              <Text style={{fontSize: AppUtils.FontSize - 2}}>
-                {statusText}
-              </Text>
-            </TouchableOpacity>
-          </View>
-        )}
+        <Direita
+          emScreenConsultaAgendada={emScreenConsultaAgendada!}
+          corCirculo={corCirculo}
+          statusText={statusText}
+        />
       </View>
 
       {currentStatus == 'AGENDADA' && !emScreenConsultaAgendada && (
@@ -168,47 +141,96 @@ export default function CardConsulta({
             gap: 30,
             marginTop: 25,
           }}>
-          <Pressable
-            onPress={() => {
+          <CustomButton
+            bgColor={theme.colors.background}
+            borderRadius={10}
+            borderColor={'red'}
+            borderWidth={1}
+            onClick={() => {
               if (callbackCancelar != undefined) callbackCancelar(consulta);
             }}
-            style={{
-              borderColor: 'red',
-              borderRadius: 10,
-              borderWidth: 1,
-              paddingHorizontal: 15,
-              paddingVertical: 8,
-              width: 100,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <Text style={{color: 'red', fontSize: AppUtils.FontSize}}>
-              Cancelar
-            </Text>
-          </Pressable>
+            text="Cancelar"
+            width={100}
+            textColor="red"
+          />
 
-          <TouchableOpacity
-            onPress={() =>
+          <CustomButton
+            borderRadius={10}
+            onClick={() =>
               nav.navigate('ScreenEscolherDia', {
                 consulta: consulta,
                 editMode: true,
               })
             }
-            style={{
-              backgroundColor: '#2390BB',
-              paddingHorizontal: 15,
-              paddingVertical: 8,
-              borderRadius: 10,
-              width: 100,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <Text style={{color: '#fff', fontSize: AppUtils.FontSize}}>
-              Editar
-            </Text>
-          </TouchableOpacity>
+            text="Editar"
+            width={100}
+          />
         </View>
       )}
+    </View>
+  );
+}
+
+type l = {
+  iconName: string;
+  corCirculo: string;
+  especialista: Especialista;
+  dataFormatada: string;
+  horarioMarcado: string;
+  theme: Theme;
+};
+function Left({
+  iconName,
+  corCirculo,
+  especialista,
+  dataFormatada,
+  horarioMarcado,
+  theme,
+}: l) {
+  return (
+    <View style={{flexDirection: 'row', columnGap: 20}}>
+      <FontAwesome name={iconName} color={corCirculo} size={20} />
+      <View>
+        <Caption>Data: {dataFormatada}</Caption>
+        <Caption>Horário: {horarioMarcado}</Caption>
+
+        <Body color={theme.colors.textSecondary} weight="bold">
+          {especialista.nome}
+        </Body>
+        <Spacer height={20} />
+
+        <Body>{getEspecializacao(especialista.especializacao)}</Body>
+      </View>
+    </View>
+  );
+}
+
+type d = {
+  corCirculo: string;
+  statusText: string;
+  emScreenConsultaAgendada: boolean;
+};
+function Direita({corCirculo, statusText, emScreenConsultaAgendada}: d) {
+  if (emScreenConsultaAgendada) return null;
+
+  return (
+    <View
+      style={{
+        flexDirection: 'row',
+        gap: 5,
+        alignItems: 'center',
+        height: 20,
+      }}>
+      <View
+        style={{
+          height: size,
+          width: size,
+          borderRadius: size / 2,
+          backgroundColor: corCirculo,
+        }}
+      />
+
+      <StatusText>{statusText}</StatusText>
     </View>
   );
 }

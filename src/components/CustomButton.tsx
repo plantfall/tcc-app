@@ -1,21 +1,38 @@
 import {ActivityIndicator} from '@ant-design/react-native';
-import {TouchableOpacity, Text} from 'react-native';
-import {AppUtils, BlueColor} from '../utils/AppUtils';
+import {Body} from '../ui/theme/components/typography';
+import {TouchableOpacity} from 'react-native';
+import {useTheme} from '../context/ThemeContext';
 
 type Props = {
   onClick: () => void;
   text: string;
+  textColor?: string;
   bgColor?: string;
   isLoading?: boolean;
   borderRadius?: number;
+  borderWidth?: number;
+  borderColor?: string;
   iconSource?: any;
   iconName?: string;
+  width?: number;
 };
 
 export default function CustomButton(props: Props) {
-  const {isLoading, borderRadius, onClick, bgColor, text} = props;
+  const {
+    isLoading,
+    borderRadius,
+    borderColor,
+    borderWidth,
+    onClick,
+    bgColor,
+    text,
+    textColor,
+    width,
+  } = props;
 
-  const backgroundColor = bgColor ?? BlueColor;
+  const {theme} = useTheme();
+
+  const backgroundColor = bgColor ?? theme.colors.primary;
   const disabled = isLoading;
 
   return (
@@ -26,9 +43,11 @@ export default function CustomButton(props: Props) {
         backgroundColor,
         paddingVertical: 15,
         borderRadius: borderRadius ?? 5,
+        borderColor: borderColor,
+        borderWidth: borderWidth,
         justifyContent: 'center',
         alignItems: 'center',
-        width: '100%',
+        width: width ?? '100%',
         opacity: disabled ? 0.5 : 1,
         flexDirection: 'row',
         gap: 8,
@@ -40,9 +59,8 @@ export default function CustomButton(props: Props) {
           {props.iconSource && props.iconName && (
             <props.iconSource name={props.iconName} size={18} color="#fff" />
           )}
-          <Text style={{color: 'white', fontSize: AppUtils.FontSize}}>
-            {text}
-          </Text>
+
+          <Body color={textColor ?? theme.colors.background}>{text}</Body>
         </>
       )}
     </TouchableOpacity>

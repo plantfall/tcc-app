@@ -7,12 +7,13 @@ export const lightTheme: Theme = {
     text: '#1E1E1E',
     textSecondary: '#002230',
     textLabel: '#6A6868',
-    primary: '#007AFF',
+    primary: '#1B8CB9',
     secondary: '#FF9500',
   },
   typography: {
     fontFamily: 'Inter-Regular',
     fontSize: {
+      tiny: 12,
       small: 14,
       medium: 16,
       large: 20,

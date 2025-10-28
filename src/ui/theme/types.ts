@@ -9,6 +9,7 @@ type ReactNativeFontWeight = '400' | '700' | 'normal' | 'bold';
 export interface ThemeTypography {
   fontFamily: string;
   fontSize: {
+    tiny: number;
     small: number;
     medium: number;
     large: number;

@@ -1,13 +1,13 @@
-import {useContext, useEffect, useState} from 'react';
-import {FlatList, Text, ToastAndroid, View} from 'react-native';
-import {Consulta, ConsultaService} from '../../service/ConsultaService';
 import {AppUtils, theme} from '../../utils/AppUtils';
+import {Consulta, ConsultaService} from '../../service/ConsultaService';
+import {FlatList, Text, ToastAndroid, View} from 'react-native';
+import {useContext, useEffect, useState} from 'react';
 
-import CardConsulta from '../../components/CardConsulta';
+import CardConsulta from './components/CardConsulta';
 import CustomButton from '../../components/CustomButton';
 import CustomPopup from '../../components/CustomPopup';
-import Voltar from '../../components/Voltar';
 import {SessionContext} from '../../context/SessionContext';
+import Voltar from '../../components/Voltar';
 
 export default function ScreenHistoricoConsultas() {
   const [consultas, setConsultas] = useState<Consulta[]>([]);
