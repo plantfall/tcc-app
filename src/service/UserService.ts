@@ -37,7 +37,17 @@ export class UserService {
         throw new Error('Dados do usuário não encontrados no Firestore.');
       }
 
-      const userData = userDoc.data() as User;
+      const {name, nome, createdAt, created_at, cartao_sus, email, password} =
+        userDoc.data() as any;
+
+      const userData: User = {
+        cartaoSus: cartao_sus,
+        email: email,
+        nome: nome == undefined ? name : nome,
+        password: password,
+        uid: userId,
+        createdAt: createdAt == undefined ? createdAt : created_at,
+      };
 
       return userData;
     } catch (error: any) {

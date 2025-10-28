@@ -30,19 +30,19 @@ export default function ScreenNotificacoes() {
     loadNotificacoes();
 
     async function loadNotificacoes() {
-      // const list = await NotificationService.ListarNotificacoes(user?.uid!);
-      /// setNotificacoes(list);
+      const list = await NotificationService.ListarNotificacoes(user?.uid!);
+      setNotificacoes(list);
 
-      const aux: Notificacao[] = [];
-      for (let i = 0; i < 30; i++) {
-        aux.push({
-          id: i + '',
-          titulo: 'Agendamento de COnsulta',
-          mensagem: 'Com X dia 10 de outubro de 2025 Às 12:45',
-        });
-      }
+      // const aux: Notificacao[] = [];
+      // for (let i = 0; i < 30; i++) {
+      //   aux.push({
+      //     id: i + '',
+      //     titulo: 'Agendamento de COnsulta',
+      //     mensagem: 'Com X dia 10 de outubro de 2025 Às 12:45',
+      //   });
+      // }
 
-      setNotificacoes(aux);
+      // setNotificacoes(aux);
     }
   }, []);
 

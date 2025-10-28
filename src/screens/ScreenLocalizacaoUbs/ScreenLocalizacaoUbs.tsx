@@ -1,10 +1,10 @@
-import {Linking, StatusBar, StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useRef} from 'react';
+import {Linking, StyleSheet, Text, View} from 'react-native';
 
 import {Animated} from 'react-native';
-import {AppUtils} from '../../utils/AppUtils.ts';
 import CustomButton from '../../components/CustomButton.tsx';
 import Voltar from '../../components/Voltar.tsx';
+import {AppUtils} from '../../utils/AppUtils.ts';
 
 export default function ScreenLocalizacaoUbs() {
   const logoAnim = useRef(new Animated.Value(0)).current;
@@ -66,7 +66,7 @@ function Card() {
       <Text style={[styles.subtitle]}>Telefone</Text>
       <Text style={styles.label}>(32) 98410-6022</Text>
 
-      <Text style={[styles.subtitle]}>Acessibilidade</Text>
+      <Text style={[styles.subtitle, {marginBottom: 10}]}>Acessibilidade</Text>
       <CustomButton onClick={abrirNoGoogleMaps} text="Ver rotas no mapa" />
     </View>
   );

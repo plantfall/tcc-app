@@ -1,4 +1,4 @@
-import {AppUtils, isEmpty, theme} from '../../utils/AppUtils.ts';
+import {useContext, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -6,18 +6,18 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {useContext, useState} from 'react';
+import {AppUtils, isEmpty, theme} from '../../utils/AppUtils.ts';
 
-import {AuthService} from '../../service/AuthService.ts';
+import FontAwesome from '@react-native-vector-icons/fontawesome';
+import {useNavigation} from '@react-navigation/native';
+import Feather from 'react-native-vector-icons/Feather';
+import MI from 'react-native-vector-icons/MaterialIcons';
 import {CircularName} from '../../components/CircularName.tsx';
 import CustomButton from '../../components/CustomButton.tsx';
 import CustomPopup from '../../components/CustomPopup.tsx';
-import Feather from 'react-native-vector-icons/Feather';
-import FontAwesome from '@react-native-vector-icons/fontawesome';
-import MI from 'react-native-vector-icons/MaterialIcons';
 import {SessionContext} from '../../context/SessionContext.tsx';
+import {AuthService} from '../../service/AuthService.ts';
 import {UserService} from '../../service/UserService.ts';
-import {useNavigation} from '@react-navigation/native';
 
 // Definição da constante para o tempo máximo entre cliques (ex: 500ms)
 const TRIPLE_CLICK_INTERVAL = 500;
@@ -27,8 +27,7 @@ export default function ScreenPerfil() {
   const [cartaoSusVisibility, setcartaoSusVisibility] = useState(false);
 
   const {sair, user, setModoDesenvolvedor} = useContext(SessionContext);
-  //const cartaoSus = user?.cartaoSus!;
-  const cartaoSus = '';
+  const cartaoSus = user?.cartaoSus!;
 
   const [clickCount, setClickCount] = useState(0);
   const [popupVisibility, setPopupVisibility] = useState(false);

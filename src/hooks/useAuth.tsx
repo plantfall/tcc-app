@@ -58,6 +58,9 @@ export function useAuth() {
     try {
       const uid = await authService.login(emailInput, password);
       const user: User = await userService.loadUser(uid);
+
+      user.password = password;
+
       await salvarUsuario(user);
     } catch (e: any) {
       setErro(e.message || 'Erro desconhecido ao fazer login.');

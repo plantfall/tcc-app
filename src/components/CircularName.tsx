@@ -1,4 +1,5 @@
 import {Text, View} from 'react-native';
+
 import {AppUtils} from '../utils/AppUtils';
 
 export type Props = {
