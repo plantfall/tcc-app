@@ -1,15 +1,16 @@
-import {useContext, useEffect, useState} from 'react';
+import {AppUtils, BlueColor, theme} from '../../../utils/AppUtils';
+import {Caption, Subtitle} from '../../../ui/theme/components/typography';
 import {Text, TouchableOpacity, View} from 'react-native';
-import {AppUtils, BlueColor, theme} from '../utils/AppUtils';
+import {useContext, useEffect, useState} from 'react';
 
-import FontAwesome from '@react-native-vector-icons/fontawesome';
-import {useNavigation} from '@react-navigation/native';
-import LinearGradient from 'react-native-linear-gradient';
+import {CircularName} from '../../../components/CircularName';
+import {ConsultaService} from '../../../service/ConsultaService';
 import Feather from 'react-native-vector-icons/Feather';
-import {SessionContext} from '../context/SessionContext';
-import {ConsultaService} from '../service/ConsultaService';
-import {NotificationService} from '../service/NotificationService';
-import {CircularName} from './CircularName';
+import FontAwesome from '@react-native-vector-icons/fontawesome';
+import LinearGradient from 'react-native-linear-gradient';
+import {NotificationService} from '../../../service/NotificationService';
+import {SessionContext} from '../../../context/SessionContext';
+import {useNavigation} from '@react-navigation/native';
 
 type Props = {
   nome: string;
@@ -56,16 +57,17 @@ export default function HomeHeader({nome}: Props) {
           alignSelf: 'flex-start', // garante que a View não se estique
         }}>
         <FontAwesome name="calendar" color={'##002230'} size={15} />
+        <Caption>
+          {dtProximaConsulta == null
+            ? 'Nenhum agendamento encontrado'
+            : dtProximaConsulta}
+        </Caption>
         <Text
           style={{
             color: '#002230',
             fontSize: AppUtils.FontSize,
             width: 150,
-          }}>
-          {dtProximaConsulta == null
-            ? 'Nenhum agendamento encontrado'
-            : dtProximaConsulta}
-        </Text>
+          }}></Text>
       </View>
     </LinearGradient>
   );
@@ -118,9 +120,7 @@ function Top({nome}: Props) {
           <CircularName nome={nome} />
         </TouchableOpacity>
 
-        <Text style={{fontSize: 20, fontWeight: '700', color: '#002230'}}>
-          Ola, {limitarNome(nome)}!
-        </Text>
+        <Subtitle weight="bold"> Ola, {limitarNome(nome)}!</Subtitle>
       </View>
 
       <TouchableOpacity onPress={() => nav.navigate('ScreenNotificacoes')}>

@@ -1,10 +1,27 @@
-import React, {useEffect} from 'react';
 import {PermissionsAndroid, Platform, StatusBar} from 'react-native';
+import React, {useEffect} from 'react';
+import {ThemeProvider, useTheme} from './src/context/ThemeContext.tsx';
 
 import {NavigationContainer} from '@react-navigation/native';
+import Routes from './src/routes/Routes';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import SessionProvider from './src/context/SessionContext.tsx';
-import Routes from './src/routes/Routes';
+
+function RootContent() {
+  const {theme} = useTheme();
+
+  return (
+    // Use a cor de fundo do tema na SafeAreaView
+    <SafeAreaView style={{flex: 1, backgroundColor: theme.colors.background}}>
+      {/* Defina a cor de fundo da StatusBar e o estilo do texto com base no tema */}
+      <StatusBar
+        backgroundColor={theme.colors.background}
+        barStyle={theme.name === 'dark' ? 'light-content' : 'dark-content'}
+      />
+      <Routes />
+    </SafeAreaView>
+  );
+}
 
 export default function App() {
   useEffect(() => {
@@ -34,13 +51,14 @@ export default function App() {
   };
 
   return (
-    <NavigationContainer>
-      <SessionProvider>
-        <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
-          <StatusBar backgroundColor={'#000'} barStyle={'dark-content'} />
-          <Routes />
-        </SafeAreaView>
-      </SessionProvider>
-    </NavigationContainer>
+    // 1. Envolva tudo com o ThemeProvider
+    <ThemeProvider>
+      <NavigationContainer>
+        <SessionProvider>
+          {/* 2. Use o novo componente que consome o tema */}
+          <RootContent />
+        </SessionProvider>
+      </NavigationContainer>
+    </ThemeProvider>
   );
 }

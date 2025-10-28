@@ -1,12 +1,14 @@
 import {Text, TextInput, TouchableOpacity, View} from 'react-native';
-import {AppUtils, theme} from '../../utils/AppUtils';
 
+import {Body} from '../../ui/theme/components/typography';
 import {FontAwesome} from '@react-native-vector-icons/fontawesome';
-import {useNavigation} from '@react-navigation/native';
-import {useContext} from 'react';
-import HomeHeader from '../../components/HomeHeader';
+import HomeHeader from './components/HomeHeader';
 import {SessionContext} from '../../context/SessionContext';
+import {Theme} from '../../ui/theme/types';
 import {stylesAuth} from '../ScreenSignUp/ScreenSignUp';
+import {useContext} from 'react';
+import {useNavigation} from '@react-navigation/native';
+import {useTheme} from '../../context/ThemeContext';
 
 export default function Home() {
   const {
@@ -16,24 +18,29 @@ export default function Home() {
     setSegundosParaAgendarConsultaEmDevMode,
   } = useContext(SessionContext);
 
+  const {theme} = useTheme();
+
   return (
-    <View style={{flex: 1, backgroundColor: '#fff'}}>
+    <View style={{flex: 1, backgroundColor: theme.colors.background}}>
       <HomeHeader nome={user?.nome!} />
       <View style={{rowGap: 20, marginTop: 50, marginHorizontal: 15}}>
         <Item
           text="Agendar Consulta"
           iconName="calendar-check-o"
           destination="ScreenAgendarConsulta"
+          theme={theme}
         />
         <Item
           text="Histórico de Consultas"
           iconName="history"
           destination="ScreenHistoricoConsultas"
+          theme={theme}
         />
         <Item
           text="Localização da UBS"
           iconName="location-arrow"
           destination="ScreenLocalizacaoUbs"
+          theme={theme}
         />
 
         {modoDesenvolvedor && (
@@ -63,7 +70,12 @@ export default function Home() {
   );
 }
 
-type Props = {text: string; iconName: string; destination: string};
+type Props = {
+  text: string;
+  iconName: string;
+  destination: string;
+  theme: Theme;
+};
 function Item({text, iconName, destination}: Props) {
   const nav = useNavigation();
   return (
@@ -85,7 +97,7 @@ function Item({text, iconName, destination}: Props) {
           paddingHorizontal: 15,
         }}>
         <FontAwesome name={iconName} color={'#1B8CB9'} size={20} />
-        <Text style={{fontSize: AppUtils.FontSizeMedium}}>{text}</Text>
+        <Body>{text}</Body>
       </View>
     </TouchableOpacity>
   );
