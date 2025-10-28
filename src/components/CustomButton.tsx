@@ -1,12 +1,15 @@
+import {DimensionValue, TouchableOpacity} from 'react-native';
+
 import {ActivityIndicator} from '@ant-design/react-native';
 import {Body} from '../ui/theme/components/typography';
-import {TouchableOpacity} from 'react-native';
+import {Weight} from '../ui/theme/components/typography/ThemedText';
 import {useTheme} from '../context/ThemeContext';
 
 type Props = {
   onClick: () => void;
   text: string;
   textColor?: string;
+  textWeight?: Weight;
   bgColor?: string;
   isLoading?: boolean;
   borderRadius?: number;
@@ -14,7 +17,13 @@ type Props = {
   borderColor?: string;
   iconSource?: any;
   iconName?: string;
-  width?: number;
+  iconSize?: number;
+  iconOnLeft?: boolean;
+  iconColor?: string;
+  width?: DimensionValue;
+  height?: DimensionValue;
+  maxWidth?: DimensionValue;
+  paddingVertical?: number;
 };
 
 export default function CustomButton(props: Props) {
@@ -27,7 +36,13 @@ export default function CustomButton(props: Props) {
     bgColor,
     text,
     textColor,
+    textWeight,
     width,
+    height,
+    paddingVertical,
+    maxWidth,
+    iconOnLeft,
+    iconColor,
   } = props;
 
   const {theme} = useTheme();
@@ -41,13 +56,15 @@ export default function CustomButton(props: Props) {
       onPress={onClick}
       style={{
         backgroundColor,
-        paddingVertical: 15,
-        borderRadius: borderRadius ?? 5,
+        paddingVertical: paddingVertical ?? 15,
+        borderRadius: borderRadius ?? 7,
         borderColor: borderColor,
         borderWidth: borderWidth,
         justifyContent: 'center',
         alignItems: 'center',
         width: width ?? '100%',
+        height: height,
+        maxWidth: maxWidth ?? '100%',
         opacity: disabled ? 0.5 : 1,
         flexDirection: 'row',
         gap: 8,
@@ -56,11 +73,27 @@ export default function CustomButton(props: Props) {
         <ActivityIndicator size={20} color="#fff" />
       ) : (
         <>
-          {props.iconSource && props.iconName && (
-            <props.iconSource name={props.iconName} size={18} color="#fff" />
+          {props.iconSource && props.iconName && iconOnLeft && (
+            <props.iconSource
+              name={props.iconName}
+              size={props.iconSize ?? 18}
+              color={iconColor ?? '#fff'}
+            />
           )}
 
-          <Body color={textColor ?? theme.colors.background}>{text}</Body>
+          <Body
+            color={textColor ?? theme.colors.background}
+            weight={textWeight}>
+            {text}
+          </Body>
+
+          {props.iconSource && props.iconName && !iconOnLeft && (
+            <props.iconSource
+              name={props.iconName}
+              size={props.iconSize ?? 18}
+              color={iconColor ?? '#fff'}
+            />
+          )}
         </>
       )}
     </TouchableOpacity>

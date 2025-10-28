@@ -3,6 +3,15 @@ import {ThemedText, ThemedTextProps} from './ThemedText';
 import React from 'react';
 import {useTheme} from '../../../../context/ThemeContext';
 
+export const H1: React.FC<{children: React.ReactNode}> = ({children}) => {
+  const {theme} = useTheme();
+  return (
+    <ThemedText size={theme.typography.fontSize.extraLarge} weight="bold">
+      {children}
+    </ThemedText>
+  );
+};
+
 export const Title: React.FC<{children: React.ReactNode}> = ({children}) => {
   const {theme} = useTheme();
   return (
@@ -33,7 +42,7 @@ export const Body = (props: ThemedTextProps) => {
   return (
     <ThemedText
       size={theme.typography.fontSize.medium}
-      weight={props.weight}
+      weight={props.weight ?? 'regular'}
       color={props.color}>
       {children}
     </ThemedText>
@@ -48,7 +57,7 @@ export const Caption = (props: ThemedTextProps) => {
     <ThemedText
       size={theme.typography.fontSize.small}
       weight="regular"
-      color={theme.colors.textSecondary}>
+      color={props.color ?? theme.colors.textSecondary}>
       {children}
     </ThemedText>
   );
@@ -73,7 +82,10 @@ export const StatusText = (props: ThemedTextProps) => {
   const {children} = props;
 
   return (
-    <ThemedText size={theme.typography.fontSize.tiny} weight="regular">
+    <ThemedText
+      size={theme.typography.fontSize.tiny}
+      weight="regular"
+      color={props.color ?? theme.colors.text}>
       {children}
     </ThemedText>
   );

@@ -3,7 +3,7 @@ import React, {useEffect} from 'react';
 import {ThemeProvider, useTheme} from './src/context/ThemeContext.tsx';
 
 import {NavigationContainer} from '@react-navigation/native';
-import Routes from './src/routes/Routes';
+import Routes from './src/routes/Routes.tsx';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import SessionProvider from './src/context/SessionContext.tsx';
 
@@ -19,6 +19,8 @@ function RootContent() {
         barStyle={theme.name === 'dark' ? 'light-content' : 'dark-content'}
       />
       <Routes />
+
+      {/* <ScreenConsultaAgendada /> */}
     </SafeAreaView>
   );
 }

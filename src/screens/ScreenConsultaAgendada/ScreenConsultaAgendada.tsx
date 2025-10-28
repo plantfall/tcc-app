@@ -2,37 +2,32 @@ import {
   BackHandler,
   Image,
   StatusBar,
-  Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-import {useEffect, useState} from 'react';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
 import AntDesignIcon from 'react-native-vector-icons/AntDesign';
-import {AppUtils} from '../../utils/AppUtils';
 import CardConsulta from '../ScreenHistoricoConsultas/components/CardConsulta';
 import CustomButton from '../../components/CustomButton';
-import OutlineButton from '../../components/OutlineButton';
-
-type Notificacao = {
-  titulo: string;
-  mensagem: string;
-};
+import {Title} from '../../ui/theme/components/typography';
+import ViewThemed from '../../components/ViewThemed';
+import {useEffect} from 'react';
+import {useTheme} from '../../context/ThemeContext';
 
 export default function ScreenConsultaAgendada() {
-  const [notificacoes, setNotificacoes] = useState<Notificacao[]>([]);
-
   const {params} = useRoute();
 
   const editMode = params?.editMode || false;
   const consulta = params.consulta;
-  //const editMode = false;
+  // const editMode = false;
   // const consulta = consultaMock;
 
   const consultaAgendada = consulta;
 
   const nav = useNavigation();
+
+  const {theme} = useTheme();
 
   useEffect(() => {
     const onBackPress = () => {
@@ -52,7 +47,7 @@ export default function ScreenConsultaAgendada() {
   }, [nav]);
 
   return (
-    <View style={{backgroundColor: '#fff', flex: 1}}>
+    <ViewThemed>
       <StatusBar backgroundColor={'#1B8CB9A1'} barStyle={'light-content'} />
       <View
         style={{
@@ -69,17 +64,13 @@ export default function ScreenConsultaAgendada() {
           </TouchableOpacity>
         </View>
 
-        <Text
-          style={{
-            fontSize: AppUtils.FontSizeGrande + 4,
-            fontWeight: '700',
-            textAlign: 'left',
-            marginLeft: 20,
-          }}>
-          {editMode
-            ? 'Sua consulta foi alterada\ncom sucesso!'
-            : 'Sua consulta foi agendada\ncom sucesso!'}
-        </Text>
+        <View style={{marginLeft: 20}}>
+          <Title>
+            {editMode
+              ? 'Sua consulta foi alterada\ncom sucesso!'
+              : 'Sua consulta foi agendada\ncom sucesso!'}
+          </Title>
+        </View>
 
         <View style={{alignItems: 'center'}}>
           <Image
@@ -107,12 +98,16 @@ export default function ScreenConsultaAgendada() {
             onClick={() => nav.navigate('ScreenHistoricoConsultas')}
           />
 
-          <OutlineButton
+          <CustomButton
             text="Voltar para tela inicial"
             onClick={() => nav.navigate('Home')}
+            borderColor={theme.colors.primary}
+            borderWidth={1}
+            bgColor={theme.colors.background}
+            textColor={theme.colors.primary}
           />
         </View>
       </View>
-    </View>
+    </ViewThemed>
   );
 }

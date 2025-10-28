@@ -1,4 +1,4 @@
-import {AppUtils, BlueColor, theme} from '../../../utils/AppUtils';
+import {AppUtils, BlueColor} from '../../../utils/AppUtils';
 import {Caption, Subtitle} from '../../../ui/theme/components/typography';
 import {Text, TouchableOpacity, View} from 'react-native';
 import {useContext, useEffect, useState} from 'react';
@@ -7,10 +7,12 @@ import {CircularName} from '../../../components/CircularName';
 import {ConsultaService} from '../../../service/ConsultaService';
 import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from '@react-native-vector-icons/fontawesome';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import LinearGradient from 'react-native-linear-gradient';
 import {NotificationService} from '../../../service/NotificationService';
 import {SessionContext} from '../../../context/SessionContext';
 import {useNavigation} from '@react-navigation/native';
+import {useTheme} from '../../../context/ThemeContext';
 
 type Props = {
   nome: string;
@@ -21,6 +23,7 @@ export default function HomeHeader({nome}: Props) {
     null,
   );
   const consultaService = new ConsultaService();
+
   useEffect(() => {
     async function fetch() {
       const proximasConsultas = await consultaService.buscarProximasConsultas();
@@ -62,12 +65,6 @@ export default function HomeHeader({nome}: Props) {
             ? 'Nenhum agendamento encontrado'
             : dtProximaConsulta}
         </Caption>
-        <Text
-          style={{
-            color: '#002230',
-            fontSize: AppUtils.FontSize,
-            width: 150,
-          }}></Text>
       </View>
     </LinearGradient>
   );
@@ -107,6 +104,7 @@ function Top({nome}: Props) {
     return () => clearInterval(intervalId);
   }, []); // Adicione dependências se necessário
 
+  const {toggleTheme, theme} = useTheme();
   return (
     <View
       style={{
@@ -123,26 +121,36 @@ function Top({nome}: Props) {
         <Subtitle weight="bold"> Ola, {limitarNome(nome)}!</Subtitle>
       </View>
 
-      <TouchableOpacity onPress={() => nav.navigate('ScreenNotificacoes')}>
-        <TouchableOpacity
-          style={{position: 'relative'}}
-          onPress={() => nav.navigate('ScreenNotificacoes')}>
-          <Feather name="bell" color={BlueColor} size={20} />
+      <View style={{flexDirection: 'row', columnGap: 20}}>
+        <TouchableOpacity onPress={toggleTheme}>
+          <Ionicons
+            name={theme.name == 'light' ? 'sunny' : 'moon'}
+            color={theme.colors.primary}
+            size={20}
+          />
         </TouchableOpacity>
 
-        {notificacoesAmount > 0 && (
+        <TouchableOpacity onPress={() => nav.navigate('ScreenNotificacoes')}>
           <TouchableOpacity
-            onPress={() => nav.navigate('ScreenNotificacoes')}
-            style={{
-              position: 'absolute',
-              backgroundColor: theme.secondondaryColor,
-              height: circleSize,
-              width: circleSize,
-              borderRadius: circleSize / 2,
-            }}
-          />
-        )}
-      </TouchableOpacity>
+            style={{position: 'relative'}}
+            onPress={() => nav.navigate('ScreenNotificacoes')}>
+            <Feather name="bell" color={BlueColor} size={20} />
+          </TouchableOpacity>
+
+          {notificacoesAmount > 0 && (
+            <TouchableOpacity
+              onPress={() => nav.navigate('ScreenNotificacoes')}
+              style={{
+                position: 'absolute',
+                backgroundColor: theme.secondondaryColor,
+                height: circleSize,
+                width: circleSize,
+                borderRadius: circleSize / 2,
+              }}
+            />
+          )}
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }

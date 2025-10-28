@@ -1,23 +1,21 @@
+import {AppUtils, isEmpty} from '../../utils/AppUtils.ts';
+import {StyleSheet, ToastAndroid, TouchableOpacity, View} from 'react-native';
 import {useContext, useState} from 'react';
-import {
-  StyleSheet,
-  Text,
-  ToastAndroid,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import {AppUtils, isEmpty, theme} from '../../utils/AppUtils.ts';
 
-import FontAwesome from '@react-native-vector-icons/fontawesome';
-import {useNavigation} from '@react-navigation/native';
-import Feather from 'react-native-vector-icons/Feather';
-import MI from 'react-native-vector-icons/MaterialIcons';
+import {AuthService} from '../../service/AuthService.ts';
+import {Body} from '../../ui/theme/components/typography/index.tsx';
 import {CircularName} from '../../components/CircularName.tsx';
 import CustomButton from '../../components/CustomButton.tsx';
 import CustomPopup from '../../components/CustomPopup.tsx';
+import Feather from 'react-native-vector-icons/Feather';
+import FontAwesome from '@react-native-vector-icons/fontawesome';
+import MI from 'react-native-vector-icons/MaterialIcons';
 import {SessionContext} from '../../context/SessionContext.tsx';
-import {AuthService} from '../../service/AuthService.ts';
+import Spacer from '../../components/Spacer.tsx';
 import {UserService} from '../../service/UserService.ts';
+import ViewThemed from '../../components/ViewThemed.tsx';
+import {useNavigation} from '@react-navigation/native';
+import {useTheme} from '../../context/ThemeContext.tsx';
 
 // Definição da constante para o tempo máximo entre cliques (ex: 500ms)
 const TRIPLE_CLICK_INTERVAL = 500;
@@ -33,6 +31,8 @@ export default function ScreenPerfil() {
   const [popupVisibility, setPopupVisibility] = useState(false);
 
   const nav = useNavigation();
+
+  const {theme} = useTheme();
 
   async function handleDeleteAccount() {
     const authService = new AuthService();
@@ -107,7 +107,7 @@ export default function ScreenPerfil() {
   };
 
   return (
-    <View style={{gap: 20, backgroundColor: '#fff', flex: 1}}>
+    <ViewThemed>
       <View
         style={{
           flexDirection: 'row',
@@ -117,14 +117,14 @@ export default function ScreenPerfil() {
           marginTop: 20,
         }}>
         <TouchableOpacity style={{padding: 5}} onPress={() => nav.goBack()}>
-          <Feather name="arrow-left" size={27} color={'#000'} />
+          <Feather name="arrow-left" size={25} color={theme.colors.text} />
         </TouchableOpacity>
 
-        <Text style={{fontSize: AppUtils.FontSizeGrande, fontWeight: '700'}}>
-          Minha Área
-        </Text>
+        <Body weight="bold">Minha Área</Body>
       </View>
+      <Spacer height={20} />
       <View style={{borderWidth: 0.6, borderBottomColor: '#CBCBCB'}} />
+      <Spacer height={20} />
 
       <CustomPopup
         title="Tem certeza que quer excluir sua conta?"
@@ -134,16 +134,16 @@ export default function ScreenPerfil() {
         btns={[
           {
             text: 'Cancelar',
-            color: theme.blueColor,
+            color: theme.colors.primary,
             borderRadius: 10,
-            borderColor: theme.blueColor,
+            borderColor: theme.colors.primary,
             borderWidth: 1,
             bgColor: 'white',
             onClick: () => setPopupVisibility(false),
           },
           {
             text: 'Confirmar',
-            bgColor: theme.secondondaryColor,
+            bgColor: theme.colors.textSecondaryVariant,
             borderRadius: 10,
             onClick: async () => {
               await handleDeleteAccount();
@@ -157,30 +157,20 @@ export default function ScreenPerfil() {
           <CircularName nome={user?.nome!} size={90} fontSize={40} />
         </TouchableOpacity>
 
-        <Text
-          style={{
-            fontSize: AppUtils.FontSizeGrande,
-            fontWeight: '700',
-            marginTop: 20,
-            color: '#002230',
-          }}>
+        <Spacer height={20} />
+        <Body weight="bold" color={theme.colors.textSecondaryVariant}>
           {user?.nome}
-        </Text>
+        </Body>
       </View>
+      <Spacer height={20} />
 
       <View style={{marginTop: 30, paddingHorizontal: 20}}>
         <View>
-          <Text
-            style={{
-              fontSize: AppUtils.FontSize,
-              fontWeight: '700',
-              marginBottom: 5,
-            }}>
-            Email
-          </Text>
+          <Body weight="bold">Email</Body>
+          <Spacer height={5} />
 
           <View style={perfilStyles.container}>
-            <Text>{user?.email}</Text>
+            <Body>{user?.email}</Body>
           </View>
         </View>
 
@@ -192,20 +182,14 @@ export default function ScreenPerfil() {
                 marginTop: 10,
               },
             ]}>
-            <Text
-              style={{
-                fontSize: AppUtils.FontSize,
-                fontWeight: '700',
-                marginBottom: 5,
-              }}>
-              Cartão do SUS
-            </Text>
+            <Body weight="bold">Cartão do SUS</Body>
+            <Spacer height={5} />
             <View style={perfilStyles.container}>
-              <Text>
+              <Body>
                 {cartaoSusVisibility
                   ? formatarCartaoSus()
                   : '*** **** **** ****'}
-              </Text>
+              </Body>
               <TouchableOpacity
                 onPress={() => setcartaoSusVisibility(prev => !prev)}
                 style={perfilStyles.eyeButton}>
@@ -238,21 +222,21 @@ export default function ScreenPerfil() {
             <MI name={'mode-edit'} size={20} color="#808080" />
           )}
 
-          <Text
-            style={{
-              fontSize: AppUtils.FontSizeMedium,
-              color: theme.secondondaryColor,
-              fontWeight: '600',
-            }}>
+          <Body weight="bold" color={theme.colors.textSecondaryVariant}>
             {isEmpty(cartaoSus)
               ? 'Adicionar cartão do SUS'
               : 'Editar cartão do SUS'}
-          </Text>
+          </Body>
         </TouchableOpacity>
 
         <View style={{marginBottom: 15}} />
+
         <View
-          style={{borderColor: theme.line, width: '100%', borderWidth: 0.2}}
+          style={{
+            borderColor: theme.colors.border,
+            width: '100%',
+            borderWidth: 0.2,
+          }}
         />
         <View style={{marginBottom: 15}} />
 
@@ -265,30 +249,28 @@ export default function ScreenPerfil() {
             alignSelf: 'flex-start',
           }}>
           <Feather name={'trash-2'} size={20} color="#808080" />
-          <Text
-            style={{
-              fontSize: AppUtils.FontSizeMedium,
-              color: theme.secondondaryColor,
-              fontWeight: '600',
-            }}>
+          <Body weight="bold" color={theme.colors.textSecondaryVariant}>
             Excluir conta
-          </Text>
+          </Body>
         </TouchableOpacity>
 
-        <View style={{marginBottom: 30}} />
-
-        <View style={{marginBottom: 25}} />
+        <Spacer height={40} />
 
         <CustomButton
           text="Sair da conta"
           iconSource={Feather}
           iconName="log-out"
+          iconColor={
+            theme.name == 'light'
+              ? theme.colors.background
+              : theme.colors.background
+          }
           onClick={async () => {
             await sair();
           }}
         />
       </View>
-    </View>
+    </ViewThemed>
   );
 }
 

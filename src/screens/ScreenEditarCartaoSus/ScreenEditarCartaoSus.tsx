@@ -1,13 +1,14 @@
-import {useNavigation, useRoute} from '@react-navigation/native';
-import {useContext, useState} from 'react';
-import {Image, Text, ToastAndroid, TouchableOpacity, View} from 'react-native';
 import {AppUtils, theme} from '../../utils/AppUtils.ts';
+import {Image, Text, ToastAndroid, TouchableOpacity, View} from 'react-native';
+import {useContext, useState} from 'react';
+import {useNavigation, useRoute} from '@react-navigation/native';
 
-import Feather from 'react-native-vector-icons/Feather';
 import CustomButton from '../../components/CustomButton.tsx';
+import Feather from 'react-native-vector-icons/Feather';
 import {InputCartaoSus} from '../../components/InputCartaoSus.tsx';
 import {SessionContext} from '../../context/SessionContext.tsx';
 import {UserService} from '../../service/UserService.ts';
+import ViewThemed from '../../components/ViewThemed.tsx';
 import {perfilStyles} from '../ScreenPerfil/ScreenPerfil.tsx';
 
 export default function ScreenEditarCartaoSus() {
@@ -38,7 +39,7 @@ export default function ScreenEditarCartaoSus() {
   };
 
   return (
-    <View style={{gap: 20, backgroundColor: '#fff', flex: 1}}>
+    <ViewThemed>
       <View
         style={{
           flexDirection: 'row',
@@ -107,6 +108,6 @@ export default function ScreenEditarCartaoSus() {
           isLoading={atualizando}
         />
       </View>
-    </View>
+    </ViewThemed>
   );
 }

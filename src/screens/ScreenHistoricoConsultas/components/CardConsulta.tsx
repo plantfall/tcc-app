@@ -15,12 +15,12 @@ import {Theme} from '../../../ui/theme/types';
 import {View} from 'react-native';
 import {getEspecializacao} from '../../ScreenAgendarConsulta/ScreenAgendarConsulta';
 import {useNavigation} from '@react-navigation/native';
-import {useTheme} from '../../../context/ThemeContext';
 
 type Props = {
   consulta: Consulta;
   emScreenConsultaAgendada?: boolean;
   callbackCancelar?: (consulta: Consulta) => void;
+  theme: Theme;
 };
 
 const size = 10;
@@ -28,6 +28,7 @@ export default function CardConsulta({
   consulta,
   emScreenConsultaAgendada,
   callbackCancelar,
+  theme,
 }: Props) {
   const {dataFormatada, especialista, horarioMarcado} = consulta;
 
@@ -39,8 +40,6 @@ export default function CardConsulta({
   const cs = new ConsultaService();
 
   const {user} = useContext(SessionContext);
-
-  const {theme} = useTheme();
 
   /**
    * Função que calcula o status de exibição, considerando o tempo.
@@ -109,7 +108,7 @@ export default function CardConsulta({
         borderWidth: 1,
         borderColor: '#BAE6C9',
         padding: 10,
-        backgroundColor: '#fff',
+        backgroundColor: theme.colors.background,
         marginBottom: 10,
       }}>
       <View
@@ -130,6 +129,7 @@ export default function CardConsulta({
           emScreenConsultaAgendada={emScreenConsultaAgendada!}
           corCirculo={corCirculo}
           statusText={statusText}
+          theme={theme}
         />
       </View>
 
@@ -191,10 +191,24 @@ function Left({
     <View style={{flexDirection: 'row', columnGap: 20}}>
       <FontAwesome name={iconName} color={corCirculo} size={20} />
       <View>
-        <Caption>Data: {dataFormatada}</Caption>
-        <Caption>Horário: {horarioMarcado}</Caption>
+        <Caption
+          color={
+            theme.name == 'light' ? theme.colors.secondary : theme.colors.text
+          }>
+          Data: {dataFormatada}
+        </Caption>
+        <Caption
+          color={
+            theme.name == 'light' ? theme.colors.secondary : theme.colors.text
+          }>
+          Horário: {horarioMarcado}
+        </Caption>
 
-        <Body color={theme.colors.textSecondary} weight="bold">
+        <Body
+          color={
+            theme.name == 'light' ? theme.colors.secondary : theme.colors.text
+          }
+          weight="bold">
           {especialista.nome}
         </Body>
         <Spacer height={20} />
@@ -209,8 +223,9 @@ type d = {
   corCirculo: string;
   statusText: string;
   emScreenConsultaAgendada: boolean;
+  theme: Theme;
 };
-function Direita({corCirculo, statusText, emScreenConsultaAgendada}: d) {
+function Direita({corCirculo, statusText, emScreenConsultaAgendada, theme}: d) {
   if (emScreenConsultaAgendada) return null;
 
   return (
@@ -230,7 +245,7 @@ function Direita({corCirculo, statusText, emScreenConsultaAgendada}: d) {
         }}
       />
 
-      <StatusText>{statusText}</StatusText>
+      <StatusText color={theme.colors.text}>{statusText}</StatusText>
     </View>
   );
 }

@@ -1,13 +1,15 @@
-import {AppUtils, theme} from '../../utils/AppUtils';
 import {Consulta, ConsultaService} from '../../service/ConsultaService';
-import {FlatList, Text, ToastAndroid, View} from 'react-native';
+import {FlatList, ToastAndroid, View} from 'react-native';
 import {useContext, useEffect, useState} from 'react';
 
+import {Body} from '../../ui/theme/components/typography';
 import CardConsulta from './components/CardConsulta';
 import CustomButton from '../../components/CustomButton';
 import CustomPopup from '../../components/CustomPopup';
 import {SessionContext} from '../../context/SessionContext';
+import ViewThemed from '../../components/ViewThemed';
 import Voltar from '../../components/Voltar';
+import {useTheme} from '../../context/ThemeContext';
 
 export default function ScreenHistoricoConsultas() {
   const [consultas, setConsultas] = useState<Consulta[]>([]);
@@ -17,7 +19,10 @@ export default function ScreenHistoricoConsultas() {
     null,
   );
 
+  const [isPopupVisible, setIsPopupVisible] = useState(true);
+
   const {user, modoDesenvolvedor} = useContext(SessionContext);
+  const {theme} = useTheme();
 
   useEffect(() => {
     loadConsultas();
@@ -52,32 +57,36 @@ export default function ScreenHistoricoConsultas() {
       ToastAndroid.show(e.message, ToastAndroid.LONG);
     } finally {
       setConsultaSelected(null);
+      setIsPopupVisible(false);
     }
   };
 
   return (
-    <View style={{backgroundColor: '#fff', flex: 1}}>
+    <ViewThemed>
       <Voltar text="Minhas consultas" />
 
       <CustomPopup
         title="Confirma o cancelamento da consulta?"
         message="Ao confirmar, sua consulta será cancelada. Você poderá agendar novamente quando desejar."
-        visible={consultaSelected != null}
-        onClose={() => setConsultaSelected(null)}
+        visible={isPopupVisible}
+        onClose={() => {
+          setConsultaSelected(null);
+          setIsPopupVisible(false);
+        }}
         btns={[
           {
             text: 'Cancelar',
-            color: theme.blueColor,
+            color: theme.colors.primary,
             bgColor: 'white',
             borderWidth: 1,
             borderRadius: 10,
-            borderColor: theme.blueColor,
-            onClick: () => setConsultaSelected(null),
+            borderColor: theme.colors.primary,
+            onClick: () => setIsPopupVisible(false),
           },
 
           {
             text: 'Confirmar',
-            bgColor: theme.blueColor,
+            bgColor: theme.colors.primary,
             borderRadius: 10,
             onClick: async () => {
               await handleCancelarConsulta();
@@ -99,26 +108,24 @@ export default function ScreenHistoricoConsultas() {
             <CardConsulta
               consulta={item}
               callbackCancelar={consulta => {
+                console.log('clicou');
+                setIsPopupVisible(true);
                 setConsultaSelected(consulta);
+                console.log(consulta);
               }}
+              theme={theme}
             />
           )}
           ListEmptyComponent={() => {
             return (
-              <View>
-                <Text
-                  style={{
-                    textAlign: 'center',
-                    fontSize: AppUtils.FontSizeMedium,
-                  }}>
-                  Nenhuma consulta encontrada!
-                </Text>
+              <View style={{alignItems: 'center'}}>
+                <Body>Nenhuma consulta encontrada!</Body>
               </View>
             );
           }}
           contentContainerStyle={{paddingBottom: 150}} // 👈 resolve
         />
       </View>
-    </View>
+    </ViewThemed>
   );
 }

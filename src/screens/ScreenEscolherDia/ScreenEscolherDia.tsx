@@ -1,14 +1,15 @@
-import {AppUtils, GreenColor} from '../../utils/AppUtils';
 import {Calendar, LocaleConfig} from 'react-native-calendars';
-import {Text, View} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
-import {CircleImage} from '../../components/CircleImage';
+import {Body} from '../../ui/theme/components/typography';
 import {Consulta} from '../../service/ConsultaService';
 import {ConverterStringParaDataFormatoBrasileiroPorExtendo} from '../../utils/DateUtils';
 import {Especialista} from '../ScreenAgendarConsulta/useAgendarConsulta';
+import Top from './components/Top';
+import {View} from 'react-native';
+import ViewThemed from '../../components/ViewThemed';
 import Voltar from '../../components/Voltar';
-import {getEspecializacao} from '../ScreenAgendarConsulta/ScreenAgendarConsulta';
+import {useTheme} from '../../context/ThemeContext';
 
 // Configurar locale para português (opcional, mas recomendado)
 LocaleConfig.locales['pt'] = {
@@ -128,18 +129,25 @@ export default function ScreenEscolherDia() {
     }
   }
 
+  const {theme} = useTheme();
+
   return (
-    <View style={{backgroundColor: '#fff', flex: 1}}>
+    <ViewThemed>
       <Voltar text="Calendário de Consulta" />
       <View style={{marginHorizontal: 10, marginTop: 20}}>
-        <Top especialista={especialista} />
-        <Text style={{margin: 10, fontSize: AppUtils.FontSize}}>
-          Selecione no calendário o dia em que deseja realizar sua consulta:
-        </Text>
-        <Text
-          style={{margin: 10, color: '#8E8E8E', fontSize: AppUtils.FontSize}}>
-          *Os dias destacados estão disponíveis para agendamento
-        </Text>
+        <Top especialista={especialista} theme={theme} />
+
+        <View style={{margin: 10}}>
+          <Body>
+            Selecione no calendário o dia em que deseja realizar sua consulta:
+          </Body>
+        </View>
+
+        <View style={{margin: 10}}>
+          <Body color={theme.colors.textLabel}>
+            *Os dias destacados estão disponíveis para agendamento
+          </Body>
+        </View>
 
         <Calendar
           markedDates={markedDates}
@@ -173,35 +181,6 @@ export default function ScreenEscolherDia() {
           }}
         />
       </View>
-    </View>
-  );
-}
-
-type Props = {
-  especialista: Especialista;
-};
-function Top({especialista}: Props) {
-  return (
-    <View
-      style={{
-        borderRadius: 10,
-        borderColor: GreenColor,
-        borderWidth: 1,
-        padding: 10,
-        marginVertical: 10,
-        width: '100%',
-      }}>
-      <View style={{flexDirection: 'row', gap: 15, alignItems: 'center'}}>
-        <CircleImage especialista={especialista} size={50} />
-        <View>
-          <Text style={{fontSize: AppUtils.FontSizeMedium, fontWeight: '600'}}>
-            {especialista.nome}
-          </Text>
-          <Text style={{fontSize: AppUtils.FontSize}}>
-            {getEspecializacao(especialista.especializacao)}
-          </Text>
-        </View>
-      </View>
-    </View>
+    </ViewThemed>
   );
 }

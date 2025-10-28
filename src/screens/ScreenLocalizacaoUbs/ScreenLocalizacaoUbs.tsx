@@ -9,6 +9,7 @@ import React, {useEffect, useRef} from 'react';
 import {Animated} from 'react-native';
 import CustomButton from '../../components/CustomButton.tsx';
 import Spacer from '../../components/Spacer.tsx';
+import ViewThemed from '../../components/ViewThemed.tsx';
 import Voltar from '../../components/Voltar.tsx';
 
 export default function ScreenLocalizacaoUbs() {
@@ -23,11 +24,7 @@ export default function ScreenLocalizacaoUbs() {
   }, []);
 
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: '#FFFFFF',
-      }}>
+    <ViewThemed>
       <Voltar text="Localização da UBS" />
       <View>
         <Animated.Image
@@ -49,7 +46,7 @@ export default function ScreenLocalizacaoUbs() {
 
         <Card />
       </View>
-    </View>
+    </ViewThemed>
   );
 }
 

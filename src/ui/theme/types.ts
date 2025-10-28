@@ -14,20 +14,29 @@ export interface ThemeTypography {
     medium: number;
     large: number;
     title: number;
+    extraLarge: number;
   };
   // Garante que o objeto FontWeight tenha as chaves esperadas (regular/bold)
   // e que os valores (ex: '400') sejam compatíveis com o tipo do React Native.
   fontWeight: Record<ThemeWeightKey, ReactNativeFontWeight>;
 }
 
+type name = 'dark' | 'light';
+
 export interface Theme {
+  name: name;
   colors: {
     background: string;
+    backgroundVariant: string;
     text: string;
     primary: string;
     secondary: string;
     textSecondary: string;
     textLabel: string;
+    textLabelVariant: string;
+    textLabelSecondVariant: string;
+    textSecondaryVariant: string;
+    border: string;
   };
   typography: ThemeTypography;
 }

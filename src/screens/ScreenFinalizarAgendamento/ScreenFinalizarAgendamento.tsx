@@ -1,14 +1,17 @@
-import {useNavigation, useRoute} from '@react-navigation/native';
-import {useContext, useEffect, useState} from 'react';
-import {Text, ToastAndroid, TouchableOpacity, View} from 'react-native';
 import {Consulta, ConsultaService} from '../../service/ConsultaService';
+import {ToastAndroid, TouchableOpacity, View} from 'react-native';
+import {useContext, useEffect, useState} from 'react';
+import {useNavigation, useRoute} from '@react-navigation/native';
 
-import type {StackNavigationProp} from '@react-navigation/stack';
+import {Body} from '../../ui/theme/components/typography';
 import CustomButton from '../../components/CustomButton';
-import Voltar from '../../components/Voltar';
-import {SessionContext} from '../../context/SessionContext';
-import {RootStackParamList} from '../../routes/app.routes';
 import {GreenColor} from '../../utils/AppUtils';
+import {RootStackParamList} from '../../routes/app.routes';
+import {SessionContext} from '../../context/SessionContext';
+import type {StackNavigationProp} from '@react-navigation/stack';
+import ViewThemed from '../../components/ViewThemed';
+import Voltar from '../../components/Voltar';
+import {useTheme} from '../../context/ThemeContext';
 
 const HORARIOS = [
   '08:00',
@@ -59,6 +62,7 @@ export default function ScreenFinalizarAgendamento() {
   };
 
   const nav = useNavigation<StackNavigationProp<RootStackParamList>>();
+  const {theme} = useTheme();
 
   const handleAgendar = async () => {
     if (horarioSelected == '') return;
@@ -83,11 +87,11 @@ export default function ScreenFinalizarAgendamento() {
   };
 
   return (
-    <View style={{backgroundColor: '#fff', flex: 1}}>
+    <ViewThemed>
       <Voltar text="Agendar Consulta" />
 
       <View style={{padding: 15, marginTop: 10}}>
-        <Text>Escolha o horário do atendimento</Text>
+        <Body>Escolha o horário do atendimento</Body>
         <View>
           <View
             style={{
@@ -112,7 +116,14 @@ export default function ScreenFinalizarAgendamento() {
                   alignItems: 'center',
                   borderRadius: 5,
                 }}>
-                <Text>{v}</Text>
+                <Body
+                  color={
+                    theme.name == 'light'
+                      ? theme.colors.text
+                      : theme.colors.background
+                  }>
+                  {v}
+                </Body>
               </TouchableOpacity>
             ))}
           </View>
@@ -124,6 +135,6 @@ export default function ScreenFinalizarAgendamento() {
           isLoading={isLoading}
         />
       </View>
-    </View>
+    </ViewThemed>
   );
 }

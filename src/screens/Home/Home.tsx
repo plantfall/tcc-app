@@ -5,6 +5,7 @@ import {FontAwesome} from '@react-native-vector-icons/fontawesome';
 import HomeHeader from './components/HomeHeader';
 import {SessionContext} from '../../context/SessionContext';
 import {Theme} from '../../ui/theme/types';
+import ViewThemed from '../../components/ViewThemed';
 import {stylesAuth} from '../ScreenSignUp/ScreenSignUp';
 import {useContext} from 'react';
 import {useNavigation} from '@react-navigation/native';
@@ -21,7 +22,7 @@ export default function Home() {
   const {theme} = useTheme();
 
   return (
-    <View style={{flex: 1, backgroundColor: theme.colors.background}}>
+    <ViewThemed>
       <HomeHeader nome={user?.nome!} />
       <View style={{rowGap: 20, marginTop: 50, marginHorizontal: 15}}>
         <Item
@@ -47,7 +48,7 @@ export default function Home() {
           <View>
             <Text
               style={{
-                color: theme.secondondaryColor,
+                color: theme.colors.text,
                 fontWeight: '700',
                 fontSize: 15,
               }}>
@@ -66,7 +67,7 @@ export default function Home() {
           </View>
         )}
       </View>
-    </View>
+    </ViewThemed>
   );
 }
 
@@ -76,7 +77,7 @@ type Props = {
   destination: string;
   theme: Theme;
 };
-function Item({text, iconName, destination}: Props) {
+function Item({text, iconName, destination, theme}: Props) {
   const nav = useNavigation();
   return (
     <TouchableOpacity
@@ -92,11 +93,11 @@ function Item({text, iconName, destination}: Props) {
           borderColor: '#d3d1d1ff',
           borderWidth: 1,
           borderRadius: 10,
-          backgroundColor: 'white',
+          backgroundColor: theme.colors.background,
           height: 90,
           paddingHorizontal: 15,
         }}>
-        <FontAwesome name={iconName} color={'#1B8CB9'} size={20} />
+        <FontAwesome name={iconName} color={theme.colors.primary} size={20} />
         <Body>{text}</Body>
       </View>
     </TouchableOpacity>

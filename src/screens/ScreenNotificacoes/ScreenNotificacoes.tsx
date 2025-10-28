@@ -1,8 +1,7 @@
-import {useContext, useEffect, useState} from 'react';
+import {Body, Label} from '../../ui/theme/components/typography';
 import {
   FlatList,
   Image,
-  Text,
   ToastAndroid,
   TouchableOpacity,
   View,
@@ -11,13 +10,17 @@ import {
   Notificacao,
   NotificationService,
 } from '../../service/NotificationService';
-import {AppUtils, theme} from '../../utils/AppUtils';
+import {useContext, useEffect, useState} from 'react';
 
-import {useNavigation} from '@react-navigation/native';
 import AntDesignIcon from 'react-native-vector-icons/AntDesign';
+import CustomButton from '../../components/CustomButton';
 import Feather from 'react-native-vector-icons/Feather';
 import Foundation from 'react-native-vector-icons/Foundation';
 import {SessionContext} from '../../context/SessionContext';
+import Spacer from '../../components/Spacer';
+import ViewThemed from '../../components/ViewThemed';
+import {useNavigation} from '@react-navigation/native';
+import {useTheme} from '../../context/ThemeContext';
 
 export default function ScreenNotificacoes() {
   const [notificacoes, setNotificacoes] = useState<Notificacao[]>([]);
@@ -25,6 +28,7 @@ export default function ScreenNotificacoes() {
   const nav = useNavigation();
 
   const {user} = useContext(SessionContext);
+  const {theme} = useTheme();
 
   useEffect(() => {
     loadNotificacoes();
@@ -60,7 +64,7 @@ export default function ScreenNotificacoes() {
 
   return (
     // 1. O contêiner principal com flex: 1 garante que ele ocupe toda a tela.
-    <View style={{backgroundColor: '#fff', flex: 1}}>
+    <ViewThemed>
       {/* 2. Cabeçalho (Fixo no topo) */}
       <View
         style={{
@@ -71,14 +75,8 @@ export default function ScreenNotificacoes() {
         }}>
         <View
           style={{flexDirection: 'row', alignItems: 'center', columnGap: 15}}>
-          <Feather name="bell" color={'black'} size={20} />
-          <Text
-            style={{
-              fontSize: AppUtils.FontSizeGrande,
-              fontWeight: '700',
-            }}>
-            Notificações
-          </Text>
+          <Feather name="bell" color={theme.colors.text} size={20} />
+          <Body weight="bold">Notificações</Body>
         </View>
 
         <TouchableOpacity
@@ -116,14 +114,9 @@ export default function ScreenNotificacoes() {
                 source={require('../../assets/images/sem_notificacoes.png')}
                 style={{width: 300, height: 300}}
               />
-              <Text
-                style={{
-                  fontSize: AppUtils.FontSizeGrande,
-                  fontWeight: '700',
-                  marginTop: 20,
-                }}>
-                Sem notificações no momento!
-              </Text>
+              <Spacer />
+
+              <Body weight="bold">Sem notificações no momento!</Body>
             </View>
           )}
         />
@@ -137,34 +130,21 @@ export default function ScreenNotificacoes() {
               height: 100,
               justifyContent: 'center',
               alignItems: 'center',
-              borderTopColor: theme.line,
+              borderTopColor: theme.colors.border,
               borderTopWidth: 0.5,
-              backgroundColor: '#fff',
+              //backgroundColor: '#fff',
               paddingHorizontal: 15,
             }}>
-            <TouchableOpacity
-              onPress={marcarTodasComoLidas}
-              style={{
-                backgroundColor: '#1b8cb9',
-                paddingVertical: 12,
-                paddingHorizontal: 30,
-                borderRadius: 8,
-                width: '90%', // Tornando o botão um pouco maior
-                alignItems: 'center',
-              }}>
-              <Text
-                style={{
-                  fontSize: AppUtils.FontSizeMedium,
-                  color: '#fff',
-                  fontWeight: 'bold',
-                }}>
-                Limpar notificações
-              </Text>
-            </TouchableOpacity>
+            <CustomButton
+              onClick={marcarTodasComoLidas}
+              text="Limpar notificações"
+              width={'90%'}
+              textWeight={'bold'}
+            />
           </View>
         )}
       </View>
-    </View>
+    </ViewThemed>
   );
 }
 
@@ -176,45 +156,28 @@ type Props = {
 function Card({notificacao}: Props) {
   const {titulo, mensagem} = notificacao;
 
+  const {theme} = useTheme();
+
   return (
     <View
       style={{
         padding: 15,
-        backgroundColor: 'white',
+        backgroundColor: theme.colors.background,
         marginBottom: 5,
-        borderBottomColor: theme.line,
+        borderBottomColor: theme.colors.textLabel,
         borderBottomWidth: 0.5,
         marginHorizontal: 10,
       }}>
       <View style={{flexDirection: 'row', columnGap: 10}}>
         <Foundation name="alert" size={20} color={'#ffc100'} />
-        <Text
-          style={{
-            fontSize: AppUtils.FontSizeMedium,
-            fontWeight: 'bold',
-            marginBottom: 10,
-          }}>
-          {titulo}
-        </Text>
+        <Body weight="bold">{titulo}</Body>
+        <Spacer />
       </View>
 
-      <Text
-        style={{
-          fontSize: AppUtils.FontSizeMedium,
-          fontWeight: '400',
-          color: '#2C2B2B',
-        }}>
-        {mensagem}
-      </Text>
-
-      <Text
-        style={{
-          fontSize: AppUtils.FontSize,
-          fontWeight: '300',
-          color: '#2C2B2B',
-        }}>
+      <Body>{mensagem}</Body>
+      <Label color={theme.colors.textLabelVariant}>
         Se não for possível comparecer, lembre-se de desmarcar.
-      </Text>
+      </Label>
     </View>
   );
 }
