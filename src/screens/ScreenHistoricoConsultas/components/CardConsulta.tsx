@@ -1,20 +1,20 @@
+import {useContext, useEffect, useState} from 'react';
+import {Consulta, ConsultaService} from '../../../service/ConsultaService';
 import {
   Body,
   Caption,
   StatusText,
 } from '../../../ui/theme/components/typography';
-import {Consulta, ConsultaService} from '../../../service/ConsultaService';
-import {useContext, useEffect, useState} from 'react';
 
-import CustomButton from '../../../components/CustomButton';
-import {Especialista} from '../../ScreenAgendarConsulta/useAgendarConsulta';
 import FontAwesome from '@react-native-vector-icons/fontawesome';
-import {SessionContext} from '../../../context/SessionContext';
-import Spacer from '../../../components/Spacer';
-import {Theme} from '../../../ui/theme/types';
-import {View} from 'react-native';
-import {getEspecializacao} from '../../ScreenAgendarConsulta/ScreenAgendarConsulta';
 import {useNavigation} from '@react-navigation/native';
+import {View} from 'react-native';
+import CustomButton from '../../../components/CustomButton';
+import Spacer from '../../../components/Spacer';
+import {SessionContext} from '../../../context/SessionContext';
+import {Theme} from '../../../ui/theme/types';
+import {getEspecializacao} from '../../ScreenAgendarConsulta/ScreenAgendarConsulta';
+import {Especialista} from '../../ScreenAgendarConsulta/useAgendarConsulta';
 
 type Props = {
   consulta: Consulta;
@@ -152,6 +152,8 @@ export default function CardConsulta({
             text="Cancelar"
             width={100}
             textColor="red"
+            height={45}
+            paddingVertical={5}
           />
 
           <CustomButton
@@ -164,6 +166,8 @@ export default function CardConsulta({
             }
             text="Editar"
             width={100}
+            height={45}
+            paddingVertical={5}
           />
         </View>
       )}
@@ -193,20 +197,26 @@ function Left({
       <View>
         <Caption
           color={
-            theme.name == 'light' ? theme.colors.secondary : theme.colors.text
+            theme.name == 'light'
+              ? theme.colors.textSecondaryVariant
+              : theme.colors.text
           }>
           Data: {dataFormatada}
         </Caption>
         <Caption
           color={
-            theme.name == 'light' ? theme.colors.secondary : theme.colors.text
+            theme.name == 'light'
+              ? theme.colors.textSecondaryVariant
+              : theme.colors.text
           }>
           Horário: {horarioMarcado}
         </Caption>
 
         <Body
           color={
-            theme.name == 'light' ? theme.colors.secondary : theme.colors.text
+            theme.name == 'light'
+              ? theme.colors.textSecondaryVariant
+              : theme.colors.text
           }
           weight="bold">
           {especialista.nome}

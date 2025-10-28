@@ -7,7 +7,6 @@ import {CircularName} from '../../../components/CircularName';
 import {ConsultaService} from '../../../service/ConsultaService';
 import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from '@react-native-vector-icons/fontawesome';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import LinearGradient from 'react-native-linear-gradient';
 import {NotificationService} from '../../../service/NotificationService';
 import {SessionContext} from '../../../context/SessionContext';
@@ -121,36 +120,36 @@ function Top({nome}: Props) {
         <Subtitle weight="bold"> Ola, {limitarNome(nome)}!</Subtitle>
       </View>
 
-      <View style={{flexDirection: 'row', columnGap: 20}}>
+      {/* <View style={{flexDirection: 'row', columnGap: 20}}>
         <TouchableOpacity onPress={toggleTheme}>
           <Ionicons
             name={theme.name == 'light' ? 'sunny' : 'moon'}
             color={theme.colors.primary}
             size={20}
           />
+        </TouchableOpacity> */}
+
+      <TouchableOpacity onPress={() => nav.navigate('ScreenNotificacoes')}>
+        <TouchableOpacity
+          style={{position: 'relative'}}
+          onPress={() => nav.navigate('ScreenNotificacoes')}>
+          <Feather name="bell" color={BlueColor} size={20} />
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => nav.navigate('ScreenNotificacoes')}>
+        {notificacoesAmount > 0 && (
           <TouchableOpacity
-            style={{position: 'relative'}}
-            onPress={() => nav.navigate('ScreenNotificacoes')}>
-            <Feather name="bell" color={BlueColor} size={20} />
-          </TouchableOpacity>
-
-          {notificacoesAmount > 0 && (
-            <TouchableOpacity
-              onPress={() => nav.navigate('ScreenNotificacoes')}
-              style={{
-                position: 'absolute',
-                backgroundColor: theme.secondondaryColor,
-                height: circleSize,
-                width: circleSize,
-                borderRadius: circleSize / 2,
-              }}
-            />
-          )}
-        </TouchableOpacity>
-      </View>
+            onPress={() => nav.navigate('ScreenNotificacoes')}
+            style={{
+              position: 'absolute',
+              backgroundColor: theme.colors.textSecondaryVariant,
+              height: circleSize,
+              width: circleSize,
+              borderRadius: circleSize / 2,
+            }}
+          />
+        )}
+      </TouchableOpacity>
+      {/* </View> */}
     </View>
   );
 }

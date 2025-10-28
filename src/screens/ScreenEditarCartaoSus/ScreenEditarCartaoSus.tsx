@@ -1,14 +1,16 @@
-import {AppUtils, theme} from '../../utils/AppUtils.ts';
-import {Image, Text, ToastAndroid, TouchableOpacity, View} from 'react-native';
-import {useContext, useState} from 'react';
 import {useNavigation, useRoute} from '@react-navigation/native';
+import {useContext, useState} from 'react';
+import {Image, ToastAndroid, TouchableOpacity, View} from 'react-native';
 
-import CustomButton from '../../components/CustomButton.tsx';
 import Feather from 'react-native-vector-icons/Feather';
+import CustomButton from '../../components/CustomButton.tsx';
 import {InputCartaoSus} from '../../components/InputCartaoSus.tsx';
-import {SessionContext} from '../../context/SessionContext.tsx';
-import {UserService} from '../../service/UserService.ts';
+import Spacer from '../../components/Spacer.tsx';
 import ViewThemed from '../../components/ViewThemed.tsx';
+import {SessionContext} from '../../context/SessionContext.tsx';
+import {useTheme} from '../../context/ThemeContext.tsx';
+import {UserService} from '../../service/UserService.ts';
+import {Body} from '../../ui/theme/components/typography/index.tsx';
 import {perfilStyles} from '../ScreenPerfil/ScreenPerfil.tsx';
 
 export default function ScreenEditarCartaoSus() {
@@ -22,6 +24,8 @@ export default function ScreenEditarCartaoSus() {
 
   const route = useRoute();
   const editMode = route.params?.editMode as boolean;
+
+  const {theme} = useTheme();
 
   const handleAtualizarCartaoSus = async () => {
     const as = new UserService();
@@ -49,12 +53,10 @@ export default function ScreenEditarCartaoSus() {
           marginTop: 20,
         }}>
         <TouchableOpacity style={{padding: 5}} onPress={() => nav.goBack()}>
-          <Feather name="arrow-left" size={27} color={'#000'} />
+          <Feather name="arrow-left" size={25} color={theme.colors.text} />
         </TouchableOpacity>
 
-        <Text style={{fontSize: AppUtils.FontSizeGrande, fontWeight: '700'}}>
-          Cartão do SUS
-        </Text>
+        <Body weight="bold">Cartão do SUS</Body>
       </View>
       <View style={{borderWidth: 0.6, borderBottomColor: '#CBCBCB'}} />
 
@@ -70,27 +72,22 @@ export default function ScreenEditarCartaoSus() {
       </View>
 
       <View style={{marginTop: 40, paddingHorizontal: 20}}>
-        <Text
-          style={{
-            fontSize: AppUtils.FontSizeMedium,
-            fontWeight: '700',
-            marginBottom: 50,
-            color: theme.secondondaryColor,
-          }}>
+        <Body
+          weight="bold"
+          color={
+            theme.name == 'light'
+              ? theme.colors.textSecondaryVariant //secondondaryColor
+              : theme.colors.text
+          }>
           O Cartão do SUS permite que suas informações médicas sejam vinculadas
           ao seu perfil no sistema público de saúde.
-        </Text>
+        </Body>
 
+        <Spacer />
         <View>
-          <Text
-            style={{
-              fontSize: AppUtils.FontSize,
-              fontWeight: '700',
-              marginBottom: 5,
-            }}>
-            Cartão do SUS
-          </Text>
+          <Body weight="bold">Cartão do SUS</Body>
 
+          <Spacer height={5} />
           <InputCartaoSus
             style={perfilStyles.container}
             cartaoSusInput={cartaoSus}
@@ -104,6 +101,12 @@ export default function ScreenEditarCartaoSus() {
           text={editMode ? 'Atualizar' : 'Salvar'}
           iconSource={Feather}
           iconName="check"
+          textColor={
+            theme.name == 'light' ? theme.colors.background : theme.colors.text
+          }
+          iconColor={
+            theme.name == 'light' ? theme.colors.background : theme.colors.text
+          }
           onClick={handleAtualizarCartaoSus}
           isLoading={atualizando}
         />

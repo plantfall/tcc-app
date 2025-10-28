@@ -162,6 +162,7 @@ export default function ScreenSignUp() {
 
           <View style={{marginTop: 50}} />
           <CustomButton
+            textColor="#fff"
             text="Criar conta"
             isLoading={isLoading}
             bgColor={BlueColor}

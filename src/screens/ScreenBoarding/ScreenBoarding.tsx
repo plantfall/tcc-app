@@ -80,6 +80,7 @@ export default function ScreenBoarding() {
 
       <View style={{width: '100%', marginTop: 50, rowGap: 20}}>
         <CustomButton
+          textColor="#fff"
           text="Já possuo conta"
           bgColor={BlueColor}
           onClick={() => nav.navigate('ScreenLogin')}

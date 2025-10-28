@@ -124,6 +124,7 @@ export default function ScreenLogin() {
 
             <View style={{marginTop: 60}} />
             <CustomButton
+              textColor="#fff"
               text="Entrar"
               isLoading={isLoading}
               bgColor={BlueColor}

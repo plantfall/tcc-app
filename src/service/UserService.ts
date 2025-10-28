@@ -17,12 +17,18 @@ export class UserService {
       email: authRequest.email.trim(),
       nome: authRequest.name.trim(),
       uid: uid.trim(),
-      password: authRequest.password,
-      createdAt: firestore.FieldValue.serverTimestamp(),
+      senha: authRequest.password,
+      dtCriacao: firestore.FieldValue.serverTimestamp(),
     };
 
     try {
-      await firestore().collection('users').doc(uid).set(user);
+      await firestore()
+        .collection('app')
+        .doc('app-tcc')
+        .collection('users')
+        .doc(uid)
+        .set(user);
+
       return user;
     } catch (error: any) {
       throw error;
@@ -37,16 +43,15 @@ export class UserService {
         throw new Error('Dados do usuário não encontrados no Firestore.');
       }
 
-      const {name, nome, createdAt, created_at, cartao_sus, email, password} =
-        userDoc.data() as any;
+      const {nome, dtCriacao, cartaoSus, email, senha} = userDoc.data() as any;
 
       const userData: User = {
-        cartaoSus: cartao_sus,
+        cartaoSus: cartaoSus,
         email: email,
-        nome: nome == undefined ? name : nome,
-        password: password,
+        nome: nome,
+        senha: senha,
         uid: userId,
-        createdAt: createdAt == undefined ? createdAt : created_at,
+        dtCriacao: dtCriacao,
       };
 
       return userData;
@@ -68,6 +73,8 @@ export class UserService {
       });
 
       const userSnapshot = await firestore()
+        .collection('app')
+        .doc('app-tcc')
         .collection('users')
         .where('email', '==', email.trim())
         .get();
@@ -98,10 +105,15 @@ export class UserService {
         userId: {valor: userId, minimoDeCaracteres: 5},
       });
 
-      await firestore().collection('users').doc(trimmedUserId).update({
-        cartaoSus: trimmedCartaoSus,
-        updatedAt: firestore.FieldValue.serverTimestamp(),
-      });
+      await firestore()
+        .collection('app')
+        .doc('app-tcc')
+        .collection('users')
+        .doc(trimmedUserId)
+        .update({
+          cartaoSus: trimmedCartaoSus,
+          updatedAt: firestore.FieldValue.serverTimestamp(),
+        });
 
       console.log(
         `Cartão SUS do usuário ${trimmedUserId} atualizado com sucesso.`,
@@ -120,10 +132,15 @@ export class UserService {
 
   async delete(userId: string): Promise<void> {
     try {
-      await firestore().collection('users').doc(userId.trim()).update({
-        deleted: true,
-        updatedAt: firestore.FieldValue.serverTimestamp(),
-      });
+      await firestore()
+        .collection('app')
+        .doc('app-tcc')
+        .collection('users')
+        .doc(userId.trim())
+        .update({
+          deleted: true,
+          updatedAt: firestore.FieldValue.serverTimestamp(),
+        });
     } catch (error) {
       throw error;
     }

@@ -1,15 +1,15 @@
-import {Consulta, ConsultaService} from '../../service/ConsultaService';
-import {FlatList, ToastAndroid, View} from 'react-native';
 import {useContext, useEffect, useState} from 'react';
+import {FlatList, ToastAndroid, View} from 'react-native';
+import {Consulta, ConsultaService} from '../../service/ConsultaService';
 
-import {Body} from '../../ui/theme/components/typography';
-import CardConsulta from './components/CardConsulta';
 import CustomButton from '../../components/CustomButton';
 import CustomPopup from '../../components/CustomPopup';
-import {SessionContext} from '../../context/SessionContext';
 import ViewThemed from '../../components/ViewThemed';
 import Voltar from '../../components/Voltar';
+import {SessionContext} from '../../context/SessionContext';
 import {useTheme} from '../../context/ThemeContext';
+import {Body} from '../../ui/theme/components/typography';
+import CardConsulta from './components/CardConsulta';
 
 export default function ScreenHistoricoConsultas() {
   const [consultas, setConsultas] = useState<Consulta[]>([]);
@@ -19,7 +19,7 @@ export default function ScreenHistoricoConsultas() {
     null,
   );
 
-  const [isPopupVisible, setIsPopupVisible] = useState(true);
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
 
   const {user, modoDesenvolvedor} = useContext(SessionContext);
   const {theme} = useTheme();
