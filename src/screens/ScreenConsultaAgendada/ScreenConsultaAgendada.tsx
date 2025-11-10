@@ -1,3 +1,4 @@
+import {useNavigation, useRoute} from '@react-navigation/native';
 import {
   BackHandler,
   Image,
@@ -5,15 +6,14 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {useNavigation, useRoute} from '@react-navigation/native';
 
-import AntDesignIcon from 'react-native-vector-icons/AntDesign';
-import CardConsulta from '../ScreenHistoricoConsultas/components/CardConsulta';
-import CustomButton from '../../components/CustomButton';
-import {Title} from '../../ui/theme/components/typography';
-import ViewThemed from '../../components/ViewThemed';
 import {useEffect} from 'react';
+import AntDesignIcon from 'react-native-vector-icons/AntDesign';
+import CustomButton from '../../components/CustomButton';
+import ViewThemed from '../../components/ViewThemed';
 import {useTheme} from '../../context/ThemeContext';
+import {Title} from '../../ui/theme/components/typography';
+import CardConsulta from '../ScreenHistoricoConsultas/components/CardConsulta';
 
 export default function ScreenConsultaAgendada() {
   const {params} = useRoute();
@@ -84,6 +84,7 @@ export default function ScreenConsultaAgendada() {
         <CardConsulta
           emScreenConsultaAgendada={true}
           consulta={consultaAgendada}
+          theme={theme}
         />
 
         <View

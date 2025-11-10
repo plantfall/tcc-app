@@ -5,13 +5,14 @@ export const darkTheme: Theme = {
   colors: {
     // Fundo Principal: Escuro (base para a tela)
     background: '#121212',
+    backgroundVariant: '#F5F5F5',
 
     // Texto Principal: Claro
     text: '#E0E0E0',
 
     // Texto Secundário: Um pouco mais apagado que o principal
     textSecondary: '#002230',
-
+    textSecondaryVariant: '#021E2A',
     // Texto de Label/Hint: Tons de cinza mais sutis
     textLabel: '#6A6A6A',
     textLabelVariant: '#8D8D8D',

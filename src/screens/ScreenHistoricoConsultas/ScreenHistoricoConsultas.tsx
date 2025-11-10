@@ -102,29 +102,31 @@ export default function ScreenHistoricoConsultas() {
             bgColor="red"
           />
         )}
-        <FlatList
-          data={consultas}
-          renderItem={({item}) => (
-            <CardConsulta
-              consulta={item}
-              callbackCancelar={consulta => {
-                console.log('clicou');
-                setIsPopupVisible(true);
-                setConsultaSelected(consulta);
-                console.log(consulta);
-              }}
-              theme={theme}
-            />
-          )}
-          ListEmptyComponent={() => {
-            return (
-              <View style={{alignItems: 'center'}}>
-                <Body>Nenhuma consulta encontrada!</Body>
-              </View>
-            );
-          }}
-          contentContainerStyle={{paddingBottom: 150}} // 👈 resolve
-        />
+        {theme && (
+          <FlatList
+            data={consultas}
+            renderItem={({item}) => (
+              <CardConsulta
+                consulta={item}
+                callbackCancelar={consulta => {
+                  console.log('clicou');
+                  setIsPopupVisible(true);
+                  setConsultaSelected(consulta);
+                  console.log(consulta);
+                }}
+                theme={theme}
+              />
+            )}
+            ListEmptyComponent={() => {
+              return (
+                <View style={{alignItems: 'center'}}>
+                  <Body>Nenhuma consulta encontrada!</Body>
+                </View>
+              );
+            }}
+            contentContainerStyle={{paddingBottom: 150}} // 👈 resolve
+          />
+        )}
       </View>
     </ViewThemed>
   );

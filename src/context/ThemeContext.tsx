@@ -41,8 +41,8 @@ export const ThemeProvider = ({children}: {children: ReactNode}) => {
     try {
       const resp = await AsyncStorage.getItem(THEME_KEY);
       const isDarkLoaded = resp === 'dark'; // True se for 'dark', False caso contrário (incluindo null)
-      //setIsDark(isDarkLoaded);
-      setIsDark(false);
+      setIsDark(isDarkLoaded);
+      //setIsDark(false);
     } catch (e) {
       console.warn('Erro ao carregar o tema:', e);
       // Em caso de erro, usamos o tema padrão (light)
