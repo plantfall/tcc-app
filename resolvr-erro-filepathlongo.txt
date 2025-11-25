@@ -1,0 +1,4 @@
+powershell
+Remove-Item -Recurse -Force .gradle
+Remove-Item -Recurse -Force app/build
+Remove-Item -Recurse -Force app/.cxx

@@ -1,11 +1,18 @@
-import {PermissionsAndroid, Platform, StatusBar} from 'react-native';
 import React, {useEffect} from 'react';
+import {
+  NativeModules,
+  PermissionsAndroid,
+  Platform,
+  StatusBar,
+} from 'react-native';
 import {ThemeProvider, useTheme} from './src/context/ThemeContext.tsx';
 
 import {NavigationContainer} from '@react-navigation/native';
-import Routes from './src/routes/Routes.tsx';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import SessionProvider from './src/context/SessionContext.tsx';
+import Routes from './src/routes/Routes.tsx';
+
+const {BarraDeNavegacao} = NativeModules;
 
 function RootContent() {
   const {theme} = useTheme();
@@ -27,6 +34,9 @@ function RootContent() {
 
 export default function App() {
   useEffect(() => {
+    const fundoClaroBotoesEscuros = true;
+    BarraDeNavegacao.setNavigationBarButtonsColor(fundoClaroBotoesEscuros);
+
     requestNotificationPermission();
   }, []);
 

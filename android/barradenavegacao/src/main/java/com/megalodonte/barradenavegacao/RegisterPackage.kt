@@ -3,6 +3,7 @@ package com.megalodonte.barradenavegacao
 import com.facebook.react.ReactPackage
 import com.facebook.react.bridge.NativeModule
 import com.facebook.react.bridge.ReactApplicationContext
+
 import com.facebook.react.uimanager.ViewManager
 
 class BarraDeNavegacaoPackage : ReactPackage {
@@ -11,7 +12,7 @@ class BarraDeNavegacaoPackage : ReactPackage {
         return listOf(BarraDeNavegacaoModule(reactContext))
     }
 
-    override fun createViewManagers(reactContext: ReactApplicationContext): List<ViewManager<*, *>> {
+    override fun createViewManagers(reactContext: ReactApplicationContext): List<ViewManager<in Nothing, in Nothing>> {
         return emptyList()
     }
 }
