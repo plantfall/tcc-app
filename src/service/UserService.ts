@@ -37,7 +37,12 @@ export class UserService {
 
   async loadUser(userId: string): Promise<User> {
     try {
-      const userDoc = await firestore().collection('users').doc(userId).get();
+      const userDoc = await firestore()
+        .collection('app')
+        .doc('app-tcc')
+        .collection('users')
+        .doc(userId)
+        .get();
 
       if (!userDoc.exists) {
         throw new Error('Dados do usuário não encontrados no Firestore.');

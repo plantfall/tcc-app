@@ -39,7 +39,7 @@ export default function ScreenPerfil() {
     const userService = new UserService();
 
     try {
-      await authService.reauthenticate(user?.email!, user?.password!);
+      await authService.reauthenticate(user?.email!, user?.senha!);
       await authService.deleteAccount();
       await userService.delete(user?.uid!);
       await sair();

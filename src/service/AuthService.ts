@@ -51,6 +51,8 @@ export class AuthService {
   public async reauthenticate(email: string, password: string): Promise<void> {
     const user = auth().currentUser;
 
+    console.log('user: ' + JSON.stringify(user));
+
     if (!user || !email || !password) {
       throw new Error('Usuário não logado ou credenciais ausentes.');
     }
