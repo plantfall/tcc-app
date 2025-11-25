@@ -1,6 +1,7 @@
 export const GreenColor = '#BAE6C9';
 export const BlueColor = '#1B8CB9';
 
+/** @deprecated Use theme from useTheme() instead. */
 export const theme = {
   secondondaryColor: '#021E2A',
   blueColor: '#1B8CB9',
@@ -11,8 +12,11 @@ export class AppUtils {
   static TestMode = true;
 
   static PlaceholderTextColor = '#808080';
+  /** @deprecated Use theme.typography.fontsize instead. */
   static FontSize = 14;
+  /** @deprecated Use theme.typography.fontsize instead. */
   static FontSizeMedium = 16;
+  /** @deprecated Use theme.typography.fontsize instead. */
   static FontSizeGrande = 18;
   static FontColor = '#000';
   static FontFamily: 'Poppins-Light';

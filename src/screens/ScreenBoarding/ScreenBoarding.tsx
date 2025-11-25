@@ -6,10 +6,12 @@ import {useNavigation} from '@react-navigation/native';
 import {Animated} from 'react-native';
 import CustomButton from '../../components/CustomButton.tsx';
 import OutlineButton from '../../components/OutlineButton.tsx';
+import {useTheme} from '../../context/ThemeContext.tsx';
 
 export default function ScreenBoarding() {
   const nav = useNavigation();
   const logoAnim = useRef(new Animated.Value(0)).current;
+  const {theme} = useTheme();
 
   useEffect(() => {
     Animated.timing(logoAnim, {
@@ -35,9 +37,19 @@ export default function ScreenBoarding() {
           fontWeight: '800',
           marginTop: 15,
           marginBottom: 15,
-          fontFamily: AppUtils.FontFamily,
         }}>
         Seja bem-vindo(a)!
+      </Text>
+      <Text
+        style={{
+          color: '#002230',
+          textAlign: 'center',
+          fontSize: AppUtils.FontSizeMedium,
+          fontWeight: '800',
+          marginTop: 15,
+          marginBottom: 15,
+        }}>
+        {'Aplicativo destinado à\n UBS de Brás Pires – MG'}
       </Text>
 
       <View
@@ -69,11 +81,10 @@ export default function ScreenBoarding() {
       <Text
         style={{
           color: '#002230',
-          fontSize: AppUtils.FontSizeGrande,
+          fontSize: theme.typography.fontSize.large,
           fontWeight: '400',
           marginTop: 25,
           marginBottom: 15,
-          fontFamily: AppUtils.FontFamily,
         }}>
         {'Gerencie e agende suas consultas\ncom facilidade.'}
       </Text>
